@@ -213,6 +213,8 @@ function SourceContent({
 const INTRO_HEADING = ["Watch", "it", "come", "together."];
 
 function IntroSection() {
+  const reduce = useReducedMotion();
+
   const introContainer = {
     hidden: {},
     visible: { transition: { staggerChildren: 0.07, delayChildren: 0.12 } },
@@ -248,14 +250,14 @@ function IntroSection() {
           pointerEvents: "none",
         }}
         initial={{ opacity: 0, scale: 0.85 }}
-        animate={{ opacity: [0.5, 0.85, 0.5], scale: [1, 1.07, 1] }}
-        transition={{ duration: 6.5, repeat: Infinity, ease: "easeInOut" }}
+        animate={reduce ? { opacity: 0.5, scale: 1 } : { opacity: [0.5, 0.85, 0.5], scale: [1, 1.07, 1] }}
+        transition={reduce ? { duration: 0.6 } : { duration: 6.5, repeat: Infinity, ease: "easeInOut" }}
       />
 
       <motion.div
         style={{ position: "relative", textAlign: "center", maxWidth: 600 }}
         variants={introContainer}
-        initial="hidden"
+        initial={reduce ? "visible" : "hidden"}
         animate="visible"
       >
         <motion.p
@@ -273,8 +275,8 @@ function IntroSection() {
               width: 7, height: 7, borderRadius: "50%",
               background: "var(--color-accent)", flexShrink: 0,
             }}
-            animate={{ scale: [1, 1.4, 1], opacity: [1, 0.5, 1] }}
-            transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
+            animate={reduce ? undefined : { scale: [1, 1.4, 1], opacity: [1, 0.5, 1] }}
+            transition={reduce ? undefined : { duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
           />
           Features
           <motion.span
@@ -283,9 +285,9 @@ function IntroSection() {
               width: 28, height: 1,
               background: "var(--color-accent)", transformOrigin: "left center",
             }}
-            initial={{ scaleX: 0, opacity: 0 }}
+            initial={reduce ? { scaleX: 1, opacity: 0.6 } : { scaleX: 0, opacity: 0 }}
             animate={{ scaleX: 1, opacity: 0.6 }}
-            transition={{ duration: 0.7, ease: E, delay: 0.5 }}
+            transition={reduce ? { duration: 0 } : { duration: 0.7, ease: E, delay: 0.5 }}
           />
         </motion.p>
 
@@ -347,8 +349,8 @@ function IntroSection() {
                 width: 3, height: 7, borderRadius: 3,
                 background: "var(--color-accent)",
               }}
-              animate={{ y: [0, 10, 0], opacity: [1, 0.2, 1] }}
-              transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
+              animate={reduce ? undefined : { y: [0, 10, 0], opacity: [1, 0.2, 1] }}
+              transition={reduce ? undefined : { duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
             />
           </span>
           <span
