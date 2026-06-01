@@ -309,22 +309,41 @@ function IntroSection() {
           Eight sources of truth, one company brain. Scroll to see how Orchestra assembles itself.
         </motion.p>
 
-        <motion.p
+        <motion.div
           variants={introItem}
           style={{
-            fontFamily: "var(--font-mono)", fontSize: 11,
-            letterSpacing: "0.18em", textTransform: "uppercase",
-            color: "var(--color-muted)", margin: 0,
+            display: "flex", flexDirection: "column", alignItems: "center", gap: 10,
           }}
         >
-          <motion.span
-            style={{ display: "inline-block" }}
-            animate={{ y: [0, 7, 0] }}
-            transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
+          {/* mouse outline with a falling wheel dot */}
+          <span
+            aria-hidden="true"
+            style={{
+              width: 24, height: 38, borderRadius: 14,
+              border: "1.5px solid var(--color-muted)",
+              display: "flex", justifyContent: "center", paddingTop: 7,
+              opacity: 0.55,
+            }}
           >
-            Scroll ↓
-          </motion.span>
-        </motion.p>
+            <motion.span
+              style={{
+                width: 3, height: 7, borderRadius: 3,
+                background: "var(--color-accent)",
+              }}
+              animate={{ y: [0, 10, 0], opacity: [1, 0.2, 1] }}
+              transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
+            />
+          </span>
+          <span
+            style={{
+              fontFamily: "var(--font-mono)", fontSize: 10,
+              letterSpacing: "0.22em", textTransform: "uppercase",
+              color: "var(--color-muted)",
+            }}
+          >
+            Scroll
+          </span>
+        </motion.div>
       </motion.div>
     </div>
   );
