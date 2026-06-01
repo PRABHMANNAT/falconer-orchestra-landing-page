@@ -223,6 +223,22 @@ function IntroSection() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, ease: E, delay: 0.2 }}
       >
+        <motion.img
+          src="/orchestra-logo-mark.png"
+          alt="Orchestra mark"
+          width={88}
+          height={120}
+          style={{
+            display: "block",
+            margin: "0 auto 28px",
+            width: "clamp(72px, 8vw, 104px)",
+            height: "auto",
+            filter: "drop-shadow(0 6px 18px rgba(217, 119, 87, 0.18))",
+          }}
+          initial={{ opacity: 0, y: 12, scale: 0.96 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          transition={{ duration: 0.9, ease: E, delay: 0.05 }}
+        />
         <p style={{
           fontFamily: "var(--font-mono)", fontSize: 11,
           letterSpacing: "0.28em", textTransform: "uppercase",
