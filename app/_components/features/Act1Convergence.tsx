@@ -302,20 +302,24 @@ function IntroSection() {
             margin: "0 0 24px",
           }}
         >
-          {INTRO_HEADING.map((word, i) => (
-            <motion.span
-              key={i}
-              variants={headingWord}
-              aria-hidden="true"
-              style={{
-                display: "inline-block",
-                marginRight: i < INTRO_HEADING.length - 1 ? "0.26em" : 0,
-                willChange: "transform, filter",
-              }}
-            >
-              {word}
-            </motion.span>
-          ))}
+          {INTRO_HEADING.map((word, i) => {
+            const isLast = i === INTRO_HEADING.length - 1;
+            return (
+              <motion.span
+                key={i}
+                variants={headingWord}
+                aria-hidden="true"
+                style={{
+                  display: "inline-block",
+                  marginRight: isLast ? 0 : "0.26em",
+                  color: isLast ? "var(--color-accent)" : undefined,
+                  willChange: "transform, filter",
+                }}
+              >
+                {word}
+              </motion.span>
+            );
+          })}
         </motion.h1>
 
         <motion.p
