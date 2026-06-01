@@ -62,8 +62,19 @@
    DARK MODE — mobile nav
    --------------------------------------------------------- */
 [data-theme="dark"] .site-header .mobile-nav {
-  background: rgba(15, 13, 11, 0.98);
-  border-color: rgba(255, 255, 255, 0.1);
+  background: #0F0D0B;
+  border-color: rgba(255, 255, 255, 0.12);
+  box-shadow: 0 24px 40px rgba(0, 0, 0, 0.5);
+}
+
+[data-theme="dark"] .mobile-nav-link {
+  color: rgba(255, 255, 255, 0.82);
+  border-bottom-color: rgba(255, 255, 255, 0.10);
+}
+
+[data-theme="dark"] .mobile-nav-link.active,
+[data-theme="dark"] .mobile-nav-link:hover {
+  color: #FAF7F1;
 }
 
 /* ---------------------------------------------------------
