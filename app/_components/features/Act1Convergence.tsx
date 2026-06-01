@@ -210,7 +210,25 @@ function SourceContent({
 }
 
 // ─── Intro section content ────────────────────────────────────────────────────
+const INTRO_HEADING = ["Watch", "it", "come", "together."];
+
 function IntroSection() {
+  const introContainer = {
+    hidden: {},
+    visible: { transition: { staggerChildren: 0.07, delayChildren: 0.12 } },
+  };
+  const introItem = {
+    hidden: { opacity: 0, y: 14 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: E } },
+  };
+  const headingWord = {
+    hidden: { opacity: 0, y: 30, filter: "blur(10px)" },
+    visible: {
+      opacity: 1, y: 0, filter: "blur(0px)",
+      transition: { duration: 0.7, ease: E },
+    },
+  };
+
   return (
     <div style={{
       height: `${INTRO_VH}vh`,
@@ -218,43 +236,74 @@ function IntroSection() {
       pointerEvents: "none",
     }}>
       <motion.div
-        style={{ textAlign: "center", maxWidth: 560 }}
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, ease: E, delay: 0.2 }}
+        style={{ textAlign: "center", maxWidth: 600 }}
+        variants={introContainer}
+        initial="hidden"
+        animate="visible"
       >
-        <p style={{
-          fontFamily: "var(--font-mono)", fontSize: 11,
-          letterSpacing: "0.28em", textTransform: "uppercase",
-          color: "var(--color-accent)", margin: "0 0 20px",
-        }}>
-          Features
-        </p>
-        <h1 style={{
-          fontFamily: "var(--font-display)",
-          fontSize: "clamp(52px, 7vw, 96px)",
-          fontWeight: 400, textTransform: "uppercase",
-          color: "var(--color-ink)", lineHeight: 0.96,
-          margin: "0 0 24px",
-        }}>
-          Watch it come together.
-        </h1>
-        <p style={{
-          fontSize: 17, color: "var(--color-muted)",
-          lineHeight: 1.6, maxWidth: 460, margin: "0 auto 40px",
-        }}>
-          Eight sources of truth, one company brain. Scroll to see how Orchestra assembles itself.
-        </p>
         <motion.p
+          variants={introItem}
+          style={{
+            fontFamily: "var(--font-mono)", fontSize: 11,
+            letterSpacing: "0.28em", textTransform: "uppercase",
+            color: "var(--color-accent)", margin: "0 0 20px",
+          }}
+        >
+          Features
+        </motion.p>
+
+        <motion.h1
+          variants={introContainer}
+          aria-label="Watch it come together."
+          style={{
+            fontFamily: "var(--font-display)",
+            fontSize: "clamp(52px, 7vw, 96px)",
+            fontWeight: 400, textTransform: "uppercase",
+            color: "var(--color-ink)", lineHeight: 0.96,
+            margin: "0 0 24px",
+          }}
+        >
+          {INTRO_HEADING.map((word, i) => (
+            <motion.span
+              key={i}
+              variants={headingWord}
+              aria-hidden="true"
+              style={{
+                display: "inline-block",
+                marginRight: i < INTRO_HEADING.length - 1 ? "0.26em" : 0,
+                willChange: "transform, filter",
+              }}
+            >
+              {word}
+            </motion.span>
+          ))}
+        </motion.h1>
+
+        <motion.p
+          variants={introItem}
+          style={{
+            fontSize: 17, color: "var(--color-muted)",
+            lineHeight: 1.6, maxWidth: 460, margin: "0 auto 40px",
+          }}
+        >
+          Eight sources of truth, one company brain. Scroll to see how Orchestra assembles itself.
+        </motion.p>
+
+        <motion.p
+          variants={introItem}
           style={{
             fontFamily: "var(--font-mono)", fontSize: 11,
             letterSpacing: "0.18em", textTransform: "uppercase",
             color: "var(--color-muted)", margin: 0,
           }}
-          animate={{ y: [0, 7, 0] }}
-          transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
         >
-          Scroll ↓
+          <motion.span
+            style={{ display: "inline-block" }}
+            animate={{ y: [0, 7, 0] }}
+            transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
+          >
+            Scroll ↓
+          </motion.span>
         </motion.p>
       </motion.div>
     </div>
