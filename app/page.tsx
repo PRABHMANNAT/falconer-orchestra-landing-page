@@ -718,12 +718,10 @@ function SocratesPanel() {
 }
 
 function FdeAvatar({ name, tint }: { name: string; tint: string }) {
-  const initials = name
-    .split(/\s+/)
-    .map((w) => w[0])
-    .join("")
-    .slice(0, 2)
-    .toUpperCase();
+  // DiceBear HTTP API — deterministic SVG portrait seeded by the person's name.
+  const src = `https://api.dicebear.com/9.x/notionists/svg?seed=${encodeURIComponent(
+    name
+  )}&radius=50&backgroundType=gradientLinear`;
   return (
     <motion.span
       className={`fde-avatar fde-avatar--${tint}`}
@@ -733,7 +731,8 @@ function FdeAvatar({ name, tint }: { name: string; tint: string }) {
       viewport={{ once: true }}
       transition={{ type: "spring", stiffness: 320, damping: 18, delay: 0.15 }}
     >
-      {initials}
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src={src} alt="" width={40} height={40} loading="lazy" />
     </motion.span>
   );
 }
