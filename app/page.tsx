@@ -9,7 +9,6 @@ import Mark from "./_components/Mark";
 
 // Lazy-loaded new sections (all "use client" components)
 import dynamic from "next/dynamic";
-const HeroFlow = dynamic(() => import("./_components/HeroFlow"), { ssr: false });
 const TrustedBy = dynamic(() => import("./_components/TrustedBy"), { ssr: false });
 const AIPmSection = dynamic(() => import("./_components/AIPmSection"), { ssr: false });
 const TimelineSection = dynamic(() => import("./_components/TimelineSection"), { ssr: false });
@@ -786,9 +785,19 @@ export default function Home() {
               </motion.p>
             </motion.div>
 
-            {/* Right column — animated radial flow */}
+            {/* Right column — product video */}
             <div className="hero-right">
-              <HeroFlow />
+              <div className="hero-video">
+                <video
+                  src="/getting-started.mp4"
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                  preload="metadata"
+                  aria-label="Orchestra in motion"
+                />
+              </div>
             </div>
           </div>
         </section>

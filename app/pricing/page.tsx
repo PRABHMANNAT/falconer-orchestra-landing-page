@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
 import {
   AnimatePresence,
   motion,
@@ -9,8 +8,8 @@ import {
   type Variants,
 } from "framer-motion";
 import { Check, X } from "lucide-react";
-import Mark from "../_components/Mark";
 import Footer from "../_components/Footer";
+import SiteHeader from "../_components/SiteHeader";
 import "./pricing.css";
 
 const EASE = [0.22, 1, 0.36, 1] as [number, number, number, number];
@@ -94,29 +93,6 @@ const itemVariants: Variants = {
   hidden: { opacity: 0, x: -8 },
   visible: { opacity: 1, x: 0, transition: { duration: 0.35, ease: EASE } },
 };
-
-/* ──────────────── Top nav ──────────────── */
-function PricingNav() {
-  return (
-    <nav className="pricing-nav" aria-label="Primary">
-      <Link href="/" className="pricing-brand">
-        <Mark tone="dark" />
-        Orchestra
-      </Link>
-      <div className="pricing-nav-right">
-        <Link href="/features" className="pricing-nav-link">
-          Features
-        </Link>
-        <Link href="/" className="pricing-nav-link">
-          ← Home
-        </Link>
-        <a href="#cta" className="pricing-nav-cta">
-          Join Waitlist
-        </a>
-      </div>
-    </nav>
-  );
-}
 
 /* ──────────────── Comparison rows ──────────────── */
 type Row = { feature: string; values: [string | boolean, string | boolean, string | boolean] };
@@ -224,7 +200,7 @@ export default function PricingPage() {
 
   return (
     <>
-      <PricingNav />
+      <SiteHeader />
 
       <main className="pricing-page">
         {/* HERO */}
@@ -269,12 +245,6 @@ export default function PricingPage() {
               aria-label="Billing period"
               variants={headItem}
             >
-              <motion.span
-                className="billing-thumb"
-                layout
-                animate={{ x: billing === "annual" ? "100%" : 0 }}
-                transition={{ type: "spring", stiffness: 360, damping: 28 }}
-              />
               {(["monthly", "annual"] as const).map((opt) => (
                 <button
                   key={opt}

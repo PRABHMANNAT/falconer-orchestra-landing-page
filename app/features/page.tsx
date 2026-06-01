@@ -3,8 +3,8 @@
 import { useState, useEffect, useSyncExternalStore } from "react";
 import { useReducedMotion } from "framer-motion";
 import dynamic from "next/dynamic";
-import Link from "next/link";
 import Mark from "../_components/Mark";
+import SiteHeader from "../_components/SiteHeader";
 
 // Dynamic imports — all GSAP code runs client-side only
 const Act1Convergence      = dynamic(() => import("../_components/features/Act1Convergence"),      { ssr: false });
@@ -12,61 +12,6 @@ const Act2Growth           = dynamic(() => import("../_components/features/Act2G
 const ProgressIndicator    = dynamic(() => import("../_components/features/ProgressIndicator"),    { ssr: false });
 const SkipControls         = dynamic(() => import("../_components/features/SkipControls"),         { ssr: false });
 const ReducedMotionFallback = dynamic(() => import("../_components/features/ReducedMotionFallback"), { ssr: false });
-
-function FeaturesNav({ cinematic }: { cinematic: boolean }) {
-  return (
-    <nav style={{
-      position: "fixed",
-      top: 0, left: 0, right: 0,
-      zIndex: 100,
-      height: 72,
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "space-between",
-      padding: "0 clamp(20px, 5vw, 60px)",
-      background: cinematic ? "transparent" : "rgba(248,245,235,0.92)",
-      borderBottom: cinematic ? "none" : "1px solid var(--color-line)",
-      backdropFilter: cinematic ? "none" : "blur(14px)",
-      transition: "background 0.4s ease, border-color 0.4s ease, backdrop-filter 0.4s ease",
-    }}>
-      <Link
-        href="/"
-        style={{
-          display: "inline-flex", alignItems: "center", gap: 9,
-          color: cinematic ? "var(--color-ink)" : "var(--color-ink)",
-          fontFamily: "var(--font-nav)", fontSize: 22, fontWeight: 700,
-          textDecoration: "none", letterSpacing: "0.01em",
-        }}
-      >
-        <Mark tone="dark" />
-        Orchestra
-      </Link>
-
-      <div style={{ display: "flex", alignItems: "center", gap: 24 }}>
-        <Link href="/pricing" style={{
-          fontFamily: "var(--font-mono)", fontSize: 11, letterSpacing: "0.14em",
-          textTransform: "uppercase", color: "var(--color-muted)", textDecoration: "none",
-        }}>
-          Pricing
-        </Link>
-        <Link href="/" style={{
-          fontFamily: "var(--font-mono)", fontSize: 11, letterSpacing: "0.14em",
-          textTransform: "uppercase", color: "var(--color-muted)", textDecoration: "none",
-        }}>
-          ← Home
-        </Link>
-        <a href="#" style={{
-          padding: "10px 22px", borderRadius: 999,
-          background: "var(--color-accent)", color: "#fff",
-          fontFamily: "var(--font-mono)", fontSize: 12, letterSpacing: "0.14em",
-          textTransform: "uppercase", textDecoration: "none",
-        }}>
-          Join Waitlist
-        </a>
-      </div>
-    </nav>
-  );
-}
 
 export default function FeaturesPage() {
   const reduceMotion = useReducedMotion();
@@ -111,7 +56,7 @@ export default function FeaturesPage() {
 
   return (
     <>
-      <FeaturesNav cinematic={inCinematic && showCinematic} />
+      <SiteHeader />
 
       {/* Floating UI controls (only during cinematic) */}
       {showCinematic && (
