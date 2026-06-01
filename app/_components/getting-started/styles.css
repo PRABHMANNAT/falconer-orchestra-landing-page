@@ -1,0 +1,571 @@
+/* ============================================================
+   Getting Started — tabbed experience (Connect → Structure → Ask)
+   Brand-aligned: warm neutral, coral, dark green, soft greys
+   ============================================================ */
+
+.gs-section {
+  padding: clamp(72px, 9vw, 120px) var(--pad);
+  background: var(--color-cream);
+}
+
+.gs-grid {
+  max-width: 1180px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp(32px, 5vw, 56px);
+  align-items: start;
+}
+
+@media (min-width: 900px) {
+  .gs-grid {
+    grid-template-columns: 0.85fr 1.15fr;
+    gap: clamp(40px, 5vw, 80px);
+  }
+}
+
+/* ---------- Copy column ---------- */
+.gs-copy { max-width: 38ch; }
+
+.gs-kicker {
+  margin: 0 0 14px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+}
+
+.gs-copy h2 {
+  margin: 0 0 16px;
+  font-family: var(--font-display);
+  font-size: clamp(34px, 4.6vw, 60px);
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+  color: var(--color-ink);
+}
+
+.gs-copy p { margin: 0 0 24px; line-height: 1.6; color: var(--color-muted); }
+
+.gs-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--color-accent);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  text-decoration: none;
+  padding-bottom: 2px;
+  border-bottom: 1px solid color-mix(in srgb, var(--color-accent) 60%, transparent);
+  transition: gap 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.gs-link:hover { gap: 12px; color: var(--color-accent-deep); border-bottom-color: var(--color-accent-deep); }
+
+/* ---------- Step tabs ---------- */
+.gs-tabs {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-bottom: 32px;
+  padding: 6px;
+  border-radius: 999px;
+  background: var(--color-paper);
+  border: 1px solid var(--color-line);
+}
+
+.gs-tab {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 18px;
+  border: 0;
+  background: transparent;
+  border-radius: 999px;
+  cursor: pointer;
+  color: var(--color-muted);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  transition: color 0.25s ease;
+  z-index: 1;
+}
+
+.gs-tab-num {
+  display: inline-grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--color-ink) 8%, transparent);
+  font-size: 10.5px;
+  font-weight: 700;
+  color: var(--color-ink);
+  transition: background 0.25s ease, color 0.25s ease;
+}
+
+.gs-tab.is-active { color: #fff; }
+.gs-tab.is-active .gs-tab-num { background: rgba(255,255,255,0.22); color: #fff; }
+
+.gs-tab:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 4px;
+  border-radius: 999px;
+}
+
+.gs-tab-thumb {
+  position: absolute;
+  inset: 6px auto 6px auto;
+  border-radius: 999px;
+  background: var(--color-ink);
+  z-index: 0;
+}
+
+/* ---------- Stage (right column) ---------- */
+.gs-stage {
+  position: relative;
+  padding: clamp(24px, 3vw, 36px);
+  background: var(--color-paper);
+  border: 1px solid var(--color-line);
+  border-radius: 24px;
+  box-shadow: 0 24px 60px rgba(14, 29, 11, 0.06);
+  min-height: 520px;
+}
+
+.gs-stage-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 12px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--color-accent) 12%, transparent);
+  border: 1px solid color-mix(in srgb, var(--color-accent) 24%, transparent);
+  color: var(--color-accent-deep);
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.gs-stage-pill-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: #21b07a;
+  box-shadow: 0 0 0 0 rgba(33, 176, 122, 0.4);
+  animation: gs-pulse 1.8s ease-out infinite;
+}
+
+@keyframes gs-pulse {
+  0%   { box-shadow: 0 0 0 0 rgba(33, 176, 122, 0.45); }
+  70%  { box-shadow: 0 0 0 6px rgba(33, 176, 122, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(33, 176, 122, 0); }
+}
+
+/* ============================================================
+   1. Connect — orbit
+   ============================================================ */
+.gs-orbit {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  margin: 18px 0 18px;
+}
+
+.gs-orbit-ring {
+  position: absolute;
+  inset: 12%;
+  border: 1px dashed color-mix(in srgb, var(--color-accent) 32%, transparent);
+  border-radius: 50%;
+}
+
+.gs-orbit-beams { position: absolute; inset: 0; }
+
+.gs-wire {
+  stroke: var(--color-line);
+  stroke-width: 1;
+  opacity: 0.85;
+}
+
+.gs-wire.is-active { stroke: color-mix(in srgb, var(--color-accent) 28%, transparent); }
+
+.gs-flow { stroke-width: 2; stroke-linecap: round; }
+
+.gs-packet { fill: var(--color-accent); filter: drop-shadow(0 0 2px rgba(217,119,87,0.8)); }
+
+.gs-orbit-core {
+  position: absolute;
+  left: 50%; top: 50%;
+  transform: translate(-50%, -50%);
+  display: grid; place-items: center;
+  width: clamp(76px, 22%, 110px);
+  height: clamp(76px, 22%, 110px);
+  border-radius: 26px;
+  background: linear-gradient(160deg, #e8825a 0%, #b85c3e 100%);
+  color: #fff;
+  box-shadow: 0 18px 40px rgba(184, 92, 62, 0.28), inset 0 1px 0 rgba(255,255,255,0.25);
+  z-index: 3;
+  overflow: hidden;
+}
+
+.gs-orbit-core .falcon-mark { width: 52%; height: 52%; }
+
+.gs-orbit-core-shimmer {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(120deg, transparent 35%, rgba(255,255,255,0.32) 50%, transparent 65%);
+  pointer-events: none;
+}
+
+.gs-active-halo {
+  position: absolute;
+  width: clamp(44px, 12%, 60px);
+  height: clamp(44px, 12%, 60px);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(circle, rgba(217,119,87,0.5), transparent 70%);
+  pointer-events: none;
+}
+
+.gs-node-slot {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+}
+
+.gs-node {
+  display: grid; place-items: center;
+  width: clamp(44px, 12%, 60px);
+  height: clamp(44px, 12%, 60px);
+  padding: 0;
+  border-radius: 16px;
+  border: 1px solid var(--color-line);
+  background: #fff;
+  box-shadow: 0 4px 14px rgba(14, 29, 11, 0.06);
+  cursor: pointer;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.gs-node-img { width: 62%; height: 62%; object-fit: contain; border-radius: 6px; }
+
+.gs-node:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
+  border-color: var(--color-accent);
+}
+
+.gs-node.is-active {
+  border-color: var(--color-accent);
+  background: linear-gradient(180deg, #fff, color-mix(in srgb, var(--color-accent) 14%, transparent));
+  box-shadow: 0 10px 26px rgba(217, 119, 87, 0.22);
+}
+
+/* Integration card under orbit */
+.gs-int-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 16px;
+  border-radius: 14px;
+  border: 1px solid var(--color-line);
+  background: var(--color-cream);
+}
+
+.gs-int-card-logo {
+  display: grid; place-items: center;
+  width: 38px; height: 38px;
+  border-radius: 10px;
+  border: 1px solid var(--color-line);
+  background: #fff;
+  flex-shrink: 0;
+}
+
+.gs-int-card-logo img { width: 70%; height: 70%; object-fit: contain; border-radius: 6px; }
+
+.gs-int-card-text { display: flex; flex-direction: column; min-width: 0; }
+.gs-int-card-text b { color: var(--color-ink); font-size: 14px; }
+.gs-int-card-text small { color: var(--color-muted); font-size: 12px; line-height: 1.5; }
+
+.gs-int-card-tag {
+  margin-left: auto;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--color-accent) 14%, transparent);
+  color: var(--color-accent-deep);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+/* ============================================================
+   2. Structure — context demo + chart
+   ============================================================ */
+.gs-context {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 18px;
+  margin-top: 18px;
+}
+
+@media (min-width: 720px) {
+  .gs-context { grid-template-columns: 1.05fr 0.95fr; }
+}
+
+.gs-convo {
+  background: var(--color-cream);
+  border: 1px solid var(--color-line);
+  border-radius: 16px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.gs-convo-head {
+  display: flex; align-items: center; gap: 10px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--color-line);
+}
+
+.gs-convo-avatar {
+  width: 30px; height: 30px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--color-accent), var(--color-accent-deep));
+  display: grid; place-items: center;
+  color: #fff; font-family: var(--font-mono); font-size: 11px; font-weight: 700;
+}
+
+.gs-convo-name { font-weight: 600; color: var(--color-ink); font-size: 14px; }
+.gs-convo-status { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--color-muted); }
+
+.gs-prompts { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+
+.gs-prompt-btn {
+  border: 1px solid var(--color-line);
+  background: var(--color-paper);
+  color: var(--color-ink);
+  padding: 8px 12px;
+  border-radius: 999px;
+  font-size: 12.5px;
+  cursor: pointer;
+  text-align: left;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.gs-prompt-btn:hover { border-color: var(--color-accent); background: #fff; }
+.gs-prompt-btn:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; }
+
+.gs-reply {
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: #fff;
+  border: 1px solid var(--color-line);
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--color-ink);
+}
+
+.gs-reply-citations { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+
+.gs-citation {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 3px 9px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--color-accent) 12%, transparent);
+  color: var(--color-accent-deep);
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.04em;
+  text-decoration: none;
+  transition: background 0.2s ease;
+}
+
+.gs-citation:hover { background: color-mix(in srgb, var(--color-accent) 22%, transparent); }
+
+/* CompanyBrainChart */
+.gs-chart {
+  background: var(--color-cream);
+  border: 1px solid var(--color-line);
+  border-radius: 16px;
+  padding: 16px;
+}
+
+.gs-chart-head { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 14px; }
+.gs-chart-title { margin: 0; font-size: 13px; font-weight: 600; color: var(--color-ink); }
+.gs-chart-sub { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--color-muted); }
+
+.gs-chart-bars { display: flex; flex-direction: column; gap: 10px; }
+
+.gs-chart-row {
+  display: grid;
+  grid-template-columns: 90px 1fr 50px;
+  gap: 10px;
+  align-items: center;
+  padding: 4px 0;
+  border-radius: 6px;
+  outline: none;
+}
+
+.gs-chart-row:focus-visible { background: color-mix(in srgb, var(--color-accent) 8%, transparent); }
+
+.gs-chart-row-label { font-size: 12.5px; color: var(--color-ink); }
+
+.gs-chart-track {
+  position: relative;
+  height: 10px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--color-ink) 6%, transparent);
+  overflow: hidden;
+}
+
+.gs-chart-fill {
+  position: absolute; left: 0; top: 0; bottom: 0;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--color-accent), var(--color-accent-deep));
+}
+
+.gs-chart-value { font-family: var(--font-mono); font-size: 11.5px; color: var(--color-muted); text-align: right; }
+
+.gs-chart-tip {
+  position: absolute;
+  z-index: 5;
+  padding: 8px 10px;
+  border-radius: 8px;
+  background: var(--color-ink);
+  color: #fff;
+  font-size: 11.5px;
+  pointer-events: none;
+  white-space: nowrap;
+  box-shadow: 0 8px 24px rgba(14, 29, 11, 0.25);
+}
+
+/* ============================================================
+   3. Ask — AI PM suggestions
+   ============================================================ */
+.gs-suggestions {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 14px;
+  margin-top: 18px;
+}
+
+@media (min-width: 720px) {
+  .gs-suggestions { grid-template-columns: 1fr 1fr; }
+}
+
+.gs-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 18px;
+  border-radius: 16px;
+  border: 1px solid var(--color-line);
+  background: var(--color-cream);
+  overflow: hidden;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.gs-card:hover {
+  border-color: color-mix(in srgb, var(--accent, var(--color-accent)) 55%, transparent);
+  box-shadow: 0 18px 38px rgba(14, 29, 11, 0.08);
+}
+
+.gs-card-bar {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 3px;
+  background: var(--accent, var(--color-accent));
+  transform: scaleY(0.35);
+  transform-origin: top center;
+  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.gs-card:hover .gs-card-bar { transform: scaleY(1); }
+
+.gs-card-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+
+.gs-card-cat {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--font-mono); font-size: 10.5px;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--accent, var(--color-accent));
+}
+
+.gs-card-icon {
+  display: inline-grid; place-items: center;
+  width: 26px; height: 26px;
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--accent, var(--color-accent)) 14%, transparent);
+  color: var(--accent, var(--color-accent));
+}
+
+.gs-card-sev {
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 2px 8px;
+  border-radius: 999px;
+}
+
+.gs-card-sev.low    { background: rgba(33, 176, 122, 0.14); color: #0c8d5d; }
+.gs-card-sev.med    { background: rgba(224, 160, 32, 0.16); color: #a26a06; }
+.gs-card-sev.high   { background: rgba(220, 38, 38, 0.14); color: #b22a2a; }
+
+.gs-card h3 {
+  margin: 6px 0 4px;
+  font-family: var(--font-nav);
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.35;
+  color: var(--color-ink);
+}
+
+.gs-card p {
+  margin: 0;
+  font-size: 13.5px;
+  line-height: 1.55;
+  color: var(--color-muted);
+}
+
+.gs-card-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 10px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+  text-decoration: none;
+  opacity: 0;
+  transform: translateY(4px);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.gs-card:hover .gs-card-cta,
+.gs-card:focus-within .gs-card-cta {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.gs-suggest-foot { margin-top: 18px; text-align: center; }
+
+/* ============================================================
+   Reduced motion
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  .gs-stage-pill-dot,
+  .gs-orbit-core-shimmer {
+    animation: none;
+  }
+}
