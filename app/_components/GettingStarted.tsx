@@ -25,29 +25,30 @@ type Tool = {
   id: string;
   name: string;
   category: string;
-  domain: string;
+  src: string;
   Logo: (p: React.SVGProps<SVGSVGElement>) => React.ReactElement;
   detail: string;
 };
 
+// Real brand logos: Icons8 PNGs for most, logo.dev for tools that aren't in
+// the Icons8 bundle (Granola, Notion). ToolLogo falls back to the bundled SVG
+// brand mark if either image source fails.
+const LOGO_TOKEN = "pk_bAr4xp1ZTdSLLLK4n3m09A";
+const logoDev = (domain: string) =>
+  `https://img.logo.dev/${domain}?token=${LOGO_TOKEN}&size=128&retina=true&format=png`;
+
 // Ordered so adjacent orbit slots alternate categories — the ring reads as a
 // mix of every surface, not clustered blocks.
 const TOOLS: Tool[] = [
-  { id: "slack",     name: "Slack",       category: "Comms",       domain: "slack.com",              Logo: SlackLogo,      detail: "Channels & threads, summarised" },
-  { id: "granola",   name: "Granola",     category: "Transcripts", domain: "granola.ai",             Logo: GranolaLogo,    detail: "Calls recapped in seconds" },
-  { id: "gdocs",     name: "Google Docs", category: "Docs",        domain: "docs.google.com",        Logo: GoogleDocsLogo, detail: "Docs linked to the brain" },
-  { id: "github",    name: "GitHub",      category: "Code",        domain: "github.com",             Logo: GitHubLogo,     detail: "PRs become changelog context" },
-  { id: "teams",     name: "Teams",       category: "Comms",       domain: "teams.microsoft.com",    Logo: TeamsLogo,      detail: "Every channel ingested" },
-  { id: "fireflies", name: "Fireflies",   category: "Transcripts", domain: "fireflies.ai",           Logo: FirefliesLogo,  detail: "Decisions logged from transcripts" },
-  { id: "notion",    name: "Notion",      category: "Docs",        domain: "notion.so",              Logo: NotionLogo,     detail: "Runbooks cited in replies" },
-  { id: "vscode",    name: "VS Code",     category: "Code",        domain: "code.visualstudio.com",  Logo: VSCodeLogo,     detail: "Workspace edits kept in sync" }
+  { id: "slack",     name: "Slack",       category: "Comms",       src: "/integrations/slack.png",       Logo: SlackLogo,      detail: "Channels & threads, summarised" },
+  { id: "granola",   name: "Granola",     category: "Transcripts", src: logoDev("granola.ai"),           Logo: GranolaLogo,    detail: "Calls recapped in seconds" },
+  { id: "gdocs",     name: "Google Docs", category: "Docs",        src: "/integrations/google-docs.png", Logo: GoogleDocsLogo, detail: "Docs linked to the brain" },
+  { id: "github",    name: "GitHub",      category: "Code",        src: "/integrations/github.png",      Logo: GitHubLogo,     detail: "PRs become changelog context" },
+  { id: "teams",     name: "Teams",       category: "Comms",       src: "/integrations/teams.png",       Logo: TeamsLogo,      detail: "Every channel ingested" },
+  { id: "fireflies", name: "Fireflies",   category: "Transcripts", src: "/integrations/fireflies.png",   Logo: FirefliesLogo,  detail: "Decisions logged from transcripts" },
+  { id: "notion",    name: "Notion",      category: "Docs",        src: logoDev("notion.so"),            Logo: NotionLogo,     detail: "Runbooks cited in replies" },
+  { id: "vscode",    name: "VS Code",     category: "Code",        src: "/integrations/vscode.png",      Logo: VSCodeLogo,     detail: "Workspace edits kept in sync" }
 ];
-
-// Real brand logos via logo.dev — gracefully falls back to the bundled SVG
-// brand mark if the image fails to load (offline / unknown domain).
-const LOGO_TOKEN = "pk_bAr4xp1ZTdSLLLK4n3m09A";
-const logoSrc = (domain: string) =>
-  `https://img.logo.dev/${domain}?token=${LOGO_TOKEN}&size=128&retina=true&format=png`;
 
 function ToolLogo({ tool }: { tool: Tool }) {
   const [failed, setFailed] = useState(false);
@@ -58,7 +59,7 @@ function ToolLogo({ tool }: { tool: Tool }) {
   return (
     <img
       className="getstarted-logo-img"
-      src={logoSrc(tool.domain)}
+      src={tool.src}
       alt={`${tool.name} logo`}
       loading="lazy"
       draggable={false}
