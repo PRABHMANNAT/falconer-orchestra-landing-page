@@ -1,268 +1,173 @@
 "use client";
 
-import { motion, useInView } from "framer-motion";
-import { useRef } from "react";
-import { GitMerge, FileWarning, Clock, FileSearch } from "lucide-react";
+import { motion, useInView, type Variants } from "framer-motion";
+import { useRef, type CSSProperties } from "react";
+import { GitMerge, FileWarning, Clock, FileSearch, type LucideIcon } from "lucide-react";
 
-const cards = [
+type Card = {
+  key: string;
+  Icon: LucideIcon;
+  accent: string;
+  category: string;
+  severity: string | null;
+  title: string;
+  body: string;
+};
+
+const CARDS: Card[] = [
   {
-    accentColor: "#d97757",
-    icon: <GitMerge size={18} color="#d97757" />,
-    category: "MERGE CONFLICTS",
-    categoryColor: "#d97757",
-    severity: { label: "HIGH", bg: "#fee2e2", color: "#dc2626" },
+    key: "merge",
+    Icon: GitMerge,
+    accent: "#d97757",
+    category: "Merge conflicts",
+    severity: "High",
     title: "Maya and Devraj both editing auth.ts",
     body: "Two open PRs touch the same files. Merge either first and the other will need to rebase.",
   },
   {
-    accentColor: "#7c3aed",
-    icon: <FileWarning size={18} color="#7c3aed" />,
-    category: "SPEC DRIFT",
-    categoryColor: "#7c3aed",
+    key: "drift",
+    Icon: FileWarning,
+    accent: "#7c5cff",
+    category: "Spec drift",
     severity: null,
     title: "OAuth shipping despite PRD saying v1 is magic-link only",
     body: "Your PRD and your code stopped agreeing. Reconcile before launch.",
   },
   {
-    accentColor: "#d97706",
-    icon: <Clock size={18} color="#d97706" />,
-    category: "STALLED WORK",
-    categoryColor: "#d97706",
+    key: "stalled",
+    Icon: Clock,
+    accent: "#e0a020",
+    category: "Stalled work",
     severity: null,
     title: "PR #43 has had no activity in 7 days",
-    body: "Blocked on review from Sarah. Last comment 7 days ago.",
+    body: "Blocked on review from Sarah. Last comment was 7 days ago.",
   },
   {
-    accentColor: "#d97757",
-    icon: <FileSearch size={18} color="#d97757" />,
-    category: "COVERAGE GAP",
-    categoryColor: "#d97757",
+    key: "coverage",
+    Icon: FileSearch,
+    accent: "#10a5a0",
+    category: "Coverage gap",
     severity: null,
     title: "Driver Assignment spec has no engineering activity",
     body: "Scoped for sprint 4. We're in sprint 5. Nothing's been touched.",
   },
 ];
 
+const EASE = [0.22, 1, 0.36, 1] as [number, number, number, number];
+
+const headVariants: Variants = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.08, delayChildren: 0.02 } },
+};
+
+const headItem: Variants = {
+  hidden: { opacity: 0, y: 16 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.55, ease: EASE } },
+};
+
+const gridVariants: Variants = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.1, delayChildren: 0.12 } },
+};
+
+const cardVariants: Variants = {
+  hidden: { opacity: 0, y: 26, filter: "blur(6px)" },
+  visible: { opacity: 1, y: 0, filter: "blur(0px)", transition: { duration: 0.6, ease: EASE } },
+};
+
+const iconVariants: Variants = {
+  hidden: { scale: 0, rotate: -25 },
+  visible: { scale: 1, rotate: 0, transition: { type: "spring", stiffness: 360, damping: 16 } },
+};
+
 export default function AIPmSection() {
   const gridRef = useRef<HTMLDivElement>(null);
-  const isInView = useInView(gridRef, { once: true, margin: "-100px" });
+  const inView = useInView(gridRef, { once: true, margin: "-100px" });
 
   return (
-    <section
-      style={{
-        background:
-          "radial-gradient(ellipse 60% 50% at 100% 0%, rgba(217,119,87,0.08), transparent 60%), var(--color-cream)",
-        paddingTop: "clamp(80px, 10vw, 130px)",
-        paddingBottom: "clamp(80px, 10vw, 130px)",
-        paddingLeft: "var(--pad)",
-        paddingRight: "var(--pad)",
-      }}
-    >
-      <div style={{ maxWidth: 1280, margin: "0 auto" }}>
+    <section className="aipm-section">
+      <div className="aipm-inner">
         {/* Header */}
-        <div style={{ textAlign: "center" }}>
-          <p
-            style={{
-              fontFamily: "var(--font-mono)",
-              textTransform: "uppercase",
-              letterSpacing: "0.22em",
-              fontSize: 12,
-              color: "var(--color-accent)",
-              marginBottom: 16,
-              margin: "0 0 16px",
-            }}
-          >
-            SUGGESTIONS
-          </p>
-          <h2
-            style={{
-              fontFamily: "var(--font-display)",
-              fontSize: "clamp(48px, 6vw, 80px)",
-              lineHeight: 0.96,
-              color: "var(--color-ink)",
-              textTransform: "uppercase",
-              textAlign: "center",
-              margin: 0,
-            }}
-          >
-            THE AI PM YOU NEVER HIRED
-          </h2>
-          <p
-            style={{
-              maxWidth: 600,
-              margin: "24px auto 64px",
-              fontSize: "clamp(16px, 1.4vw, 18px)",
-              color: "var(--color-muted)",
-              lineHeight: 1.6,
-            }}
-          >
-            Socrates doesn&apos;t just answer questions. It watches your company
-            in motion and surfaces what would slip through — before it costs you
-            a sprint.
-          </p>
-        </div>
-
-        {/* 2×2 Grid */}
-        <div
-          ref={gridRef}
-          style={{
-            maxWidth: 900,
-            margin: "0 auto",
-            display: "grid",
-            gridTemplateColumns: "repeat(2, 1fr)",
-            gap: 20,
-          }}
-          className="ai-pm-grid"
+        <motion.div
+          className="aipm-head"
+          variants={headVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.5 }}
         >
-          {cards.map((card, i) => (
-            <motion.div
-              key={card.category}
-              initial={{ opacity: 0, y: 20 }}
-              animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-              transition={{ duration: 0.45, delay: i * 0.08, ease: "easeOut" }}
-              whileHover={{
-                y: -2,
-                boxShadow: "0 20px 40px rgba(14,29,11,0.08)",
-              }}
-              style={{
-                background: "#fff",
-                borderRadius: 16,
-                border: "1px solid var(--color-line)",
-                padding: 24,
-                position: "relative",
-                overflow: "hidden",
-                cursor: "default",
-              }}
-            >
-              {/* Left accent bar */}
-              <div
-                style={{
-                  position: "absolute",
-                  left: 0,
-                  top: 0,
-                  bottom: 0,
-                  width: 3,
-                  borderRadius: "3px 0 0 3px",
-                  background: card.accentColor,
-                }}
-              />
+          <motion.span className="aipm-live" variants={headItem}>
+            <span className="aipm-live-dot" />
+            Socrates · watching live
+          </motion.span>
+          <motion.h2 className="aipm-title" variants={headItem}>
+            The AI PM you never hired
+          </motion.h2>
+          <motion.p className="aipm-sub" variants={headItem}>
+            Socrates doesn&apos;t just answer questions. It watches your company in motion and
+            surfaces what would slip through — before it costs you a sprint.
+          </motion.p>
+        </motion.div>
 
-              {/* Card header row */}
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 10,
-                  marginBottom: 12,
-                  justifyContent: "space-between",
-                }}
+        {/* 2×2 grid */}
+        <motion.div
+          ref={gridRef}
+          className="aipm-grid"
+          variants={gridVariants}
+          initial="hidden"
+          animate={inView ? "visible" : "hidden"}
+        >
+          {CARDS.map((card) => {
+            const Icon = card.Icon;
+            return (
+              <motion.div
+                key={card.key}
+                className="aipm-card"
+                style={{ "--accent": card.accent } as CSSProperties}
+                variants={cardVariants}
+                whileHover={{ y: -6 }}
+                transition={{ type: "spring", stiffness: 300, damping: 24 }}
               >
-                <div style={{ display: "flex", alignItems: "center", gap: 0 }}>
-                  {card.icon}
-                  <span
-                    style={{
-                      fontFamily: "var(--font-mono)",
-                      fontSize: 11,
-                      letterSpacing: "0.14em",
-                      textTransform: "uppercase",
-                      color: card.categoryColor,
-                      marginLeft: 6,
-                    }}
-                  >
+                <span className="aipm-card-glow" aria-hidden="true" />
+                <span className="aipm-card-bar" aria-hidden="true" />
+
+                <div className="aipm-card-head">
+                  <span className="aipm-cat">
+                    <motion.span className="aipm-icon" variants={iconVariants}>
+                      <Icon size={16} strokeWidth={2.2} />
+                    </motion.span>
                     {card.category}
                   </span>
+                  {card.severity && (
+                    <span className="aipm-sev">
+                      <span className="aipm-sev-dot" />
+                      {card.severity}
+                    </span>
+                  )}
                 </div>
-                {card.severity && (
-                  <span
-                    style={{
-                      background: card.severity.bg,
-                      color: card.severity.color,
-                      fontSize: 10,
-                      borderRadius: 999,
-                      padding: "2px 7px",
-                      fontFamily: "var(--font-mono)",
-                      fontWeight: 600,
-                      letterSpacing: "0.08em",
-                      textTransform: "uppercase",
-                      flexShrink: 0,
-                    }}
-                  >
-                    {card.severity.label}
-                  </span>
-                )}
-              </div>
 
-              {/* Title */}
-              <p
-                style={{
-                  fontFamily: "var(--font-sans)",
-                  fontSize: 15,
-                  fontWeight: 600,
-                  color: "var(--color-ink)",
-                  margin: "0 0 8px",
-                }}
-              >
-                {card.title}
-              </p>
+                <p className="aipm-card-title">{card.title}</p>
+                <p className="aipm-card-body">{card.body}</p>
+              </motion.div>
+            );
+          })}
+        </motion.div>
 
-              {/* Body */}
-              <p
-                style={{
-                  fontSize: 14,
-                  color: "var(--color-muted)",
-                  lineHeight: 1.55,
-                  margin: 0,
-                }}
-              >
-                {card.body}
-              </p>
-            </motion.div>
-          ))}
-        </div>
-
-        {/* Below grid CTA */}
-        <div
-          style={{ textAlign: "center", marginTop: 48 }}
+        {/* Footer CTA */}
+        <motion.div
+          className="aipm-footer"
+          initial={{ opacity: 0, y: 10 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: 0.3, ease: EASE }}
         >
-          <a
-            href="#"
-            style={{
-              color: "var(--color-accent)",
-              fontFamily: "var(--font-mono)",
-              fontSize: 13,
-              letterSpacing: "0.18em",
-              textTransform: "uppercase",
-              textDecoration: "none",
-              borderBottom: "1px solid var(--color-accent)",
-              paddingBottom: 2,
-              display: "inline-block",
-            }}
-          >
-            EXPLORE SUGGESTIONS →
+          <a href="#" className="aipm-cta">
+            Explore suggestions <span aria-hidden="true">→</span>
           </a>
-          <p
-            style={{
-              fontFamily: "var(--font-mono)",
-              fontSize: 11,
-              color: "var(--color-muted)",
-              marginTop: 14,
-              margin: "14px 0 0",
-            }}
-          >
-            Socrates surfaces 8 categories of risk. Only what needs attention
-            now is shown.
+          <p className="aipm-note">
+            Socrates surfaces 8 categories of risk. Only what needs attention now is shown.
           </p>
-        </div>
+        </motion.div>
       </div>
-
-      {/* Responsive grid style */}
-      <style>{`
-        @media (max-width: 640px) {
-          .ai-pm-grid {
-            grid-template-columns: 1fr !important;
-          }
-        }
-      `}</style>
     </section>
   );
 }
