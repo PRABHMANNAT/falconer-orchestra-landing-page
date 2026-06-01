@@ -1,7 +1,14 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
+import {
+  AnimatePresence,
+  motion,
+  useMotionValue,
+  useReducedMotion,
+  useSpring,
+  useTransform,
+} from "framer-motion";
 import Mark from "./Mark";
 import {
   SlackLogo,
@@ -80,6 +87,7 @@ const STEPS = ["Connect", "Structure", "Ask"];
 
 export default function GettingStarted() {
   const [active, setActive] = useState(0);
+  const [prev, setPrev] = useState(0);
   const [paused, setPaused] = useState(false);
   const reduceMotion = useReducedMotion();
 
@@ -87,11 +95,47 @@ export default function GettingStarted() {
   // stays put entirely when the user prefers reduced motion.
   useEffect(() => {
     if (paused || reduceMotion) return;
-    const id = setInterval(() => setActive((a) => (a + 1) % TOOLS.length), 2200);
+    const id = setInterval(() => {
+      setActive((a) => {
+        setPrev(a);
+        return (a + 1) % TOOLS.length;
+      });
+    }, 2200);
     return () => clearInterval(id);
   }, [paused, reduceMotion]);
 
+  // When the active changes via hover/focus, also remember the previous one so
+  // the caption can slide in from the right direction.
+  const setActiveTracked = (next: number) => {
+    setActive((cur) => {
+      setPrev(cur);
+      return next;
+    });
+  };
+
+  // Subtle mouse-parallax tilt for the whole orbit stage.
+  const orbitRef = useRef<HTMLDivElement>(null);
+  const mx = useMotionValue(0);
+  const my = useMotionValue(0);
+  const rx = useSpring(useTransform(my, [-1, 1], [4, -4]), { stiffness: 90, damping: 18 });
+  const ry = useSpring(useTransform(mx, [-1, 1], [-6, 6]), { stiffness: 90, damping: 18 });
+
+  const handleOrbitMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (reduceMotion) return;
+    const el = orbitRef.current;
+    if (!el) return;
+    const r = el.getBoundingClientRect();
+    mx.set(((e.clientX - r.left) / r.width) * 2 - 1);
+    my.set(((e.clientY - r.top) / r.height) * 2 - 1);
+  };
+  const resetOrbit = () => {
+    mx.set(0);
+    my.set(0);
+  };
+
   const tool = TOOLS[active];
+  // Direction the caption slides from (based on going forward/back around the ring).
+  const captionDir = active >= prev ? 1 : -1;
 
   return (
     <section className="getstarted">
@@ -113,12 +157,37 @@ export default function GettingStarted() {
           structures it into one account brain, and keeps each deployment in sync — with zero busywork.
         </motion.p>
 
-        <motion.div className="getstarted-steps" variants={fadeVar} transition={{ duration: 0.6, ease: softEase }}>
+        <motion.div
+          className="getstarted-steps"
+          variants={{
+            hidden: {},
+            visible: { transition: { staggerChildren: 0.18, delayChildren: 0.15 } },
+          }}
+        >
           {STEPS.map((s, i) => (
-            <span className="getstarted-step" key={s}>
-              <span className="getstarted-step-num">{i + 1}</span>
+            <motion.span
+              className="getstarted-step"
+              key={s}
+              variants={{
+                hidden: { opacity: 0, y: 10, scale: 0.9 },
+                visible: {
+                  opacity: 1, y: 0, scale: 1,
+                  transition: { type: "spring", stiffness: 360, damping: 22 },
+                },
+              }}
+              whileHover={{ y: -2 }}
+            >
+              <motion.span
+                className="getstarted-step-num"
+                initial={{ scale: 0 }}
+                whileInView={{ scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ type: "spring", stiffness: 420, damping: 18, delay: 0.25 + i * 0.18 }}
+              >
+                {i + 1}
+              </motion.span>
               {s}
-            </span>
+            </motion.span>
           ))}
         </motion.div>
 
@@ -140,8 +209,34 @@ export default function GettingStarted() {
           {TOOLS.length} live integrations
         </span>
 
-        <div className="getstarted-orbit">
+        <motion.div
+          className="getstarted-orbit"
+          ref={orbitRef}
+          onMouseMove={handleOrbitMove}
+          onMouseLeave={resetOrbit}
+          style={
+            reduceMotion
+              ? undefined
+              : { perspective: 900, rotateX: rx, rotateY: ry, transformStyle: "preserve-3d" as const }
+          }
+        >
           <svg className="getstarted-beams" viewBox="0 0 100 100" aria-hidden="true">
+            <defs>
+              <linearGradient id="gs-flow-grad" gradientUnits="userSpaceOnUse"
+                x1={POINTS[active].x} y1={POINTS[active].y} x2={50} y2={50}>
+                <stop offset="0%" stopColor="rgba(217,119,87,0.0)" />
+                <stop offset="40%" stopColor="rgba(217,119,87,0.9)" />
+                <stop offset="100%" stopColor="#b85c3e" />
+              </linearGradient>
+              <filter id="gs-flow-glow" x="-50%" y="-50%" width="200%" height="200%">
+                <feGaussianBlur stdDeviation="0.6" result="b" />
+                <feMerge>
+                  <feMergeNode in="b" />
+                  <feMergeNode in="SourceGraphic" />
+                </feMerge>
+              </filter>
+            </defs>
+
             {POINTS.map((p, i) => (
               <line
                 key={i}
@@ -161,25 +256,34 @@ export default function GettingStarted() {
               y2={50}
               className="getstarted-flow"
               vectorEffect="non-scaling-stroke"
+              stroke="url(#gs-flow-grad)"
+              filter="url(#gs-flow-glow)"
               initial={{ pathLength: 0, opacity: 0 }}
               animate={{ pathLength: 1, opacity: 1 }}
-              transition={{ duration: 0.5, ease: softEase }}
+              transition={{ duration: 0.55, ease: softEase }}
             />
-            {/* Data packet travelling from the active tool into the brain. */}
-            {!reduceMotion && (
-              <motion.circle
-                key={`packet-${active}`}
-                className="getstarted-packet"
-                r={1.7}
-                initial={{ cx: POINTS[active].x, cy: POINTS[active].y, opacity: 0 }}
-                animate={{
-                  cx: [POINTS[active].x, 50],
-                  cy: [POINTS[active].y, 50],
-                  opacity: [0, 1, 1, 0]
-                }}
-                transition={{ duration: 1.5, ease: "easeInOut", repeat: Infinity, repeatDelay: 0.15, delay: 0.4 }}
-              />
-            )}
+            {/* Data packets streaming from the active tool into the brain. */}
+            {!reduceMotion &&
+              [0, 0.55].map((delay, idx) => (
+                <motion.circle
+                  key={`packet-${active}-${idx}`}
+                  className="getstarted-packet"
+                  r={1.7}
+                  initial={{ cx: POINTS[active].x, cy: POINTS[active].y, opacity: 0 }}
+                  animate={{
+                    cx: [POINTS[active].x, 50],
+                    cy: [POINTS[active].y, 50],
+                    opacity: [0, 1, 1, 0],
+                  }}
+                  transition={{
+                    duration: 1.5,
+                    ease: "easeInOut",
+                    repeat: Infinity,
+                    repeatDelay: 0.15,
+                    delay: 0.4 + delay,
+                  }}
+                />
+              ))}
           </svg>
 
           <span className="getstarted-ring" aria-hidden="true" />
@@ -220,13 +324,13 @@ export default function GettingStarted() {
                 <motion.button
                   type="button"
                   className={`getstarted-node${i === active ? " is-active" : ""}`}
-                  onMouseEnter={() => { setActive(i); setPaused(true); }}
-                  onFocus={() => { setActive(i); setPaused(true); }}
+                  onMouseEnter={() => { setActiveTracked(i); setPaused(true); }}
+                  onFocus={() => { setActiveTracked(i); setPaused(true); }}
                   onBlur={() => setPaused(false)}
                   aria-label={`${t.name} — ${t.detail}`}
                   whileHover={{ scale: 1.1 }}
                   whileTap={{ scale: 0.94 }}
-                  animate={{ scale: i === active ? 1.12 : 1 }}
+                  animate={{ scale: i === active ? 1.14 : 1 }}
                   transition={{ type: "spring", stiffness: 300, damping: 20 }}
                 >
                   <ToolLogo tool={t} />
@@ -235,28 +339,85 @@ export default function GettingStarted() {
             </motion.span>
           ))}
 
-          <div className="getstarted-core">
+          {/* Active-node halo: a soft ring that scales/fades around the lit node */}
+          {!reduceMotion && (
+            <motion.span
+              key={`halo-${active}`}
+              className="getstarted-active-halo"
+              aria-hidden="true"
+              style={{ left: `${POINTS[active].x}%`, top: `${POINTS[active].y}%` }}
+              initial={{ opacity: 0.55, scale: 0.6 }}
+              animate={{ opacity: 0, scale: 1.9 }}
+              transition={{ duration: 1.2, ease: "easeOut", repeat: Infinity }}
+            />
+          )}
+
+          <motion.div
+            className="getstarted-core"
+            animate={
+              reduceMotion
+                ? undefined
+                : { rotate: [0, 360], scale: [1, 1.04, 1] }
+            }
+            transition={
+              reduceMotion
+                ? undefined
+                : {
+                    rotate: { duration: 28, repeat: Infinity, ease: "linear" },
+                    scale: { duration: 4, repeat: Infinity, ease: "easeInOut" },
+                  }
+            }
+          >
             <span className="getstarted-core-glow" aria-hidden="true" />
-            <Mark tone="light" />
-          </div>
-        </div>
+            <motion.div
+              animate={reduceMotion ? undefined : { rotate: [0, -360] }}
+              transition={reduceMotion ? undefined : { duration: 28, repeat: Infinity, ease: "linear" }}
+              style={{ display: "grid", placeItems: "center", width: "50%", height: "50%" }}
+            >
+              <Mark tone="light" />
+            </motion.div>
+            {/* Faint shimmer sweeping across the core */}
+            {!reduceMotion && (
+              <motion.span
+                aria-hidden="true"
+                className="getstarted-core-shimmer"
+                animate={{ x: ["-130%", "130%"] }}
+                transition={{ duration: 5.5, repeat: Infinity, repeatDelay: 1.2, ease: "easeInOut" }}
+              />
+            )}
+          </motion.div>
+        </motion.div>
 
         <div className="getstarted-caption">
           <AnimatePresence mode="wait">
             <motion.div
               key={tool.id}
               className="getstarted-caption-inner"
-              initial={{ opacity: 0, y: 8 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -8 }}
-              transition={{ duration: 0.32, ease: softEase }}
+              initial={{ opacity: 0, x: 18 * captionDir, filter: "blur(6px)" }}
+              animate={{ opacity: 1, x: 0, filter: "blur(0px)" }}
+              exit={{ opacity: 0, x: -18 * captionDir, filter: "blur(6px)" }}
+              transition={{ duration: 0.4, ease: softEase }}
             >
-              <span className="getstarted-caption-logo"><ToolLogo tool={tool} /></span>
+              <motion.span
+                className="getstarted-caption-logo"
+                initial={{ scale: 0.6, rotate: -10 }}
+                animate={{ scale: 1, rotate: 0 }}
+                transition={{ type: "spring", stiffness: 360, damping: 18 }}
+              >
+                <ToolLogo tool={tool} />
+              </motion.span>
               <span className="getstarted-caption-text">
                 <strong>{tool.name}</strong>
                 <small>{tool.detail}</small>
               </span>
-              <span className="getstarted-caption-cat">{tool.category}</span>
+              <motion.span
+                className="getstarted-caption-cat"
+                initial={{ opacity: 0, y: 4 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.32, delay: 0.12, ease: softEase }}
+              >
+                {tool.category}
+              </motion.span>
             </motion.div>
           </AnimatePresence>
         </div>
