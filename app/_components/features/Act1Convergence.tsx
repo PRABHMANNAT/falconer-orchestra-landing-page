@@ -244,12 +244,32 @@ function IntroSection() {
         <motion.p
           variants={introItem}
           style={{
+            display: "inline-flex", alignItems: "center", gap: 10,
             fontFamily: "var(--font-mono)", fontSize: 11,
             letterSpacing: "0.28em", textTransform: "uppercase",
             color: "var(--color-accent)", margin: "0 0 20px",
           }}
         >
+          <motion.span
+            aria-hidden="true"
+            style={{
+              width: 7, height: 7, borderRadius: "50%",
+              background: "var(--color-accent)", flexShrink: 0,
+            }}
+            animate={{ scale: [1, 1.4, 1], opacity: [1, 0.5, 1] }}
+            transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
+          />
           Features
+          <motion.span
+            aria-hidden="true"
+            style={{
+              width: 28, height: 1,
+              background: "var(--color-accent)", transformOrigin: "left center",
+            }}
+            initial={{ scaleX: 0, opacity: 0 }}
+            animate={{ scaleX: 1, opacity: 0.6 }}
+            transition={{ duration: 0.7, ease: E, delay: 0.5 }}
+          />
         </motion.p>
 
         <motion.h1
