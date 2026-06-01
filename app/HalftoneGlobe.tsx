@@ -13,7 +13,13 @@ import { useEffect, useRef } from "react";
  * accents. On load the particles coalesce inward from a scattered state, then
  * settle into the rotation. Respects prefers-reduced-motion (static, no spin).
  */
-export default function HalftoneGlobe() {
+export default function HalftoneGlobe({
+  ink = [26, 46, 26], // dark forest green (default — light backgrounds)
+  accent = [232, 130, 90] // coral
+}: {
+  ink?: [number, number, number];
+  accent?: [number, number, number];
+} = {}) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
@@ -26,8 +32,8 @@ export default function HalftoneGlobe() {
       typeof window !== "undefined" &&
       window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-    const INK: [number, number, number] = [26, 46, 26]; // dark forest green
-    const ACCENT: [number, number, number] = [232, 130, 90]; // coral
+    const INK: [number, number, number] = ink;
+    const ACCENT: [number, number, number] = accent;
 
     let W = 0;
     let H = 0;

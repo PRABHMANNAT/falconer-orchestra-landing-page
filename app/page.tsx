@@ -1,8 +1,7 @@
 "use client";
 
 import { useEffect, useState, type CSSProperties } from "react";
-import { AnimatePresence, animate, motion, useMotionValueEvent, useReducedMotion, useScroll } from "framer-motion";
-import Avatar from "boring-avatars";
+import { AnimatePresence, motion, useMotionValueEvent, useReducedMotion, useScroll } from "framer-motion";
 import Footer from "./_components/Footer";
 import GettingStarted from "./_components/GettingStarted";
 import Mark from "./_components/Mark";
@@ -18,8 +17,6 @@ const FaqSection = dynamic(() => import("./_components/FaqSection"), { ssr: fals
 const DarkModeToggle = dynamic(() => import("./_components/DarkModeToggle"), { ssr: false });
 const MobileStickyCta = dynamic(() => import("./_components/MobileStickyCta"), { ssr: false });
 const HomepageTeaser = dynamic(() => import("./_components/HomepageTeaser"), { ssr: false });
-
-const AVATAR_PALETTE = ["#d97757", "#b85c3e", "#9a4a30", "#f6e3db", "#0e1d0b"];
 
 const navItems = ["Home", "Features", "Pricing"];
 
@@ -59,33 +56,24 @@ const featureCards = [
 const reviews = [
   {
     quote:
-      "I used to spend Monday mornings re-reading three weeks of customer Slack just to remember where the account was. That ritual is gone.",
+      "Monday mornings used to mean re-reading three weeks of customer Slack just to remember where the deployment stood. That ritual is gone.",
     name: "Maya R.",
-    role: "Founder · Logistics SaaS",
-    initials: "MR",
-    rating: 4.8,
-    tag: "After 6 weeks",
-    swatch: "a"
+    role: "Forward-Deployed Engineer · Logistics",
+    tint: "a"
   },
   {
     quote:
-      "The first time Socrates pushed back on a scoping assumption — citing the actual call transcript — I knew this was different.",
+      "The first time Socrates pushed back on a scoping assumption — citing the actual call transcript — I knew this was built for FDEs.",
     name: "Devin K.",
-    role: "Engineering Lead · Fintech",
-    initials: "DK",
-    rating: 4.7,
-    tag: "After 2 months",
-    swatch: "b"
+    role: "Senior FDE · Fintech",
+    tint: "b"
   },
   {
     quote:
-      "Orchestra knows what we promised, what shipped, and what's still open. I stopped tab-switching to remember things.",
+      "Orchestra knows what we promised on-site, what shipped, and what's still open. I stopped tab-switching to hold the account in my head.",
     name: "Sana A.",
-    role: "Head of Product · DevTools",
-    initials: "SA",
-    rating: 4.5,
-    tag: "After 4 weeks",
-    swatch: "c"
+    role: "FDE Lead · DevTools",
+    tint: "c"
   }
 ];
 
@@ -729,117 +717,24 @@ function SocratesPanel() {
   );
 }
 
-const STAR_PATH =
-  "M12 2 L14.85 8.36 L22 9.27 L17 14.14 L18.18 21 L12 17.77 L5.82 21 L7 14.14 L2 9.27 L9.15 8.36 Z";
-
-function StarRating({ value, delay = 0 }: { value: number; delay?: number }) {
-  const [display, setDisplay] = useState(0);
-  const [inView, setInView] = useState(false);
-
-  useEffect(() => {
-    if (!inView) return;
-    const controls = animate(0, value, {
-      duration: 1.3,
-      delay,
-      ease: [0.22, 1, 0.36, 1],
-      onUpdate: (v) => setDisplay(v)
-    });
-    return () => controls.stop();
-  }, [inView, value, delay]);
-
-  return (
-    <motion.div
-      className="fde-rating"
-      onViewportEnter={() => setInView(true)}
-      viewport={{ once: true, amount: 0.6 }}
-    >
-      <div className="fde-stars" aria-label={`Rated ${value} out of 5`}>
-        {[0, 1, 2, 3, 4].map((i) => {
-          const frac = Math.max(0, Math.min(1, display - i));
-          return (
-            <motion.span
-              className="fde-star"
-              key={i}
-              initial={{ scale: 0.4, opacity: 0 }}
-              whileInView={{ scale: 1, opacity: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.35, delay: delay + i * 0.06, ease: [0.22, 1, 0.36, 1] }}
-            >
-              <svg viewBox="0 0 24 24" className="star-outline" aria-hidden="true">
-                <path d={STAR_PATH} />
-              </svg>
-              <span className="star-fill" style={{ width: `${frac * 100}%` }}>
-                <svg viewBox="0 0 24 24" aria-hidden="true">
-                  <path d={STAR_PATH} />
-                </svg>
-              </span>
-            </motion.span>
-          );
-        })}
-      </div>
-      <span className="fde-rating-num">{display.toFixed(1)}</span>
-    </motion.div>
-  );
-}
-
-function FdeAvatar({ name }: { name: string }) {
+function FdeAvatar({ name, tint }: { name: string; tint: string }) {
+  const initials = name
+    .split(/\s+/)
+    .map((w) => w[0])
+    .join("")
+    .slice(0, 2)
+    .toUpperCase();
   return (
     <motion.span
-      className="fde-avatar"
-      initial={{ scale: 0.6, opacity: 0, rotate: -8 }}
-      whileInView={{ scale: 1, opacity: 1, rotate: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+      className={`fde-avatar fde-avatar--${tint}`}
       aria-hidden="true"
+      initial={{ scale: 0.5, opacity: 0 }}
+      whileInView={{ scale: 1, opacity: 1 }}
+      viewport={{ once: true }}
+      transition={{ type: "spring", stiffness: 320, damping: 18, delay: 0.15 }}
     >
-      <motion.span
-        className="fde-avatar-inner"
-        animate={{ scale: [1, 1.03, 1] }}
-        transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-      >
-        <Avatar name={name} variant="beam" size={44} colors={AVATAR_PALETTE} />
-      </motion.span>
+      {initials}
     </motion.span>
-  );
-}
-
-function PreFooterCta() {
-  const [email, setEmail] = useState("");
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    // handle submission
-  };
-
-  return (
-    <section className="prefooter-cta">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.6, ease: softEase }}
-      >
-        <a href="#record" className="prefooter-see-how">
-          See how it works →
-        </a>
-
-        <form className="email-capture" onSubmit={handleSubmit}>
-          <input
-            type="email"
-            placeholder="your@work.email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            aria-label="Work email address"
-            required
-          />
-          <button type="submit">Join Waitlist</button>
-        </form>
-
-        <p className="prefooter-note">
-          We email you once when your spot opens. No marketing spam.
-        </p>
-      </motion.div>
-    </section>
   );
 }
 
@@ -997,38 +892,41 @@ export default function Home() {
             className="fde-heading"
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true, amount: 0.4 }}
+            viewport={{ once: true, amount: 0.5 }}
             variants={{
               hidden: {},
-              visible: { transition: { staggerChildren: 0.1, delayChildren: 0.05 } }
+              visible: { transition: { staggerChildren: 0.08, delayChildren: 0.04 } }
             }}
           >
             <motion.span
-              className="fde-rule"
-              variants={{ hidden: { scaleX: 0 }, visible: { scaleX: 1 } }}
-              transition={{ duration: 0.7, ease: softEase }}
-            />
+              className="fde-eyebrow"
+              variants={{ hidden: { opacity: 0, y: 10 }, visible: { opacity: 1, y: 0 } }}
+              transition={{ duration: 0.5, ease: softEase }}
+            >
+              Forward-Deployed Engineers
+            </motion.span>
             <h2 className="fde-h2">
-              {["Made", "for", "builders."].map((word, i) => (
-                <motion.span
-                  key={`${word}-${i}`}
-                  className={word === "builders." ? "accent-word" : ""}
-                  variants={{
-                    hidden: { opacity: 0, y: 20 },
-                    visible: { opacity: 1, y: 0 }
-                  }}
-                  transition={{ duration: 0.6, ease: softEase }}
-                >
-                  {word}{" "}
-                </motion.span>
-              ))}
+              <motion.span
+                variants={{ hidden: { opacity: 0, y: 18 }, visible: { opacity: 1, y: 0 } }}
+                transition={{ duration: 0.6, ease: softEase }}
+              >
+                Made for{" "}
+              </motion.span>
+              <motion.span
+                className="accent-word"
+                variants={{ hidden: { opacity: 0, y: 18 }, visible: { opacity: 1, y: 0 } }}
+                transition={{ duration: 0.6, ease: softEase }}
+              >
+                FDEs.
+              </motion.span>
             </h2>
             <motion.p
               className="fde-sub"
               variants={{ hidden: { opacity: 0, y: 12 }, visible: { opacity: 1, y: 0 } }}
               transition={{ duration: 0.5, ease: softEase }}
             >
-              Founders, engineers, and product leads — anyone holding the customer&apos;s reality in their head.
+              Forward-deployed engineers live in the customer&apos;s reality. Orchestra keeps every thread,
+              decision, and commit in one brain they can trust on-site.
             </motion.p>
           </motion.div>
 
@@ -1039,86 +937,37 @@ export default function Home() {
             viewport={{ once: true, amount: 0.2 }}
             variants={{
               hidden: {},
-              visible: { transition: { staggerChildren: 0.12, delayChildren: 0.2 } }
+              visible: { transition: { staggerChildren: 0.12, delayChildren: 0.1 } }
             }}
           >
-            {reviews.map((item, index) => (
-              <motion.article
+            {reviews.map((item) => (
+              <motion.figure
                 key={item.name}
                 className="fde-card"
                 variants={{
-                  hidden: { opacity: 0, y: 32 },
-                  visible: { opacity: 1, y: 0, transition: { duration: 0.65, ease: softEase } }
+                  hidden: { opacity: 0, y: 28, filter: "blur(6px)" },
+                  visible: {
+                    opacity: 1,
+                    y: 0,
+                    filter: "blur(0px)",
+                    transition: { duration: 0.6, ease: softEase }
+                  }
                 }}
-                whileHover={{ y: -6, rotateY: 1.2, rotateX: -1.2 }}
-                style={{ transformStyle: "preserve-3d" }}
-                transition={{ type: "spring", stiffness: 240, damping: 22 }}
+                whileHover={{ y: -6 }}
+                transition={{ type: "spring", stiffness: 300, damping: 24 }}
               >
-                <header className="fde-card-head">
-                  <div className="fde-person">
-                    <FdeAvatar name={item.name} />
-                    <div className="fde-person-meta">
-                      <b>{item.name}</b>
-                      <small>{item.role}</small>
-                      <StarRating value={item.rating} delay={0.25 + index * 0.12} />
-                    </div>
-                  </div>
-                  <span className="fde-tag">{item.tag}</span>
-                </header>
-
-                <motion.span
-                  className="fde-quote-mark"
-                  aria-hidden="true"
-                  initial={{ opacity: 0, scale: 0.6, rotate: -8 }}
-                  whileInView={{ opacity: 1, scale: 1, rotate: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6, delay: 0.35 + index * 0.12, ease: softEase }}
-                >
-                  &ldquo;
-                </motion.span>
-
-                <motion.p
-                  className="fde-quote"
-                  initial="hidden"
-                  whileInView="visible"
-                  viewport={{ once: true, amount: 0.4 }}
-                  variants={{
-                    hidden: {},
-                    visible: { transition: { staggerChildren: 0.025, delayChildren: 0.45 + index * 0.1 } }
-                  }}
-                >
-                  {item.quote.split(" ").map((word, wi) => (
-                    <motion.span
-                      key={wi}
-                      className="fde-quote-word"
-                      variants={{
-                        hidden: { opacity: 0, y: 6 },
-                        visible: { opacity: 1, y: 0, transition: { duration: 0.35, ease: softEase } }
-                      }}
-                    >
-                      {word}{" "}
-                    </motion.span>
-                  ))}
-                </motion.p>
-
-                <footer className="fde-foot">
-                  <span className="fde-foot-rule" />
-                  <span className="fde-foot-label">Verified · Early Pilot</span>
-                </footer>
-              </motion.article>
+                <span className="fde-card-bar" aria-hidden="true" />
+                <blockquote className="fde-quote">{item.quote}</blockquote>
+                <figcaption className="fde-person">
+                  <FdeAvatar name={item.name} tint={item.tint} />
+                  <span className="fde-person-meta">
+                    <b>{item.name}</b>
+                    <small>{item.role}</small>
+                  </span>
+                </figcaption>
+              </motion.figure>
             ))}
           </motion.div>
-
-          <motion.a
-            href="#"
-            className="fde-cta"
-            initial={{ opacity: 0, y: 10 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.45, delay: 0.6 }}
-          >
-            Read more customer stories <span aria-hidden="true">→</span>
-          </motion.a>
         </section>
 
         {/* ── SECTION 10: PRICING — NEW ── */}
@@ -1126,9 +975,6 @@ export default function Home() {
 
         {/* ── SECTION 11: FAQ — NEW ── */}
         <FaqSection />
-
-        {/* ── SECTION 12: PRE-FOOTER CTA ── */}
-        <PreFooterCta />
       </main>
 
       <Footer />
