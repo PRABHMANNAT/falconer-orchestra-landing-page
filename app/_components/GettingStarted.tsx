@@ -25,6 +25,7 @@ type Tool = {
   id: string;
   name: string;
   category: string;
+  domain: string;
   Logo: (p: React.SVGProps<SVGSVGElement>) => React.ReactElement;
   detail: string;
 };
@@ -32,15 +33,39 @@ type Tool = {
 // Ordered so adjacent orbit slots alternate categories — the ring reads as a
 // mix of every surface, not clustered blocks.
 const TOOLS: Tool[] = [
-  { id: "slack",     name: "Slack",       category: "Comms",       Logo: SlackLogo,      detail: "Channels & threads, summarised" },
-  { id: "granola",   name: "Granola",     category: "Transcripts", Logo: GranolaLogo,    detail: "Calls recapped in seconds" },
-  { id: "gdocs",     name: "Google Docs", category: "Docs",        Logo: GoogleDocsLogo, detail: "Docs linked to the brain" },
-  { id: "github",    name: "GitHub",      category: "Code",        Logo: GitHubLogo,     detail: "PRs become changelog context" },
-  { id: "teams",     name: "Teams",       category: "Comms",       Logo: TeamsLogo,      detail: "Every channel ingested" },
-  { id: "fireflies", name: "Fireflies",   category: "Transcripts", Logo: FirefliesLogo,  detail: "Decisions logged from transcripts" },
-  { id: "notion",    name: "Notion",      category: "Docs",        Logo: NotionLogo,     detail: "Runbooks cited in replies" },
-  { id: "vscode",    name: "VS Code",     category: "Code",        Logo: VSCodeLogo,     detail: "Workspace edits kept in sync" }
+  { id: "slack",     name: "Slack",       category: "Comms",       domain: "slack.com",              Logo: SlackLogo,      detail: "Channels & threads, summarised" },
+  { id: "granola",   name: "Granola",     category: "Transcripts", domain: "granola.ai",             Logo: GranolaLogo,    detail: "Calls recapped in seconds" },
+  { id: "gdocs",     name: "Google Docs", category: "Docs",        domain: "docs.google.com",        Logo: GoogleDocsLogo, detail: "Docs linked to the brain" },
+  { id: "github",    name: "GitHub",      category: "Code",        domain: "github.com",             Logo: GitHubLogo,     detail: "PRs become changelog context" },
+  { id: "teams",     name: "Teams",       category: "Comms",       domain: "teams.microsoft.com",    Logo: TeamsLogo,      detail: "Every channel ingested" },
+  { id: "fireflies", name: "Fireflies",   category: "Transcripts", domain: "fireflies.ai",           Logo: FirefliesLogo,  detail: "Decisions logged from transcripts" },
+  { id: "notion",    name: "Notion",      category: "Docs",        domain: "notion.so",              Logo: NotionLogo,     detail: "Runbooks cited in replies" },
+  { id: "vscode",    name: "VS Code",     category: "Code",        domain: "code.visualstudio.com",  Logo: VSCodeLogo,     detail: "Workspace edits kept in sync" }
 ];
+
+// Real brand logos via logo.dev — gracefully falls back to the bundled SVG
+// brand mark if the image fails to load (offline / unknown domain).
+const LOGO_TOKEN = "pk_bAr4xp1ZTdSLLLK4n3m09A";
+const logoSrc = (domain: string) =>
+  `https://img.logo.dev/${domain}?token=${LOGO_TOKEN}&size=128&retina=true&format=png`;
+
+function ToolLogo({ tool }: { tool: Tool }) {
+  const [failed, setFailed] = useState(false);
+  if (failed) {
+    const Fallback = tool.Logo;
+    return <Fallback />;
+  }
+  return (
+    <img
+      className="getstarted-logo-img"
+      src={logoSrc(tool.domain)}
+      alt={`${tool.name} logo`}
+      loading="lazy"
+      draggable={false}
+      onError={() => setFailed(true)}
+    />
+  );
+}
 
 // Deterministic orbit geometry in a 0–100 square coordinate space; center is
 // (50, 50). Used for both the logo nodes (CSS %) and the SVG connector beams.
@@ -173,18 +198,40 @@ export default function GettingStarted() {
           )}
 
           {TOOLS.map((t, i) => (
-            <button
+            <motion.span
               key={t.id}
-              type="button"
-              className={`getstarted-node${i === active ? " is-active" : ""}`}
+              className="getstarted-node-slot"
               style={{ left: `${POINTS[i].x}%`, top: `${POINTS[i].y}%` }}
-              onMouseEnter={() => { setActive(i); setPaused(true); }}
-              onFocus={() => { setActive(i); setPaused(true); }}
-              onBlur={() => setPaused(false)}
-              aria-label={`${t.name} — ${t.detail}`}
+              initial={reduceMotion ? false : { opacity: 0, scale: 0.2 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true, amount: 0.4 }}
+              transition={{ type: "spring", stiffness: 320, damping: 18, delay: 0.25 + i * 0.07 }}
             >
-              <t.Logo />
-            </button>
+              <motion.span
+                className="getstarted-node-float"
+                animate={reduceMotion ? undefined : { y: [0, -5, 0] }}
+                transition={
+                  reduceMotion
+                    ? undefined
+                    : { duration: 4 + (i % 3), repeat: Infinity, ease: "easeInOut", delay: i * 0.25 }
+                }
+              >
+                <motion.button
+                  type="button"
+                  className={`getstarted-node${i === active ? " is-active" : ""}`}
+                  onMouseEnter={() => { setActive(i); setPaused(true); }}
+                  onFocus={() => { setActive(i); setPaused(true); }}
+                  onBlur={() => setPaused(false)}
+                  aria-label={`${t.name} — ${t.detail}`}
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.94 }}
+                  animate={{ scale: i === active ? 1.12 : 1 }}
+                  transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                >
+                  <ToolLogo tool={t} />
+                </motion.button>
+              </motion.span>
+            </motion.span>
           ))}
 
           <div className="getstarted-core">
@@ -203,7 +250,7 @@ export default function GettingStarted() {
               exit={{ opacity: 0, y: -8 }}
               transition={{ duration: 0.32, ease: softEase }}
             >
-              <span className="getstarted-caption-logo"><tool.Logo /></span>
+              <span className="getstarted-caption-logo"><ToolLogo tool={tool} /></span>
               <span className="getstarted-caption-text">
                 <strong>{tool.name}</strong>
                 <small>{tool.detail}</small>
