@@ -1,11 +1,12 @@
 "use client";
 
-import { useEffect, useState, type CSSProperties } from "react";
+import { useEffect, useState, type CSSProperties, type ComponentType, type SVGProps } from "react";
 import Link from "next/link";
 import { AnimatePresence, motion, useMotionValueEvent, useReducedMotion, useScroll } from "framer-motion";
 import Footer from "./_components/Footer";
 import GettingStarted from "./_components/GettingStarted";
 import Mark from "./_components/Mark";
+import { GmailLogo, SlackLogo, LinearLogo, NotionLogo } from "./_components/IntegrationLogos";
 
 // Lazy-loaded new sections (all "use client" components)
 import dynamic from "next/dynamic";
@@ -425,20 +426,28 @@ function TruthMock() {
 }
 
 function ContextMock() {
-  const sources = ["Gmail", "Slack", "Linear", "Notion"];
+  const sources: { label: string; Logo: ComponentType<SVGProps<SVGSVGElement>> }[] = [
+    { label: "Gmail",  Logo: GmailLogo },
+    { label: "Slack",  Logo: SlackLogo },
+    { label: "Linear", Logo: LinearLogo },
+    { label: "Notion", Logo: NotionLogo },
+  ];
   return (
     <div className="mock context-mock">
       <span className="ctx-ring r1" />
       <span className="ctx-ring r2" />
       <span className="ctx-ring r3" />
       <div className="orbit">
-        {sources.map((label, i) => (
+        {sources.map(({ label, Logo }, i) => (
           <span
             key={label}
             className="orbit-slot"
             style={{ "--i": i, "--n": sources.length } as CSSProperties}
           >
-            <span className="orbit-node">{label}</span>
+            <span className="orbit-node">
+              <Logo className="orbit-node-logo" />
+              <span className="orbit-node-label">{label}</span>
+            </span>
           </span>
         ))}
       </div>

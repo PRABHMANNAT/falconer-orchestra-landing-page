@@ -111,6 +111,36 @@ export function GitHubLogo(props: LogoProps) {
   );
 }
 
+export function GmailLogo(props: LogoProps) {
+  return (
+    <svg viewBox="0 0 32 32" fill="none" aria-hidden="true" {...props}>
+      <path d="M3 8.5A2.5 2.5 0 0 1 5.5 6h21A2.5 2.5 0 0 1 29 8.5v15A2.5 2.5 0 0 1 26.5 26h-21A2.5 2.5 0 0 1 3 23.5v-15z" fill="#fff" stroke="#E5E3DC" />
+      <path d="M3 9l13 9 13-9v3.2L16 21 3 12.2V9z" fill="#EA4335" />
+      <path d="M3 9v3.2L16 21V13l-7-5H5.5A2.5 2.5 0 0 0 3 10.5V9z" fill="#C5221F" />
+      <path d="M29 9v3.2L16 21V13l7-5h3.5A2.5 2.5 0 0 1 29 10.5V9z" fill="#FBBC04" />
+      <path d="M16 13L9 8h14l-7 5z" fill="#34A853" />
+    </svg>
+  );
+}
+
+export function LinearLogo(props: LogoProps) {
+  return (
+    <svg viewBox="0 0 32 32" fill="none" aria-hidden="true" {...props}>
+      <defs>
+        <linearGradient id="lin-bg" x1="0" y1="0" x2="32" y2="32" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stopColor="#5E6AD2" />
+          <stop offset="100%" stopColor="#7E87E7" />
+        </linearGradient>
+      </defs>
+      <rect width="32" height="32" rx="8" fill="url(#lin-bg)" />
+      <path
+        d="M7 18.3a9.7 9.7 0 0 0 6.7 6.7L7 18.3zm0-4.4l11 11a9.7 9.7 0 0 0 3-1l-13-13a9.7 9.7 0 0 0-1 3zm1.8-5.6 14.9 14.9a9.7 9.7 0 0 0 1.6-2L10.8 6.7a9.7 9.7 0 0 0-2 1.6zm3.6-2.5a9.7 9.7 0 0 1 12.8 12.8L12.4 5.8z"
+        fill="#fff"
+      />
+    </svg>
+  );
+}
+
 export function VSCodeLogo(props: LogoProps) {
   return (
     <svg viewBox="0 0 32 32" fill="none" aria-hidden="true" {...props}>

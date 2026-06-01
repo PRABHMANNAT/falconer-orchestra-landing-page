@@ -1,0 +1,279 @@
+/* ============================================================
+   HomepageTeaser — "Watch it come together"
+   Constellation: logos as nodes, beams as edges, pulses as data
+   ============================================================ */
+.teaser {
+  position: relative;
+  isolation: isolate;
+  width: 100%;
+  background: var(--color-cream);
+  border-top: 1px solid var(--color-line);
+  padding: clamp(80px, 10vw, 140px) var(--pad);
+  text-align: center;
+  overflow: hidden;
+}
+
+.teaser-glow {
+  position: absolute;
+  inset: -20% 0 auto 50%;
+  transform: translate(-50%, 0);
+  width: min(880px, 110vw);
+  height: min(880px, 110vw);
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(217, 119, 87, 0.18), transparent 62%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+[data-theme="dark"] .teaser-glow {
+  background: radial-gradient(circle, rgba(217, 119, 87, 0.22), transparent 62%);
+}
+
+.teaser-inner {
+  position: relative;
+  z-index: 1;
+  max-width: 1080px;
+  margin: 0 auto;
+}
+
+.teaser-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 22px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--color-line);
+  background: var(--color-paper);
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+}
+
+.teaser-kicker-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--color-accent);
+  box-shadow: 0 0 0 0 rgba(217, 119, 87, 0.45);
+  animation: teaser-pulse 1.9s ease-out infinite;
+}
+
+@keyframes teaser-pulse {
+  0%   { box-shadow: 0 0 0 0 rgba(217, 119, 87, 0.45); }
+  70%  { box-shadow: 0 0 0 6px rgba(217, 119, 87, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(217, 119, 87, 0); }
+}
+
+.teaser-h2 {
+  margin: 0 0 18px;
+  font-family: var(--font-display);
+  font-size: clamp(48px, 7vw, 102px);
+  font-weight: 400;
+  line-height: 0.95;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+  color: var(--color-ink);
+}
+
+.teaser-word {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: bottom;
+}
+.teaser-word > span { display: inline-block; }
+
+.teaser-sub {
+  max-width: 540px;
+  margin: 0 auto 56px;
+  font-size: clamp(16px, 1.5vw, 19px);
+  line-height: 1.6;
+  color: var(--color-muted);
+}
+
+/* ── Constellation stage ─────────────────────────────────── */
+.teaser-stage {
+  position: relative;
+  width: min(640px, 96vw);
+  aspect-ratio: 1 / 1;
+  margin: 0 auto;
+  color: var(--color-accent);
+}
+
+.teaser-beams {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: visible;
+}
+
+.teaser-edge {
+  color: var(--color-accent);
+}
+
+.teaser-star {
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: var(--color-accent);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  opacity: 0.4;
+}
+
+.teaser-pulse {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--color-accent);
+  box-shadow: 0 0 16px rgba(217, 119, 87, 0.95);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 2;
+}
+
+.teaser-node {
+  position: absolute;
+  width: 60px;
+  height: 60px;
+  display: grid;
+  place-items: center;
+  transform: translate(-50%, -50%);
+  border-radius: 18px;
+  background: var(--color-paper);
+  border: 1px solid var(--color-line);
+  box-shadow: 0 18px 36px -16px rgba(14, 29, 11, 0.35);
+  cursor: default;
+  z-index: 3;
+  will-change: transform;
+}
+
+.teaser-node-float {
+  display: grid;
+  place-items: center;
+  will-change: transform;
+}
+
+.teaser-node svg {
+  width: 34px;
+  height: 34px;
+}
+
+.teaser-node::after {
+  content: "";
+  position: absolute;
+  inset: -8px;
+  border-radius: 22px;
+  border: 1px solid color-mix(in srgb, var(--color-accent) 35%, transparent);
+  opacity: 0;
+  transition: opacity 0.25s ease;
+  pointer-events: none;
+}
+
+.teaser-node:hover::after { opacity: 1; }
+
+[data-theme="dark"] .teaser-node {
+  background: #1A1714;
+  border-color: rgba(255, 255, 255, 0.10);
+  box-shadow: 0 18px 40px -18px rgba(0, 0, 0, 0.7);
+}
+
+.teaser-core {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 144px;
+  height: 144px;
+  display: grid;
+  place-items: center;
+  border-radius: 36px;
+  background: var(--color-accent);
+  color: #fff;
+  box-shadow:
+    0 30px 70px -20px rgba(184, 92, 62, 0.55),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.12);
+  z-index: 4;
+}
+
+.teaser-core .falcon-mark {
+  width: 68px;
+  height: 68px;
+  position: relative;
+  z-index: 2;
+}
+
+.teaser-core-glow {
+  position: absolute;
+  inset: -28%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(217, 119, 87, 0.55), transparent 65%);
+  z-index: 0;
+}
+
+.teaser-core-ring {
+  position: absolute;
+  inset: -14%;
+  border-radius: 50%;
+  border: 1px dashed rgba(255, 255, 255, 0.45);
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* ── CTA ─────────────────────────────────────────────────── */
+.teaser-cta-row { margin-top: 64px; }
+
+.teaser-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 26px 14px 28px;
+  border-radius: 999px;
+  background: var(--color-near-black);
+  color: var(--color-cream);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  text-decoration: none;
+  box-shadow: 0 16px 34px -14px rgba(14, 29, 11, 0.35);
+  transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+}
+
+.teaser-cta:hover {
+  transform: translateY(-2px);
+  background: var(--color-accent);
+  color: #fff;
+  box-shadow: 0 22px 38px -14px rgba(184, 92, 62, 0.55);
+}
+
+.teaser-cta-arrow { display: inline-block; transition: transform 0.25s ease; }
+.teaser-cta:hover .teaser-cta-arrow { transform: translateX(6px); }
+
+[data-theme="dark"] .teaser-cta {
+  background: #FAF7F1;
+  color: #0F0D0B;
+}
+[data-theme="dark"] .teaser-cta:hover {
+  background: var(--color-accent);
+  color: #fff;
+}
+
+/* ── Responsive ──────────────────────────────────────────── */
+@media (max-width: 640px) {
+  .teaser-stage { width: min(420px, 94vw); }
+  .teaser-node { width: 46px; height: 46px; border-radius: 14px; }
+  .teaser-node svg { width: 26px; height: 26px; }
+  .teaser-core { width: 104px; height: 104px; border-radius: 28px; }
+  .teaser-core .falcon-mark { width: 52px; height: 52px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .teaser-kicker-dot,
+  .teaser-star { animation: none; }
+}

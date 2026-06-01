@@ -98,6 +98,32 @@
 }
 [data-theme="dark"] .feature-card:hover { border-color: var(--color-accent); }
 
+[data-theme="dark"] .feature-corner {
+  background: radial-gradient(circle, rgba(217, 119, 87, 0.16) 0%, transparent 70%);
+  opacity: 0.7;
+}
+
+[data-theme="dark"] .feature-card h3 {
+  color: #FAF7F1;
+}
+
+[data-theme="dark"] .feature-card > p {
+  color: rgba(250, 247, 241, 0.7);
+}
+
+[data-theme="dark"] .feature-card .number {
+  color: rgba(250, 247, 241, 0.55);
+}
+
+[data-theme="dark"] .feature-eyebrow {
+  background: rgba(255, 255, 255, 0.08);
+  color: #FAF7F1;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+[data-theme="dark"] .why-h2 { color: #FAF7F1; }
+[data-theme="dark"] .why-lead { color: rgba(250, 247, 241, 0.72); }
+
 /* ---------------------------------------------------------
    DARK MODE — fde cards (testimonials)
    --------------------------------------------------------- */

@@ -1329,12 +1329,13 @@ svg {
 }
 
 .orbit-node {
-  display: inline-grid;
-  place-items: center;
-  min-width: 68px;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-width: 84px;
   height: 32px;
-  padding: 0 12px;
-  margin: -16px 0 0 -34px;
+  padding: 0 12px 0 8px;
+  margin: -16px 0 0 -42px;
   border-radius: 10px;
   background: var(--color-paper);
   border: 1px solid var(--color-line);
@@ -1346,6 +1347,16 @@ svg {
   letter-spacing: 0.06em;
   /* Counter-rotate at the label level so it stays upright through the spin. */
   animation: orbit-spin 26s linear infinite reverse;
+}
+
+.orbit-node-logo {
+  width: 16px;
+  height: 16px;
+  flex: none;
+}
+
+.orbit-node-label {
+  line-height: 1;
 }
 
 .core-node {
