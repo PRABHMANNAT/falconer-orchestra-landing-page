@@ -1,64 +1,43 @@
-const companies = [
-  "Northwind",
-  "BloomFast",
-  "Acorn Labs",
-  "Sherlock AI",
-  "Vega Systems",
-  "Thatch Co",
+"use client";
+
+import { motion } from "framer-motion";
+
+const COMPANIES = [
+  { name: "Northwind", initials: "NW" },
+  { name: "BloomFast", initials: "BF" },
+  { name: "Acorn Labs", initials: "AL" },
+  { name: "Sherlock AI", initials: "SA" },
+  { name: "Vega Systems", initials: "VS" },
+  { name: "Thatch Co", initials: "TC" },
 ];
+
+// Duplicate the list so the marquee loops seamlessly.
+const LOOP = [...COMPANIES, ...COMPANIES];
 
 export default function TrustedBy() {
   return (
-    <section
-      style={{
-        width: "100%",
-        borderTop: "1px solid #E8E0D3",
-        borderBottom: "1px solid #E8E0D3",
-        paddingTop: 28,
-        paddingBottom: 28,
-        paddingLeft: "var(--pad)",
-        paddingRight: "var(--pad)",
-        backgroundColor: "var(--color-cream)",
-        textAlign: "center",
-      }}
-    >
-      <p
-        style={{
-          fontFamily: "var(--font-mono)",
-          fontSize: 11,
-          letterSpacing: "0.22em",
-          textTransform: "uppercase",
-          color: "var(--color-muted)",
-          marginBottom: 20,
-          marginTop: 0,
-        }}
+    <section className="trusted-by" aria-label="Companies using Orchestra">
+      <motion.p
+        className="trusted-eyebrow"
+        initial={{ opacity: 0, y: 8 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, amount: 0.6 }}
+        transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
       >
-        TRUSTED BY TEAMS SHIPPING AT
-      </p>
+        Trusted by teams shipping at
+      </motion.p>
 
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          gap: 40,
-          flexWrap: "wrap",
-        }}
-      >
-        {companies.map((name) => (
-          <span
-            key={name}
-            style={{
-              fontFamily: "var(--font-nav)",
-              fontSize: 15,
-              fontWeight: 700,
-              color: "#aaa",
-              letterSpacing: "0.02em",
-            }}
-          >
-            {name}
-          </span>
-        ))}
+      <div className="trusted-marquee" aria-hidden="false">
+        <div className="trusted-track">
+          {LOOP.map((c, i) => (
+            <span className="trusted-logo" key={`${c.name}-${i}`} title={c.name}>
+              <span className="trusted-mono" aria-hidden="true">
+                {c.initials}
+              </span>
+              <span className="trusted-name">{c.name}</span>
+            </span>
+          ))}
+        </div>
       </div>
     </section>
   );

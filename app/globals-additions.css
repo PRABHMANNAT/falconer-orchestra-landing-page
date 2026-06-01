@@ -306,17 +306,130 @@
   .hero-right { display: none; }
 }
 
-/* Trusted by strip */
+/* ---------- Trusted by — infinite marquee ---------- */
 .trusted-by {
-  padding: 28px var(--pad);
+  padding: 32px 0 36px;
   border-top: 1px solid #E8E0D3;
   border-bottom: 1px solid #E8E0D3;
   background: var(--color-cream);
   text-align: center;
+  overflow: hidden;
 }
 
 [data-theme="dark"] .trusted-by {
   border-color: rgba(255, 255, 255, 0.08);
+}
+
+.trusted-eyebrow {
+  margin: 0 0 24px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+
+/* Marquee viewport — masks the track edges so logos fade in/out */
+.trusted-marquee {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0,
+    #000 12%,
+    #000 88%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent 0,
+    #000 12%,
+    #000 88%,
+    transparent 100%
+  );
+}
+
+/* Track — twice the content, animated -50% so the loop is seamless */
+.trusted-track {
+  display: inline-flex;
+  align-items: center;
+  gap: clamp(40px, 6vw, 72px);
+  padding-inline: clamp(20px, 4vw, 48px);
+  white-space: nowrap;
+  animation: trusted-scroll 28s linear infinite;
+  will-change: transform;
+}
+
+@keyframes trusted-scroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+/* Pause on hover so a curious visitor can read a name */
+.trusted-marquee:hover .trusted-track {
+  animation-play-state: paused;
+}
+
+.trusted-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+  padding: 6px 6px 6px 6px;
+  border-radius: 999px;
+  color: var(--color-ink);
+  opacity: 0.75;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.trusted-logo:hover {
+  opacity: 1;
+  transform: translateY(-1px);
+}
+
+.trusted-mono {
+  display: inline-grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--color-ink) 8%, transparent);
+  border: 1px solid var(--color-line);
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--color-ink);
+}
+
+.trusted-logo:hover .trusted-mono {
+  background: color-mix(in srgb, var(--color-accent) 14%, transparent);
+  border-color: color-mix(in srgb, var(--color-accent) 60%, transparent);
+  color: var(--color-accent-deep);
+}
+
+.trusted-name {
+  font-family: var(--font-nav);
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .trusted-track {
+    animation: none;
+    /* Show the first set centered when motion is reduced */
+    transform: translateX(0);
+    justify-content: center;
+    flex-wrap: wrap;
+    width: 100%;
+    padding: 0 var(--pad);
+  }
+  .trusted-marquee {
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
 }
 
 /* Hero eyebrow */
