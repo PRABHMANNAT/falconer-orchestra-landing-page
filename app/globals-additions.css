@@ -366,11 +366,6 @@
   to   { transform: translateX(-50%); }
 }
 
-/* Pause on hover so a curious visitor can read a name */
-.trusted-marquee:hover .trusted-track {
-  animation-play-state: paused;
-}
-
 .trusted-logo {
   display: inline-flex;
   align-items: center;
@@ -380,12 +375,6 @@
   border-radius: 999px;
   color: var(--color-ink);
   opacity: 0.75;
-  transition: opacity 0.25s ease, transform 0.25s ease;
-}
-
-.trusted-logo:hover {
-  opacity: 1;
-  transform: translateY(-1px);
 }
 
 .trusted-mark {
@@ -397,17 +386,10 @@
   background: color-mix(in srgb, var(--color-ink) 6%, transparent);
   border: 1px solid var(--color-line);
   color: var(--color-ink);
-  transition: background 0.25s ease, border-color 0.25s ease, color 0.25s ease;
 }
 
 .trusted-mark svg {
   display: block;
-}
-
-.trusted-logo:hover .trusted-mark {
-  background: color-mix(in srgb, var(--color-accent) 14%, transparent);
-  border-color: color-mix(in srgb, var(--color-accent) 60%, transparent);
-  color: var(--color-accent-deep);
 }
 
 .trusted-name {
