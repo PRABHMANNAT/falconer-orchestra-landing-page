@@ -231,12 +231,29 @@ function IntroSection() {
 
   return (
     <div style={{
+      position: "relative",
       height: `${INTRO_VH}vh`,
       display: "flex", alignItems: "center", justifyContent: "center",
       pointerEvents: "none",
     }}>
+      {/* ambient accent glow that breathes behind the copy */}
       <motion.div
-        style={{ textAlign: "center", maxWidth: 600 }}
+        aria-hidden="true"
+        style={{
+          position: "absolute",
+          width: "min(560px, 80vw)",
+          height: "min(560px, 80vw)",
+          borderRadius: "50%",
+          background: "radial-gradient(circle, rgba(217,119,87,0.14), transparent 68%)",
+          pointerEvents: "none",
+        }}
+        initial={{ opacity: 0, scale: 0.85 }}
+        animate={{ opacity: [0.5, 0.85, 0.5], scale: [1, 1.07, 1] }}
+        transition={{ duration: 6.5, repeat: Infinity, ease: "easeInOut" }}
+      />
+
+      <motion.div
+        style={{ position: "relative", textAlign: "center", maxWidth: 600 }}
         variants={introContainer}
         initial="hidden"
         animate="visible"
