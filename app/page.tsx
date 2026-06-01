@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, type CSSProperties } from "react";
+import Link from "next/link";
 import { AnimatePresence, motion, useMotionValueEvent, useReducedMotion, useScroll } from "framer-motion";
 import Footer from "./_components/Footer";
 import GettingStarted from "./_components/GettingStarted";
@@ -18,7 +19,11 @@ const DarkModeToggle = dynamic(() => import("./_components/DarkModeToggle"), { s
 const MobileStickyCta = dynamic(() => import("./_components/MobileStickyCta"), { ssr: false });
 const HomepageTeaser = dynamic(() => import("./_components/HomepageTeaser"), { ssr: false });
 
-const navItems = ["Home", "Features", "Pricing"];
+const navItems: { label: string; href: string }[] = [
+  { label: "Home", href: "/" },
+  { label: "Features", href: "/features" },
+  { label: "Pricing", href: "/pricing" },
+];
 
 const heroContainer = {
   hidden: {},
@@ -104,28 +109,29 @@ function Header() {
   return (
     <header className={`site-header ${solid ? "solid" : ""}`}>
       <div className="nav-left">
-        <a className="brand" href="#" aria-label="Orchestra home">
+        <Link className="brand" href="/" aria-label="Orchestra home">
           <Logo />
-        </a>
+        </Link>
       </div>
 
       <nav className="nav-center nav-pill-group" aria-label="Main navigation">
         {navItems.map((item) => (
-          <a
-            href="#"
-            key={item}
-            className={`nav-pill-item${activeNav === item ? " active" : ""}`}
-            onClick={(e) => { e.preventDefault(); setActiveNav(item); }}
+          <Link
+            href={item.href}
+            key={item.label}
+            className={`nav-pill-item${activeNav === item.label ? " active" : ""}`}
+            aria-current={activeNav === item.label ? "page" : undefined}
+            onClick={() => setActiveNav(item.label)}
           >
-            {activeNav === item && (
+            {activeNav === item.label && (
               <motion.span
                 className="nav-pill-bg"
                 layoutId="nav-pill"
                 transition={{ type: "spring", stiffness: 500, damping: 45 }}
               />
             )}
-            <span className="nav-pill-text">{item}</span>
-          </a>
+            <span className="nav-pill-text">{item.label}</span>
+          </Link>
         ))}
       </nav>
 
@@ -164,14 +170,15 @@ function Header() {
           >
             <nav aria-label="Mobile navigation">
               {navItems.map((item) => (
-                <a
-                  href="#"
-                  key={item}
-                  className={`mobile-nav-link${activeNav === item ? " active" : ""}`}
-                  onClick={() => { setActiveNav(item); setMenuOpen(false); }}
+                <Link
+                  href={item.href}
+                  key={item.label}
+                  className={`mobile-nav-link${activeNav === item.label ? " active" : ""}`}
+                  aria-current={activeNav === item.label ? "page" : undefined}
+                  onClick={() => { setActiveNav(item.label); setMenuOpen(false); }}
                 >
-                  {item}
-                </a>
+                  {item.label}
+                </Link>
               ))}
               <a href="#" className="mobile-nav-link" onClick={() => setMenuOpen(false)}>
                 Sign In

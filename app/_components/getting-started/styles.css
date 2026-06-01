@@ -120,9 +120,16 @@
   border-radius: 999px;
 }
 
+/* keep label + number above the sliding thumb */
+.gs-tab-num,
+.gs-tab-label { position: relative; z-index: 1; }
+
 .gs-tab-thumb {
   position: absolute;
-  inset: 6px auto 6px auto;
+  top: 6px;
+  bottom: 6px;
+  left: 0;
+  width: 0;
   border-radius: 999px;
   background: var(--color-ink);
   z-index: 0;

@@ -1,6 +1,6 @@
 "use client";
 
-import { memo, useEffect, useRef, useState } from "react";
+import { memo, useLayoutEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 
 export type StepId = "connect" | "structure" | "ask";
@@ -25,21 +25,28 @@ function StepTabsImpl({ active, onChange }: Props) {
   });
   const [thumb, setThumb] = useState<{ left: number; width: number } | null>(null);
 
-  // Position the indicator under the active tab — re-measure on resize.
-  useEffect(() => {
+  // Measure the active tab to position the indicator. Runs in a layout effect
+  // plus a rAF (so the first measure happens after fonts/flex have settled) and
+  // re-measures on active change, container resize, and window resize.
+  useLayoutEffect(() => {
+    let raf = 0;
     const measure = () => {
       const btn = tabRefs.current[active];
       const group = groupRef.current;
       if (!btn || !group) return;
-      const gRect = group.getBoundingClientRect();
-      const bRect = btn.getBoundingClientRect();
-      setThumb({ left: bRect.left - gRect.left, width: bRect.width });
+      const g = group.getBoundingClientRect();
+      const b = btn.getBoundingClientRect();
+      if (b.width === 0) return; // not laid out yet — wait for rAF
+      setThumb({ left: b.left - g.left, width: b.width });
     };
     measure();
+    raf = requestAnimationFrame(measure);
+
     const ro = new ResizeObserver(measure);
     if (groupRef.current) ro.observe(groupRef.current);
     window.addEventListener("resize", measure);
     return () => {
+      cancelAnimationFrame(raf);
       ro.disconnect();
       window.removeEventListener("resize", measure);
     };
@@ -56,18 +63,14 @@ function StepTabsImpl({ active, onChange }: Props) {
   };
 
   return (
-    <div
-      ref={groupRef}
-      role="tablist"
-      aria-label="Getting started steps"
-      className="gs-tabs"
-    >
+    <div ref={groupRef} role="tablist" aria-label="Getting started steps" className="gs-tabs">
       {thumb && (
         <motion.span
           aria-hidden="true"
           className="gs-tab-thumb"
+          initial={false}
           animate={{ left: thumb.left, width: thumb.width }}
-          transition={{ type: "spring", stiffness: 380, damping: 30 }}
+          transition={{ type: "spring", stiffness: 420, damping: 34 }}
         />
       )}
       {STEPS.map((s, i) => {
@@ -87,7 +90,7 @@ function StepTabsImpl({ active, onChange }: Props) {
             className={`gs-tab${isActive ? " is-active" : ""}`}
           >
             <span className="gs-tab-num" aria-hidden="true">{s.n}</span>
-            {s.label}
+            <span className="gs-tab-label">{s.label}</span>
           </button>
         );
       })}

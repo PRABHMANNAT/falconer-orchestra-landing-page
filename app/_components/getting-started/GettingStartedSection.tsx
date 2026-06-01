@@ -19,7 +19,7 @@ export default function GettingStartedSection() {
   const [step, setStep] = useState<StepId>("connect");
 
   return (
-    <section className="getstarted gs-section" aria-labelledby="gs-title">
+    <section id="getstarted" className="gs-section" aria-labelledby="gs-title">
       <div className="gs-grid">
         {/* Copy column */}
         <motion.header

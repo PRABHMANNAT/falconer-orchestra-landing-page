@@ -43,6 +43,12 @@ function FeaturesNav({ cinematic }: { cinematic: boolean }) {
       </Link>
 
       <div style={{ display: "flex", alignItems: "center", gap: 24 }}>
+        <Link href="/pricing" style={{
+          fontFamily: "var(--font-mono)", fontSize: 11, letterSpacing: "0.14em",
+          textTransform: "uppercase", color: "var(--color-muted)", textDecoration: "none",
+        }}>
+          Pricing
+        </Link>
         <Link href="/" style={{
           fontFamily: "var(--font-mono)", fontSize: 11, letterSpacing: "0.14em",
           textTransform: "uppercase", color: "var(--color-muted)", textDecoration: "none",
