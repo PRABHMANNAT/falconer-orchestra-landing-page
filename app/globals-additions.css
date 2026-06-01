@@ -1,0 +1,419 @@
+/* =========================================================
+   globals-additions.css
+   Imported AFTER globals.css.
+   Adds: dark-mode CSS variables + new section styles.
+   ========================================================= */
+
+/* ---------------------------------------------------------
+   ORCHESTRA LOGO — gentle glow animation (all-8-rays state)
+   Applied by OrchestraLogo when allLit=true.
+   NO scale — just a quiet opacity breath.
+   --------------------------------------------------------- */
+@keyframes orchGlowBreath {
+  0%, 100% { opacity: 0.35; }
+  50%       { opacity: 0.45; }
+}
+.orch-glow-breathing {
+  animation: orchGlowBreath 3s ease-in-out infinite;
+}
+
+/* ---------------------------------------------------------
+   DARK MODE VARIABLES
+   --------------------------------------------------------- */
+[data-theme="dark"] {
+  --color-cream: #0F0D0B;
+  --color-cream-2: #1A1714;
+  --color-paper: #1C1916;
+  --color-ink: #FAF7F1;
+  --color-near-black: #FAF7F1;
+  --color-muted: #9a9088;
+  --color-line: rgba(255, 255, 255, 0.10);
+  --cream: #0F0D0B;
+  --ink: #FAF7F1;
+  --green: #FAF7F1;
+  --paper: #1C1916;
+  --line: rgba(255, 255, 255, 0.10);
+  --muted: #9a9088;
+}
+
+/* ---------------------------------------------------------
+   DARK MODE — site header
+   --------------------------------------------------------- */
+[data-theme="dark"] .site-header {
+  background: rgba(15, 13, 11, 0.85);
+}
+[data-theme="dark"] .site-header.solid {
+  background: rgba(15, 13, 11, 0.95);
+  border-bottom-color: rgba(255, 255, 255, 0.1);
+}
+
+/* ---------------------------------------------------------
+   DARK MODE — nav pill
+   --------------------------------------------------------- */
+[data-theme="dark"] .nav-pill-group {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+[data-theme="dark"] .nav-pill-text { color: rgba(255, 255, 255, 0.7); }
+[data-theme="dark"] .nav-pill-item.active .nav-pill-text { color: #fff; }
+[data-theme="dark"] .nav-pill-bg { background: rgba(255, 255, 255, 0.15); }
+
+/* ---------------------------------------------------------
+   DARK MODE — mobile nav
+   --------------------------------------------------------- */
+[data-theme="dark"] .site-header .mobile-nav {
+  background: rgba(15, 13, 11, 0.98);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+/* ---------------------------------------------------------
+   DARK MODE — logo
+   --------------------------------------------------------- */
+[data-theme="dark"] .logo { color: #FAF7F1; }
+
+/* ---------------------------------------------------------
+   DARK MODE — hero
+   --------------------------------------------------------- */
+[data-theme="dark"] .hero { background: var(--color-cream); }
+[data-theme="dark"] .hero p { color: rgba(250, 247, 241, 0.8); }
+
+/* ---------------------------------------------------------
+   DARK MODE — feature cards
+   --------------------------------------------------------- */
+[data-theme="dark"] .feature-card {
+  background: #1A1714 !important;
+  border-color: rgba(255, 255, 255, 0.1);
+  color: #FAF7F1;
+}
+[data-theme="dark"] .feature-card:hover { border-color: var(--color-accent); }
+
+/* ---------------------------------------------------------
+   DARK MODE — fde cards (testimonials)
+   --------------------------------------------------------- */
+[data-theme="dark"] .fde-card {
+  background: #1A1714;
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+/* ---------------------------------------------------------
+   DARK MODE — copilot (Socrates panel)
+   --------------------------------------------------------- */
+[data-theme="dark"] .copilot {
+  background: #1A1714;
+  border-color: rgba(255, 255, 255, 0.1);
+}
+[data-theme="dark"] .copilot-bar { background: #161310; }
+[data-theme="dark"] .copilot-brain { background: #161310; }
+[data-theme="dark"] .copilot-cmd { background: #161310; border-color: rgba(255, 255, 255, 0.1); }
+
+/* ---------------------------------------------------------
+   DARK MODE — getstarted
+   --------------------------------------------------------- */
+[data-theme="dark"] .getstarted-stage {
+  background: #1A1714;
+  border-color: rgba(255, 255, 255, 0.1);
+}
+[data-theme="dark"] .getstarted-node { background: #1A1714; border-color: rgba(255, 255, 255, 0.1); }
+[data-theme="dark"] .getstarted-caption-inner { background: #161310; border-color: rgba(255, 255, 255, 0.1); }
+
+/* ---------------------------------------------------------
+   DARK MODE — livedoc
+   --------------------------------------------------------- */
+[data-theme="dark"] .livedoc { background: #1A1714; color: #FAF7F1; }
+[data-theme="dark"] .livedoc-chrome { background: #161310; }
+[data-theme="dark"] .livedoc-rail { background: #161310; }
+
+/* ---------------------------------------------------------
+   DARK MODE — flow (Why Orchestra) section
+   --------------------------------------------------------- */
+[data-theme="dark"] .flow {
+  background: radial-gradient(circle, rgba(217, 119, 87, 0.08) 1px, transparent 1.4px) 0 0 / 40px 40px, #0F0D0B;
+}
+
+/* ---------------------------------------------------------
+   DARK MODE — writing
+   --------------------------------------------------------- */
+[data-theme="dark"] .writing {
+  background: radial-gradient(circle, rgba(217, 119, 87, 0.06) 1px, transparent 1.4px) 0 0 / 40px 40px, #0F0D0B;
+}
+
+/* ---------------------------------------------------------
+   DARK MODE — buttons in nav
+   --------------------------------------------------------- */
+[data-theme="dark"] .btn-accent { background: var(--color-accent); color: #fff; }
+[data-theme="dark"] .btn-dark { background: rgba(255, 255, 255, 0.12); border: 1px solid rgba(255, 255, 255, 0.2); }
+
+/* ---------------------------------------------------------
+   DARK MODE — hero CTA buttons
+   In dark mode --color-near-black resolves to a cream tone, so the
+   .primary button background becomes light. Its base rule keeps
+   `color: #fff`, which makes the "Join Waitlist" label invisible.
+   Re-establish contrast by using the dark cream as the label color.
+   --------------------------------------------------------- */
+[data-theme="dark"] .hero-actions a.primary {
+  color: #0F0D0B;
+}
+[data-theme="dark"] .hero-actions a.secondary {
+  color: var(--color-near-black);
+  border-color: var(--color-near-black);
+}
+[data-theme="dark"] .hero-actions a.secondary:hover {
+  background: var(--color-near-black);
+  color: #0F0D0B;
+}
+
+/* ---------------------------------------------------------
+   DARK MODE — AIPm, Timeline, Pricing, FAQ sections
+   --------------------------------------------------------- */
+[data-theme="dark"] .aipm-section,
+[data-theme="dark"] .timeline-section,
+[data-theme="dark"] .pricing-section,
+[data-theme="dark"] .faq-section {
+  background: var(--color-cream);
+}
+
+/* ---------------------------------------------------------
+   DARK MODE — new white cards in new sections
+   --------------------------------------------------------- */
+[data-theme="dark"] .aipm-card,
+[data-theme="dark"] .timeline-card-inner,
+[data-theme="dark"] .pricing-card-free,
+[data-theme="dark"] .faq-row {
+  background: #1A1714;
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+/* ---------------------------------------------------------
+   NEW SECTION STYLES
+   --------------------------------------------------------- */
+
+/* Pre-footer email capture section */
+.prefooter-cta {
+  padding: clamp(72px, 9vw, 110px) var(--pad);
+  background: var(--color-cream);
+  border-top: 1px solid var(--color-line);
+  text-align: center;
+}
+
+.prefooter-see-how {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 32px;
+  color: var(--color-accent);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  text-decoration: none;
+  border-bottom: 1px solid var(--color-accent);
+  padding-bottom: 2px;
+  transition: gap 0.2s ease;
+}
+
+.prefooter-see-how:hover { gap: 16px; }
+
+.email-capture {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  max-width: 440px;
+  margin: 0 auto 16px;
+  flex-wrap: wrap;
+}
+
+.email-capture input {
+  flex: 1;
+  min-width: 200px;
+  padding: 13px 18px;
+  border: 1.5px solid var(--color-line);
+  border-radius: 999px;
+  background: var(--color-paper);
+  font-family: var(--font-sans);
+  font-size: 15px;
+  color: var(--color-ink);
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.email-capture input:focus { border-color: var(--color-accent); }
+.email-capture input::placeholder { color: var(--color-muted); }
+
+.email-capture button {
+  padding: 13px 24px;
+  border-radius: 999px;
+  border: 0;
+  background: var(--color-accent);
+  color: #fff;
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.15s;
+  white-space: nowrap;
+}
+
+.email-capture button:hover { background: var(--color-accent-deep); transform: translateY(-1px); }
+.email-capture button:active { transform: scale(0.97); }
+
+.prefooter-note {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--color-muted);
+  letter-spacing: 0.08em;
+  margin-top: 14px;
+}
+
+/* Sign in link in nav */
+.nav-signin {
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+  text-decoration: none;
+  transition: color 0.18s;
+  white-space: nowrap;
+}
+
+.nav-signin:hover { color: var(--color-near-black); }
+
+[data-theme="dark"] .nav-signin { color: rgba(255, 255, 255, 0.5); }
+[data-theme="dark"] .nav-signin:hover { color: #fff; }
+
+/* Mobile sticky CTA safe area */
+.mobile-sticky-cta {
+  padding-bottom: max(12px, env(safe-area-inset-bottom));
+}
+
+/* Hero layout for the two-column hero */
+.hero-two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(40px, 5vw, 80px);
+  align-items: center;
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+.hero-left { z-index: 2; }
+.hero-right { z-index: 1; }
+
+@media (max-width: 900px) {
+  .hero-two-col { grid-template-columns: 1fr; }
+  .hero-right { display: none; }
+}
+
+/* Trusted by strip */
+.trusted-by {
+  padding: 28px var(--pad);
+  border-top: 1px solid #E8E0D3;
+  border-bottom: 1px solid #E8E0D3;
+  background: var(--color-cream);
+  text-align: center;
+}
+
+[data-theme="dark"] .trusted-by {
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+/* Hero eyebrow */
+.hero-eyebrow {
+  display: inline-block;
+  margin-bottom: 20px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+}
+
+/* Hero sub-copy */
+.hero-sub {
+  max-width: 500px;
+  margin: clamp(22px, 3vw, 32px) 0 0;
+  color: rgba(14, 29, 11, 0.78);
+  font-family: var(--font-sans);
+  font-size: clamp(16px, 1.4vw, 19px);
+  font-weight: 500;
+  line-height: 1.6;
+}
+
+[data-theme="dark"] .hero-sub { color: rgba(250, 247, 241, 0.78); }
+
+/* Hero below-CTA note */
+.hero-note {
+  margin-top: 16px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  color: var(--color-muted);
+}
+
+/* Ghost link CTA */
+.hero-ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--color-accent);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: gap 0.2s;
+}
+
+.hero-ghost:hover { gap: 10px; }
+
+/* Updated memory section — full bleed terracotta */
+.memory-full {
+  background: #C24A1D;
+  margin: 0;
+  border-radius: 0;
+  padding: clamp(64px, 8vw, 110px) var(--pad);
+}
+
+.memory-full-inner {
+  display: grid;
+  grid-template-columns: 1fr 0.85fr;
+  gap: clamp(36px, 5vw, 72px);
+  align-items: center;
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+@media (max-width: 900px) {
+  .memory-full-inner { grid-template-columns: 1fr; }
+}
+
+/* Memory section explore link */
+.memory-explore {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 24px;
+  color: rgba(255, 255, 255, 0.8);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  text-decoration: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.4);
+  padding-bottom: 2px;
+  transition: color 0.2s, border-color 0.2s, gap 0.2s;
+}
+
+.memory-explore:hover {
+  color: #fff;
+  border-bottom-color: #fff;
+  gap: 12px;
+}
+
+/* Section fade-up animation wrapper */
+.section-reveal {
+  /* Used as a className; framer-motion handles actual animation */
+}
