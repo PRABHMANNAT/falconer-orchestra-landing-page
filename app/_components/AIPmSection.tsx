@@ -123,9 +123,7 @@ export default function AIPmSection() {
                 key={card.key}
                 style={{ "--accent": card.accent } as CSSProperties}
                 variants={cardVariants}
-                whileHover={{ y: -4 }}
-                transition={{ type: "spring", stiffness: 300, damping: 24 }}
-                className="group relative rounded-[22px] [--pattern-fg:color-mix(in_oklab,#0a0a0a_5%,transparent)] dark:[--pattern-fg:color-mix(in_oklab,#fff_5%,transparent)]"
+                className="group relative z-0 rounded-[22px] hover:z-20 [--pattern-fg:color-mix(in_oklab,#0a0a0a_5%,transparent)] dark:[--pattern-fg:color-mix(in_oklab,#fff_5%,transparent)]"
               >
                 {/* decorative diagonal-stripe frame */}
                 <span
@@ -133,8 +131,8 @@ export default function AIPmSection() {
                   className="absolute inset-0 h-full w-full rounded-[inherit] bg-[image:repeating-linear-gradient(315deg,var(--pattern-fg)_0,var(--pattern-fg)_1px,transparent_0,transparent_50%)] bg-[size:5px_5px] bg-fixed shadow-sm ring-1 ring-black/5 shadow-black/5 transition duration-300 group-hover:ring-black/15 dark:ring-white/5 dark:shadow-white/5 dark:group-hover:ring-white/20"
                 />
 
-                {/* content panel */}
-                <div className="relative rounded-[22px] bg-white p-4 ring-1 shadow-sm ring-black/10 shadow-black/5 md:p-8 dark:bg-neutral-900 dark:ring-white/10 dark:shadow-white/5">
+                {/* content panel — pops out on hover, revealing the stripes */}
+                <div className="relative origin-center rounded-[22px] bg-white p-4 ring-1 shadow-sm ring-black/10 shadow-black/5 transition-[transform,box-shadow] duration-300 ease-out will-change-transform group-hover:-translate-y-1 group-hover:-rotate-2 group-hover:scale-[1.05] group-hover:shadow-2xl group-hover:shadow-black/25 md:p-8 dark:bg-neutral-900 dark:ring-white/10 dark:shadow-white/5 dark:group-hover:shadow-black/60">
                   <div className="mb-4 flex items-center justify-between gap-3">
                     <span className="inline-flex items-center gap-2 font-mono text-[11px] font-medium tracking-[0.14em] uppercase" style={{ color: "var(--accent)" }}>
                       <motion.span
