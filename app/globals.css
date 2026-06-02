@@ -1,5 +1,9 @@
 @import "tailwindcss";
 
+/* Bind Tailwind's `dark:` variant to the site theme toggle, which sets
+   data-theme="dark" on <html> (instead of the default prefers-color-scheme). */
+@custom-variant dark (&:where([data-theme="dark"] *));
+
 /*
  * Orchestra — warm editorial design system.
  * Every brand color lives in ONE place: --color-accent (and its siblings).

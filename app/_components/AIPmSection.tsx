@@ -108,45 +108,59 @@ export default function AIPmSection() {
           </motion.p>
         </motion.div>
 
-        {/* 2×2 grid */}
+        {/* 2×2 grid — striped-frame panels (dark + light themed) */}
         <motion.div
           ref={gridRef}
-          className="aipm-grid"
           variants={gridVariants}
           initial="hidden"
           animate={inView ? "visible" : "hidden"}
+          className="mx-auto grid w-full max-w-3xl grid-cols-1 gap-1 rounded-3xl p-1 antialiased ring-1 shadow-sm ring-black/10 shadow-black/5 md:grid-cols-2 dark:ring-white/10 dark:shadow-white/5"
         >
           {CARDS.map((card) => {
             const Icon = card.Icon;
             return (
               <motion.div
                 key={card.key}
-                className="aipm-card"
                 style={{ "--accent": card.accent } as CSSProperties}
                 variants={cardVariants}
-                whileHover={{ y: -6 }}
+                whileHover={{ y: -4 }}
                 transition={{ type: "spring", stiffness: 300, damping: 24 }}
+                className="group relative rounded-[22px] [--pattern-fg:color-mix(in_oklab,#0a0a0a_5%,transparent)] dark:[--pattern-fg:color-mix(in_oklab,#fff_5%,transparent)]"
               >
-                <span className="aipm-card-glow" aria-hidden="true" />
-                <span className="aipm-card-bar" aria-hidden="true" />
+                {/* decorative diagonal-stripe frame */}
+                <span
+                  aria-hidden="true"
+                  className="absolute inset-0 h-full w-full rounded-[inherit] bg-[image:repeating-linear-gradient(315deg,var(--pattern-fg)_0,var(--pattern-fg)_1px,transparent_0,transparent_50%)] bg-[size:5px_5px] bg-fixed shadow-sm ring-1 ring-black/5 shadow-black/5 transition duration-300 group-hover:ring-black/15 dark:ring-white/5 dark:shadow-white/5 dark:group-hover:ring-white/20"
+                />
 
-                <div className="aipm-card-head">
-                  <span className="aipm-cat">
-                    <motion.span className="aipm-icon" variants={iconVariants}>
-                      <Icon size={16} strokeWidth={2.2} />
-                    </motion.span>
-                    {card.category}
-                  </span>
-                  {card.severity && (
-                    <span className="aipm-sev">
-                      <span className="aipm-sev-dot" />
-                      {card.severity}
+                {/* content panel */}
+                <div className="relative rounded-[22px] bg-white p-4 ring-1 shadow-sm ring-black/10 shadow-black/5 md:p-8 dark:bg-neutral-900 dark:ring-white/10 dark:shadow-white/5">
+                  <div className="mb-4 flex items-center justify-between gap-3">
+                    <span className="inline-flex items-center gap-2 font-mono text-[11px] font-medium tracking-[0.14em] uppercase" style={{ color: "var(--accent)" }}>
+                      <motion.span
+                        variants={iconVariants}
+                        className="inline-grid size-7 place-items-center rounded-lg"
+                        style={{ background: "color-mix(in srgb, var(--accent) 14%, transparent)" }}
+                      >
+                        <Icon size={15} strokeWidth={2.2} />
+                      </motion.span>
+                      {card.category}
                     </span>
-                  )}
-                </div>
+                    {card.severity && (
+                      <span className="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[10px] font-semibold tracking-wider uppercase text-neutral-500 dark:text-gray-400" style={{ background: "color-mix(in srgb, var(--accent) 12%, transparent)" }}>
+                        <span className="size-1.5 rounded-full" style={{ background: "var(--accent)" }} />
+                        {card.severity}
+                      </span>
+                    )}
+                  </div>
 
-                <p className="aipm-card-title">{card.title}</p>
-                <p className="aipm-card-body">{card.body}</p>
+                  <p className="text-base leading-6 font-medium text-neutral-900 dark:text-neutral-100">
+                    {card.title}
+                  </p>
+                  <p className="mt-2 text-sm leading-6 text-neutral-500 dark:text-gray-400">
+                    {card.body}
+                  </p>
+                </div>
               </motion.div>
             );
           })}
