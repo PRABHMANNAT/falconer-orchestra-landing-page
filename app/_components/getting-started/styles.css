@@ -104,7 +104,7 @@
   background: transparent;
   border-radius: 999px;
   cursor: pointer;
-  color: var(--color-muted);
+  color: #5b6660;
   font-family: var(--font-nav);
   font-size: 13.5px;
   font-weight: 500;
@@ -143,7 +143,7 @@
 }
 
 .gs-tab.is-active {
-  color: #fff;
+  color: #f8f5eb;
 }
 
 .gs-tab.is-active .gs-tab-n {
@@ -152,7 +152,7 @@
 }
 
 .gs-tab:not(.is-active):hover {
-  color: var(--color-ink);
+  color: #0e1d0b;
 }
 
 /* ---------- Stage ---------- */
@@ -458,25 +458,89 @@
   border-bottom-color: var(--color-accent-deep);
 }
 
-/* ---------- Dark theme tweaks ---------- */
-[data-theme="dark"] .gs-section {
-  background: transparent;
+/* ---------- Dark theme tweaks ----------
+   Some token usages don't pick up the [data-theme="dark"] override reliably
+   (Tailwind v4 @theme + cascade quirks), so we hardcode the dark surface
+   and text values here. Values mirror globals-additions.css. */
+
+[data-theme="dark"] .gs-section { background: #0F0D0B; }
+
+[data-theme="dark"] .gs-section::before {
+  background: radial-gradient(60% 100% at 50% 0%, rgba(217, 119, 87, 0.16), transparent 70%);
 }
 
-[data-theme="dark"] .gs-stage,
+[data-theme="dark"] .gs-head h2 { color: #FAF7F1; }
+[data-theme="dark"] .gs-head h2 span { color: var(--color-accent); }
+[data-theme="dark"] .gs-sub { color: #b9b0a6; }
+
 [data-theme="dark"] .gs-tabs {
-  background: color-mix(in srgb, var(--color-ink) 60%, transparent);
+  background: #1C1916;
+  border-color: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
 }
 
-[data-theme="dark"] .gs-tile,
-[data-theme="dark"] .gs-sugg,
-[data-theme="dark"] .gs-msg-you {
-  background: color-mix(in srgb, var(--color-ink) 50%, transparent);
+[data-theme="dark"] .gs-tab { color: #b9b0a6; }
+[data-theme="dark"] .gs-tab:not(.is-active):hover { color: #FAF7F1; }
+[data-theme="dark"] .gs-tab.is-active { color: #0F0D0B; }
+[data-theme="dark"] .gs-tab.is-active .gs-tab-n { color: var(--color-accent); }
+[data-theme="dark"] .gs-tab-pill { background: #FAF7F1; }
+
+[data-theme="dark"] .gs-stage {
+  background: #1C1916;
+  border-color: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.45);
 }
 
+[data-theme="dark"] .gs-stage-head h3 { color: #FAF7F1; }
+[data-theme="dark"] .gs-stage-head p { color: #b9b0a6; }
+
+[data-theme="dark"] .gs-tile {
+  background: #25201C;
+  border-color: rgba(255, 255, 255, 0.08);
+}
+[data-theme="dark"] .gs-tile:hover {
+  border-color: color-mix(in srgb, var(--color-accent) 55%, rgba(255, 255, 255, 0.08));
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.45);
+}
+[data-theme="dark"] .gs-tile-logo {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(255, 255, 255, 0.08);
+}
+[data-theme="dark"] .gs-tile-meta b { color: #FAF7F1; }
+[data-theme="dark"] .gs-tile-meta small { color: #9a9088; }
+
+[data-theme="dark"] .gs-msg {
+  border-color: rgba(255, 255, 255, 0.08);
+}
+[data-theme="dark"] .gs-msg p { color: #FAF7F1; }
+[data-theme="dark"] .gs-msg-who { color: #9a9088; }
+[data-theme="dark"] .gs-msg-you { background: #25201C; }
 [data-theme="dark"] .gs-msg-soc {
-  background: color-mix(in srgb, var(--color-ink) 75%, transparent);
+  background: #2A211D;
+  border-color: color-mix(in srgb, var(--color-accent) 40%, transparent);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
 }
+[data-theme="dark"] .gs-msg-soc .gs-msg-who { color: #f0a98a; }
+
+[data-theme="dark"] .gs-chip {
+  background: rgba(217, 119, 87, 0.18);
+  color: #f0c4b0;
+}
+
+[data-theme="dark"] .gs-sugg {
+  background: #25201C;
+  border-color: rgba(255, 255, 255, 0.08);
+}
+[data-theme="dark"] .gs-sugg:hover {
+  border-color: color-mix(in srgb, var(--color-accent) 55%, rgba(255, 255, 255, 0.08));
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.45);
+}
+[data-theme="dark"] .gs-sugg h4 { color: #FAF7F1; }
+[data-theme="dark"] .gs-sugg p { color: #b9b0a6; }
+
+[data-theme="dark"] .gs-sev-low  { background: rgba(33, 176, 122, 0.18);  color: #4fd09a; }
+[data-theme="dark"] .gs-sev-med  { background: rgba(224, 160, 32, 0.20);  color: #f0c060; }
+[data-theme="dark"] .gs-sev-high { background: rgba(220, 38, 38, 0.18);   color: #f08080; }
 
 /* ---------- Reduced motion ---------- */
 @media (prefers-reduced-motion: reduce) {
