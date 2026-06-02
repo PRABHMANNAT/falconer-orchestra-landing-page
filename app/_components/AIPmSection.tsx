@@ -103,8 +103,8 @@ export default function AIPmSection() {
             The AI PM you never hired
           </motion.h2>
           <motion.p className="aipm-sub" variants={headItem}>
-            Socrates doesn&apos;t just answer questions. It watches your company in motion and
-            surfaces what would slip through — before it costs you a sprint.
+            It reads every commit, doc, and thread your team produces — then surfaces the
+            one thing about to derail your sprint, before it does. No prompting required.
           </motion.p>
         </motion.div>
 
