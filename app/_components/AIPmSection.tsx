@@ -173,10 +173,11 @@ export default function AIPmSection() {
           transition={{ duration: 0.5, delay: 0.3, ease: EASE }}
         >
           <a href="#" className="aipm-cta">
-            Explore suggestions <span aria-hidden="true">→</span>
+            See everything Socrates caught <span aria-hidden="true">→</span>
           </a>
           <p className="aipm-note">
-            Socrates surfaces 8 categories of risk. Only what needs attention now is shown.
+            Socrates tracks 8 kinds of risk across your stack — and only ever shows you
+            what needs you right now.
           </p>
         </motion.div>
       </div>
