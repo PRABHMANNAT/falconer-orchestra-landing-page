@@ -142,8 +142,13 @@ function Header() {
         <a className="btn btn-accent" href="#">
           Join Waitlist
         </a>
-        <a className="btn btn-dark" href="#">
-          View Demo
+        <a
+          className="btn btn-dark"
+          href="https://calendly.com/adidogra07/orchestra-demo"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Book Demo
         </a>
         <button
           type="button"
@@ -186,8 +191,14 @@ function Header() {
             <a className="btn btn-accent" href="#" onClick={() => setMenuOpen(false)}>
               Join Waitlist
             </a>
-            <a className="btn btn-dark" href="#" onClick={() => setMenuOpen(false)}>
-              View Demo
+            <a
+              className="btn btn-dark"
+              href="https://calendly.com/adidogra07/orchestra-demo"
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => setMenuOpen(false)}
+            >
+              Book Demo
             </a>
           </motion.div>
         )}
@@ -780,8 +791,13 @@ export default function Home() {
                 <motion.a className="primary" href="#" whileHover={{ scale: 0.97 }} whileTap={{ scale: 0.95 }}>
                   Join Waitlist
                 </motion.a>
-                <a className="secondary" href="#">
-                  Book a Demo
+                <a
+                  className="secondary"
+                  href="https://calendly.com/adidogra07/orchestra-demo"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Book Demo
                 </a>
                 <a className="hero-ghost" href="#">
                   Sign up free →

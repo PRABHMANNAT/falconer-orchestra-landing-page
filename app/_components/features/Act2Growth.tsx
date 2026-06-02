@@ -310,13 +310,18 @@ function CtaFrame() {
           }}>
             Join Waitlist
           </a>
-          <a href="#" style={{
-            padding: "14px 32px", borderRadius: 999,
-            border: "1.5px solid rgba(255,255,255,0.3)", background: "transparent", color: "#FAF7F1",
-            fontFamily: "var(--font-mono)", fontSize: 13, letterSpacing: "0.14em",
-            textTransform: "uppercase", textDecoration: "none",
-          }}>
-            Book a Demo
+          <a
+            href="https://calendly.com/adidogra07/orchestra-demo"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              padding: "14px 32px", borderRadius: 999,
+              border: "1.5px solid rgba(255,255,255,0.3)", background: "transparent", color: "#FAF7F1",
+              fontFamily: "var(--font-mono)", fontSize: 13, letterSpacing: "0.14em",
+              textTransform: "uppercase", textDecoration: "none",
+            }}
+          >
+            Book Demo
           </a>
         </div>
         <p style={{

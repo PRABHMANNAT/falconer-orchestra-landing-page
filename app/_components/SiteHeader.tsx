@@ -74,8 +74,13 @@ export default function SiteHeader() {
         <a className="btn btn-accent" href="#">
           Join Waitlist
         </a>
-        <a className="btn btn-dark" href="#">
-          View Demo
+        <a
+          className="btn btn-dark"
+          href="https://calendly.com/adidogra07/orchestra-demo"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Book Demo
         </a>
         <button
           type="button"
@@ -121,8 +126,14 @@ export default function SiteHeader() {
             <a className="btn btn-accent" href="#" onClick={() => setMenuOpen(false)}>
               Join Waitlist
             </a>
-            <a className="btn btn-dark" href="#" onClick={() => setMenuOpen(false)}>
-              View Demo
+            <a
+              className="btn btn-dark"
+              href="https://calendly.com/adidogra07/orchestra-demo"
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => setMenuOpen(false)}
+            >
+              Book Demo
             </a>
           </motion.div>
         )}

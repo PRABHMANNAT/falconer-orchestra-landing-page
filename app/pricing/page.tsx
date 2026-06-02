@@ -458,8 +458,13 @@ export default function PricingPage() {
               <a href="#" className="pricing-page-btn pricing-page-btn--primary">
                 Join Waitlist
               </a>
-              <a href="#" className="pricing-page-btn pricing-page-btn--ghost">
-                Book a Demo
+              <a
+                href="https://calendly.com/adidogra07/orchestra-demo"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="pricing-page-btn pricing-page-btn--ghost"
+              >
+                Book Demo
               </a>
             </div>
           </motion.div>

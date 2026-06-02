@@ -416,7 +416,9 @@ export default function ReducedMotionFallback() {
           </a>
 
           <a
-            href="#demo"
+            href="https://calendly.com/adidogra07/orchestra-demo"
+            target="_blank"
+            rel="noopener noreferrer"
             style={{
               display: "inline-block",
               fontFamily: "var(--font-sans)",
@@ -442,7 +444,7 @@ export default function ReducedMotionFallback() {
               el.style.background = "transparent";
             }}
           >
-            Book a Demo
+            Book Demo
           </a>
         </div>
       </FadeUp>
