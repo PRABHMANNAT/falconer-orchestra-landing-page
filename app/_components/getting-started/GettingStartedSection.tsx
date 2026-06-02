@@ -1,194 +1,304 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import { motion, type Variants } from "framer-motion";
+import { INTEGRATIONS } from "./integrations";
 import "./styles.css";
-import { STEPS, type StepId } from "./StepTabs";
-import IntegrationShowcase from "./IntegrationShowcase";
-import ContextDemo from "./ContextDemo";
-import AiPmSuggestions from "./AiPmSuggestions";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
-const fadeUp: Variants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: EASE } },
+type StepId = "connect" | "structure" | "ask";
+
+const STEPS: {
+  id: StepId;
+  n: string;
+  label: string;
+  title: string;
+  desc: string;
+}[] = [
+  {
+    id: "connect",
+    n: "01",
+    label: "Connect",
+    title: "Plug in the tools you already use",
+    desc: "One click — Slack, GitHub, Notion, Linear and more. No setup, no config.",
+  },
+  {
+    id: "structure",
+    n: "02",
+    label: "Structure",
+    title: "Every signal becomes one brain",
+    desc: "Threads, docs, tickets, and decisions link themselves into a single map.",
+  },
+  {
+    id: "ask",
+    n: "03",
+    label: "Ask",
+    title: "Socrates answers — with sources",
+    desc: "Cited answers, surfaced risk, and context on tap. No more tab juggling.",
+  },
+];
+
+// ─── Panels ────────────────────────────────────────────────────────────────
+
+const stagger: Variants = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.05, delayChildren: 0.08 } },
 };
 
-function StepGraphic({ id }: { id: StepId }) {
-  if (id === "connect") return <IntegrationShowcase />;
-  if (id === "structure") return <ContextDemo />;
-  return <AiPmSuggestions />;
+const fadeUp: Variants = {
+  hidden: { opacity: 0, y: 10 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease: EASE } },
+};
+
+function ConnectPanel() {
+  return (
+    <motion.div
+      className="gs-connect"
+      variants={stagger}
+      initial="hidden"
+      animate="visible"
+    >
+      <motion.div className="gs-connect-grid" variants={stagger}>
+        {INTEGRATIONS.map((t) => (
+          <motion.figure
+            key={t.id}
+            className="gs-tile"
+            variants={fadeUp}
+            whileHover={{ y: -3 }}
+            transition={{ type: "spring", stiffness: 320, damping: 22 }}
+          >
+            <span className="gs-tile-logo" aria-hidden="true">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={t.src} alt="" loading="lazy" draggable={false} />
+            </span>
+            <figcaption className="gs-tile-meta">
+              <b>{t.name}</b>
+              <small>{t.category}</small>
+            </figcaption>
+            <motion.span
+              className="gs-tile-check"
+              aria-hidden="true"
+              initial={{ scale: 0, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ delay: 0.4 + Math.random() * 0.6, type: "spring", stiffness: 380, damping: 18 }}
+            >
+              <svg viewBox="0 0 12 12" width="10" height="10" aria-hidden="true">
+                <path d="M2 6.5 L5 9.5 L10 3.5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </motion.span>
+          </motion.figure>
+        ))}
+      </motion.div>
+    </motion.div>
+  );
 }
 
+function StructurePanel() {
+  const messages = [
+    { from: "you", text: "What did we promise Northwind about retries?" },
+    {
+      from: "soc",
+      text: "A 24-hour replay window with idempotency keys — committed on the May 14 call.",
+      chips: ["May 14 · call", "NW-218 · ticket", "Scoping memo"],
+    },
+  ] as const;
+
+  return (
+    <motion.div
+      className="gs-structure"
+      initial="hidden"
+      animate="visible"
+      variants={stagger}
+    >
+      {messages.map((m, i) => (
+        <motion.div
+          key={i}
+          className={`gs-msg ${m.from === "you" ? "gs-msg-you" : "gs-msg-soc"}`}
+          variants={fadeUp}
+        >
+          <span className="gs-msg-who">{m.from === "you" ? "You" : "Socrates"}</span>
+          <p>{m.text}</p>
+          {"chips" in m && m.chips && (
+            <motion.div className="gs-chips" variants={stagger}>
+              {m.chips.map((c) => (
+                <motion.span key={c} className="gs-chip" variants={fadeUp}>
+                  {c}
+                </motion.span>
+              ))}
+            </motion.div>
+          )}
+        </motion.div>
+      ))}
+    </motion.div>
+  );
+}
+
+function AskPanel() {
+  const items = [
+    {
+      sev: "high",
+      cat: "Merge conflict",
+      title: "Two PRs editing auth.ts",
+      desc: "Maya and Devraj both touched the same file — whoever merges last has to rebase.",
+    },
+    {
+      sev: "med",
+      cat: "Spec drift",
+      title: "OAuth in code, magic-link in PRD",
+      desc: "Your spec and your code stopped agreeing. Reconcile before launch.",
+    },
+    {
+      sev: "med",
+      cat: "Stalled work",
+      title: "PR #43 — no activity in 7 days",
+      desc: "Blocked on review from Sarah. Devraj nudged once on Monday.",
+    },
+    {
+      sev: "low",
+      cat: "Coverage gap",
+      title: "Driver Assignment has no engineering activity",
+      desc: "Scoped for sprint 4, we're in sprint 5, and nothing has been touched.",
+    },
+  ] as const;
+
+  return (
+    <motion.div
+      className="gs-ask"
+      initial="hidden"
+      animate="visible"
+      variants={stagger}
+    >
+      {items.map((it) => (
+        <motion.article
+          key={it.title}
+          className="gs-sugg"
+          variants={fadeUp}
+          whileHover={{ y: -3 }}
+          transition={{ type: "spring", stiffness: 320, damping: 22 }}
+        >
+          <header className="gs-sugg-head">
+            <span className={`gs-sugg-sev gs-sev-${it.sev}`}>{it.cat}</span>
+          </header>
+          <h4>{it.title}</h4>
+          <p>{it.desc}</p>
+        </motion.article>
+      ))}
+    </motion.div>
+  );
+}
+
+// ─── Section ───────────────────────────────────────────────────────────────
+
 export default function GettingStartedSection() {
-  const [step, setStep] = useState<StepId>("connect");
-  const articleRefs = useRef<Array<HTMLElement | null>>([]);
-  // After a click-scroll we briefly ignore observer updates so the click
-  // target wins over whatever the user is scrolling past.
-  const suppressUntil = useRef(0);
-
-  // Drive the active step from whichever article is closest to the
-  // viewport center. Triggers as each section passes through the middle band.
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    const els = articleRefs.current.filter(Boolean) as HTMLElement[];
-    if (els.length === 0) return;
-
-    const io = new IntersectionObserver(
-      (entries) => {
-        if (Date.now() < suppressUntil.current) return;
-        let best: { id: StepId; dist: number } | null = null;
-        const viewportCenter = window.innerHeight / 2;
-        for (const e of entries) {
-          if (!e.isIntersecting) continue;
-          const rect = e.target.getBoundingClientRect();
-          // Skip zero-size segments — happens during initial layout and in
-          // some embedded preview contexts. Picking one would be arbitrary.
-          if (rect.height === 0) continue;
-          const dist = Math.abs(rect.top + rect.height / 2 - viewportCenter);
-          const id = (e.target as HTMLElement).dataset.step as StepId;
-          if (!best || dist < best.dist) best = { id, dist };
-        }
-        if (best) setStep(best.id);
-      },
-      // A tall band around the middle of the screen — the segment whose
-      // center is here is the "active" one.
-      { rootMargin: "-40% 0px -40% 0px", threshold: 0 }
-    );
-
-    els.forEach((el) => io.observe(el));
-    return () => io.disconnect();
-  }, []);
-
-  const handleStepClick = (id: StepId) => {
-    setStep(id);
-    suppressUntil.current = Date.now() + 700;
-    const idx = STEPS.findIndex((s) => s.id === id);
-    const el = articleRefs.current[idx];
-    if (!el) return;
-    const rect = el.getBoundingClientRect();
-    const target = window.scrollY + rect.top - (window.innerHeight - rect.height) / 2;
-    window.scrollTo({ top: target, behavior: "smooth" });
-  };
-
-  const onStepKey = (e: React.KeyboardEvent<HTMLButtonElement>, idx: number) => {
-    if (e.key !== "ArrowDown" && e.key !== "ArrowUp") return;
-    e.preventDefault();
-    const dir = e.key === "ArrowDown" ? 1 : -1;
-    const next = (idx + dir + STEPS.length) % STEPS.length;
-    handleStepClick(STEPS[next].id);
-  };
-
-  const activeIndex = STEPS.findIndex((s) => s.id === step);
+  const [active, setActive] = useState<StepId>("connect");
+  const step = STEPS.find((s) => s.id === active)!;
 
   return (
     <section id="getstarted" className="gs-section" aria-labelledby="gs-title">
-      <div className="gs-grid">
-        {/* Intro column — sticky on desktop, holds the step indicator. */}
-        <motion.header
-          className="gs-copy"
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.4 }}
-          variants={{
-            hidden: {},
-            visible: { transition: { staggerChildren: 0.08, delayChildren: 0.05 } },
-          }}
+      <motion.header
+        className="gs-head"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.4 }}
+        variants={{
+          hidden: {},
+          visible: { transition: { staggerChildren: 0.08, delayChildren: 0.05 } },
+        }}
+      >
+        <motion.p className="gs-kicker" variants={fadeUp}>
+          Getting started
+        </motion.p>
+        <motion.h2 id="gs-title" variants={fadeUp}>
+          Three steps. <span>One company brain.</span>
+        </motion.h2>
+        <motion.p className="gs-sub" variants={fadeUp}>
+          Plug Orchestra into the tools you live in. Every signal becomes
+          one source of truth — and Socrates rides along to answer, cite,
+          and surface risk.
+        </motion.p>
+      </motion.header>
+
+      <motion.div
+        role="tablist"
+        aria-label="Getting started steps"
+        className="gs-tabs"
+        initial={{ opacity: 0, y: 8 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, amount: 0.4 }}
+        transition={{ duration: 0.5, ease: EASE, delay: 0.15 }}
+      >
+        {STEPS.map((s) => {
+          const isActive = s.id === active;
+          return (
+            <button
+              key={s.id}
+              type="button"
+              role="tab"
+              aria-selected={isActive}
+              aria-controls={`gs-panel-${s.id}`}
+              id={`gs-tab-${s.id}`}
+              onClick={() => setActive(s.id)}
+              className={`gs-tab${isActive ? " is-active" : ""}`}
+            >
+              {isActive && (
+                <motion.span
+                  layoutId="gs-tab-pill"
+                  className="gs-tab-pill"
+                  transition={{ type: "spring", stiffness: 380, damping: 32 }}
+                  aria-hidden="true"
+                />
+              )}
+              <span className="gs-tab-content">
+                <span className="gs-tab-n">{s.n}</span>
+                <span className="gs-tab-label">{s.label}</span>
+              </span>
+            </button>
+          );
+        })}
+      </motion.div>
+
+      <motion.div
+        className="gs-stage"
+        initial={{ opacity: 0, y: 16 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, amount: 0.2 }}
+        transition={{ duration: 0.55, ease: EASE, delay: 0.2 }}
+      >
+        <motion.div
+          key={active}
+          id={`gs-panel-${active}`}
+          role="tabpanel"
+          aria-labelledby={`gs-tab-${active}`}
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.32, ease: EASE }}
+          className="gs-stage-inner"
         >
-          <motion.p className="gs-kicker" variants={fadeUp}>
-            Getting Started
-          </motion.p>
-          <motion.h2 id="gs-title" variants={fadeUp}>
-            Connect.{" "}
-            <span style={{ color: "var(--color-accent)" }}>Structure.</span>{" "}
-            Ask.
-          </motion.h2>
-          <motion.p variants={fadeUp}>
-            Plug Orchestra into the tools you already live in. We turn every
-            signal into one company brain — and Socrates rides along to answer,
-            surface risk, and keep your team in sync.
-          </motion.p>
-
-          <motion.div variants={fadeUp}>
-            <div
-              role="tablist"
-              aria-label="Getting started steps"
-              className="gs-steps"
-            >
-              {STEPS.map((s, i) => {
-                const isActive = s.id === step;
-                const isDone = i < activeIndex;
-                return (
-                  <button
-                    key={s.id}
-                    type="button"
-                    role="tab"
-                    id={`gs-tab-${s.id}`}
-                    aria-selected={isActive}
-                    aria-controls={`gs-panel-${s.id}`}
-                    tabIndex={isActive ? 0 : -1}
-                    onClick={() => handleStepClick(s.id)}
-                    onKeyDown={(e) => onStepKey(e, i)}
-                    className={`gs-step${isActive ? " is-active" : ""}${isDone ? " is-done" : ""}`}
-                  >
-                    <span className="gs-step-num" aria-hidden="true">
-                      {s.n}
-                    </span>
-                    <span className="gs-step-body">
-                      <span className="gs-step-label">{s.label}</span>
-                      <span className="gs-step-desc">{s.desc}</span>
-                    </span>
-                  </button>
-                );
-              })}
-            </div>
-          </motion.div>
-
-          <motion.a href="#integrations" className="gs-link" variants={fadeUp}>
-            See all integrations →
-          </motion.a>
-        </motion.header>
-
-        {/* Scrolly column — three tall articles that drive the active step
-            as they pass the viewport centre. The stage on the right stays
-            sticky and swaps its animation to match. */}
-        <div className="gs-scroll-col">
-          <div className="gs-stage-sticky">
-            <motion.div
-              className="gs-stage"
-              initial={{ opacity: 0, y: 26 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.25 }}
-              transition={{ duration: 0.6, ease: EASE }}
-            >
-              <motion.div
-                key={step}
-                initial={{ opacity: 0, y: 12, filter: "blur(5px)" }}
-                animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-                transition={{ duration: 0.4, ease: EASE }}
-              >
-                <StepGraphic id={step} />
-              </motion.div>
-            </motion.div>
+          <div className="gs-stage-head">
+            <h3>{step.title}</h3>
+            <p>{step.desc}</p>
           </div>
-
-          {/* Invisible scroll segments — one per step. Their position in the
-              viewport is what drives the observer above. */}
-          <div className="gs-scroll-track" aria-hidden="true">
-            {STEPS.map((s, i) => (
-              <article
-                key={s.id}
-                ref={(el) => {
-                  articleRefs.current[i] = el;
-                }}
-                data-step={s.id}
-                className="gs-scroll-step"
-              />
-            ))}
+          <div className="gs-stage-body">
+            {active === "connect" && <ConnectPanel />}
+            {active === "structure" && <StructurePanel />}
+            {active === "ask" && <AskPanel />}
           </div>
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
+
+      <motion.div
+        className="gs-foot"
+        initial={{ opacity: 0, y: 8 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, amount: 0.6 }}
+        transition={{ duration: 0.5, ease: EASE }}
+      >
+        <a href="#integrations" className="gs-link">
+          See all integrations
+          <span aria-hidden="true">→</span>
+        </a>
+      </motion.div>
     </section>
   );
 }
