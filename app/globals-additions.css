@@ -157,8 +157,25 @@
    DARK MODE — livedoc
    --------------------------------------------------------- */
 [data-theme="dark"] .livedoc { background: #1A1714; color: #FAF7F1; }
-[data-theme="dark"] .livedoc-chrome { background: #161310; }
+[data-theme="dark"] .livedoc-chrome { background: #161310; border-bottom-color: rgba(255, 255, 255, 0.08); }
 [data-theme="dark"] .livedoc-rail { background: #161310; }
+[data-theme="dark"] .livedoc-doc { border-right-color: rgba(255, 255, 255, 0.08); }
+
+/* Lift text colours for dark surfaces — the base styles use dark inks that
+   are unreadable on the dark panel. */
+[data-theme="dark"] .livedoc-doc-title { color: #FAF7F1; }
+[data-theme="dark"] .livedoc-line { color: rgba(250, 247, 241, 0.84); }
+[data-theme="dark"] .livedoc-path { color: rgba(250, 247, 241, 0.55); }
+[data-theme="dark"] .livedoc-rail-head { color: rgba(250, 247, 241, 0.52); }
+[data-theme="dark"] .livedoc-time { color: rgba(250, 247, 241, 0.5); }
+[data-theme="dark"] .livedoc-event-title { color: #F2ECDE; }
+[data-theme="dark"] .livedoc-event-note { color: rgba(250, 247, 241, 0.62); }
+[data-theme="dark"] .livedoc-node { background: #1A1714; }
+
+/* Brighten the timeline tag text so it reads on the dark panel. */
+[data-theme="dark"] .livedoc-tag { background: rgba(217, 119, 87, 0.22); color: #ecab8e; }
+[data-theme="dark"] .livedoc-event.call .livedoc-tag { background: rgba(199, 154, 62, 0.22); color: #e7cf9c; }
+[data-theme="dark"] .livedoc-event.ticket .livedoc-tag { background: rgba(111, 154, 138, 0.24); color: #b9ccae; }
 
 /* ---------------------------------------------------------
    DARK MODE — flow (Why Orchestra) section
