@@ -17,7 +17,6 @@ const PricingSection = dynamic(() => import("./_components/PricingSection"), { s
 const FaqSection = dynamic(() => import("./_components/FaqSection"), { ssr: false });
 const DarkModeToggle = dynamic(() => import("./_components/DarkModeToggle"), { ssr: false });
 const MobileStickyCta = dynamic(() => import("./_components/MobileStickyCta"), { ssr: false });
-const HomepageTeaser = dynamic(() => import("./_components/HomepageTeaser"), { ssr: false });
 
 const navItems: { label: string; href: string }[] = [
   { label: "Home", href: "/" },
@@ -880,9 +879,6 @@ export default function Home() {
             ))}
           </div>
         </section>
-
-        {/* ── SECTION 4.5: FEATURES PAGE TEASER — NEW ── */}
-        <HomepageTeaser />
 
         {/* ── SECTION 5: GETTING STARTED (integrations) ── */}
         <GettingStarted />
