@@ -11,6 +11,7 @@ import {
   type Variants,
 } from "framer-motion";
 import Mark from "./Mark";
+import { StripedPattern } from "@/registry/magicui/striped-pattern";
 import "./HomepageTeaser.css";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
@@ -144,6 +145,7 @@ export default function HomepageTeaser() {
       whileInView="visible"
       viewport={{ once: true, amount: 0.32 }}
     >
+      <StripedPattern className="teaser-stripes [mask-image:radial-gradient(600px_circle_at_center,white,transparent)]" />
       <motion.span
         aria-hidden="true"
         className="teaser-glow"

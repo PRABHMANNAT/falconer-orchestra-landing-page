@@ -10,6 +10,15 @@
   overflow: hidden;
 }
 
+.teaser-stripes {
+  color: rgba(217, 119, 87, 0.35);
+  z-index: 0;
+}
+
+[data-theme="dark"] .teaser-stripes {
+  color: rgba(217, 119, 87, 0.28);
+}
+
 .teaser-glow {
   position: absolute;
   inset: -18% 0 auto 50%;
