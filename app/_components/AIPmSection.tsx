@@ -30,8 +30,8 @@ const CARDS: Card[] = [
     accent: "#7c5cff",
     category: "Spec drift",
     severity: null,
-    title: "OAuth shipping despite PRD saying v1 is magic-link only",
-    body: "Your PRD and your code stopped agreeing. Reconcile before launch.",
+    title: "Your code shipped OAuth — the PRD still says magic-link only",
+    body: "Spec and reality stopped agreeing days ago. Reconcile now, not in the launch post-mortem.",
   },
   {
     key: "stalled",
