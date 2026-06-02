@@ -21,8 +21,8 @@ const CARDS: Card[] = [
     accent: "#d97757",
     category: "Merge conflicts",
     severity: "High",
-    title: "Maya and Devraj both editing auth.ts",
-    body: "Two open PRs touch the same files. Merge either first and the other will need to rebase.",
+    title: "Two PRs are rewriting auth.ts at once",
+    body: "Maya and Devraj are deep in the same file. Whoever merges second eats a painful rebase — untangle it before they collide.",
   },
   {
     key: "drift",
