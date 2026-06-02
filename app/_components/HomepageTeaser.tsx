@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
 import { useRef, type CSSProperties } from "react";
 import {
   motion,
@@ -15,43 +14,10 @@ import { StripedPattern } from "@/registry/magicui/striped-pattern";
 import "./HomepageTeaser.css";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
-const CORE = { x: 50, y: 50 };
 const HEADLINE = ["Watch", "it", "come", "together."];
-const FLOW_DURATION = 5.3;
-const SIGNAL_START = 1.05;
-const SIGNAL_STAGGER = 0.16;
 
-type SourceNode = {
-  id: string;
-  label: string;
-  logoSrc: string;
-  x: number;
-  y: number;
-};
-
-const NODES: SourceNode[] = [
-  { id: "slack", label: "Slack", logoSrc: "/teaser-logos/slack.png", x: 15, y: 23 },
-  { id: "gmail", label: "Gmail", logoSrc: "/teaser-logos/gmail.png", x: 81, y: 19 },
-  { id: "linear", label: "Linear", logoSrc: "/teaser-logos/linear.png", x: 10, y: 58 },
-  { id: "notion", label: "Notion", logoSrc: "/teaser-logos/notion.png", x: 88, y: 50 },
-  { id: "github", label: "GitHub", logoSrc: "/teaser-logos/github.png", x: 22, y: 84 },
-  { id: "docs", label: "Docs", logoSrc: "/teaser-logos/google-docs.png", x: 70, y: 86 },
-  { id: "fireflies", label: "Fireflies", logoSrc: "/teaser-logos/fireflies.png", x: 31, y: 37 },
-  { id: "teams", label: "Teams", logoSrc: "/teaser-logos/teams.png", x: 76, y: 68 },
-];
-
-const EDGES: [string, string][] = [
-  ["slack", "fireflies"],
-  ["fireflies", "gmail"],
-  ["gmail", "notion"],
-  ["notion", "teams"],
-  ["teams", "docs"],
-  ["docs", "github"],
-  ["github", "linear"],
-  ["linear", "slack"],
-  ["fireflies", "notion"],
-  ["github", "teams"],
-];
+// Six evenly-spaced rays around the core. Sources flow inward along each one.
+const RAYS = [-90, -30, 30, 90, 150, 210];
 
 const sectionVariants: Variants = {
   hidden: {},
@@ -87,42 +53,6 @@ const stageVariants: Variants = {
     transition: { duration: 0.85, ease: EASE },
   },
 };
-
-const nodeVariants: Variants = {
-  hidden: { opacity: 0, x: "-50%", y: "-50%", scale: 0.62 },
-  visible: (i: number) => ({
-    opacity: 1,
-    x: "-50%",
-    y: "-50%",
-    scale: 1,
-    transition: {
-      duration: 0.58,
-      ease: EASE,
-      delay: 0.48 + i * 0.06,
-    },
-  }),
-};
-
-const edgeVariants: Variants = {
-  hidden: { pathLength: 0, opacity: 0 },
-  visible: (i: number) => ({
-    pathLength: 1,
-    opacity: 0.22,
-    transition: { duration: 1.05, ease: "easeOut", delay: 0.52 + i * 0.035 },
-  }),
-};
-
-function signalDelay(index: number) {
-  return SIGNAL_START + index * SIGNAL_STAGGER;
-}
-
-function byId(id: string): SourceNode {
-  const node = NODES.find((item) => item.id === id);
-  if (!node) {
-    throw new Error(`Unknown teaser node: ${id}`);
-  }
-  return node;
-}
 
 export default function HomepageTeaser() {
   const reduce = useReducedMotion();
@@ -178,219 +108,38 @@ export default function HomepageTeaser() {
         </motion.h2>
 
         <motion.p className="teaser-sub" variants={lineUp}>
-          Eight sources. One brain. See the convergence in motion.
+          Every source flows into one. See the convergence in motion.
         </motion.p>
 
+        {/* Minimal convergence: dots stream inward along soft rays into the core. */}
         <motion.div
           className="teaser-stage"
           variants={stageVariants}
           style={reduce ? undefined : { y: stageY, scale: stageScale }}
         >
-          <span className="teaser-sweep" aria-hidden="true" />
-          <span className="teaser-burst teaser-burst-one" aria-hidden="true" />
-          <span className="teaser-burst teaser-burst-two" aria-hidden="true" />
-          <span className="teaser-burst teaser-burst-three" aria-hidden="true" />
-
-          {!reduce &&
-            Array.from({ length: 14 }).map((_, i) => (
-              <motion.span
-                key={`spark-${i}`}
-                aria-hidden="true"
-                className="teaser-spark"
-                style={{
-                  left: `${(i * 67 + 14) % 100}%`,
-                  top: `${(i * 113 + 18) % 100}%`,
-                }}
-                animate={{ opacity: [0.12, 0.58, 0.12], scale: [0.8, 1.2, 0.8] }}
-                transition={{
-                  duration: 3.4 + (i % 5) * 0.35,
-                  delay: i * 0.18,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                }}
+          <div className="teaser-min" aria-hidden="true">
+            {RAYS.map((a) => (
+              <span
+                key={`ray-${a}`}
+                className="teaser-ray"
+                style={{ "--a": `${a}deg` } as CSSProperties}
               />
             ))}
 
-          <svg
-            className="teaser-beams"
-            viewBox="0 0 100 100"
-            preserveAspectRatio="none"
-            aria-hidden="true"
-          >
-            <defs>
-              <radialGradient id="teaser-node-glow" cx="50%" cy="50%" r="50%">
-                <stop offset="0%" stopColor="rgba(217,119,87,0.42)" />
-                <stop offset="100%" stopColor="rgba(217,119,87,0)" />
-              </radialGradient>
-            </defs>
-
-            {NODES.map((node, i) => (
-              <motion.line
-                key={`core-line-${node.id}`}
-                className="teaser-core-line"
-                style={
-                  {
-                    "--signal-delay": `${signalDelay(i)}s`,
-                    "--flow-duration": `${FLOW_DURATION}s`,
-                  } as CSSProperties
-                }
-                x1={node.x}
-                y1={node.y}
-                x2={CORE.x}
-                y2={CORE.y}
-                strokeLinecap="round"
-                vectorEffect="non-scaling-stroke"
-                initial={{ pathLength: 0, opacity: 0 }}
-                whileInView={
-                  reduce
-                    ? { pathLength: 1, opacity: 0.34 }
-                    : { pathLength: 1, opacity: [0.18, 0.7, 0.18] }
-                }
-                viewport={{ once: true, amount: 0.45 }}
-                transition={{
-                  pathLength: { duration: 1.05, ease: "easeOut", delay: 0.38 + i * 0.04 },
-                  opacity: reduce
-                    ? { duration: 0.35, delay: 0.38 + i * 0.04 }
-                    : {
-                        duration: 3.2,
-                        ease: "easeInOut",
-                        delay: signalDelay(i),
-                        repeat: Infinity,
-                        repeatDelay: 2.1,
-                      },
-                }}
-              />
-            ))}
-
-            {EDGES.map(([from, to], i) => {
-              const a = byId(from);
-              const b = byId(to);
-
-              return (
-                <motion.line
-                  key={`${from}-${to}`}
-                  className="teaser-edge"
-                  x1={a.x}
-                  y1={a.y}
-                  x2={b.x}
-                  y2={b.y}
-                  strokeLinecap="round"
-                  vectorEffect="non-scaling-stroke"
-                  custom={i}
-                  variants={edgeVariants}
+            {!reduce &&
+              RAYS.map((a, i) => (
+                <span
+                  key={`pulse-${a}`}
+                  className="teaser-pulse"
+                  style={{ "--a": `${a}deg`, "--d": `${i * 0.5}s` } as CSSProperties}
                 />
-              );
-            })}
+              ))}
 
-            {NODES.map((node) => (
-              <circle
-                key={`node-halo-${node.id}`}
-                cx={node.x}
-                cy={node.y}
-                r="6"
-                fill="url(#teaser-node-glow)"
-              />
-            ))}
-          </svg>
-
-          {!reduce &&
-            NODES.map((node, i) => (
-              <motion.span
-                key={`signal-${node.id}`}
-                aria-hidden="true"
-                className="teaser-signal"
-                initial={{ left: `${node.x}%`, top: `${node.y}%`, opacity: 0, scale: 0.45 }}
-                animate={{
-                  left: [`${node.x}%`, `${node.x}%`, `${CORE.x}%`, `${CORE.x}%`],
-                  top: [`${node.y}%`, `${node.y}%`, `${CORE.y}%`, `${CORE.y}%`],
-                  opacity: [0, 1, 1, 0],
-                  scale: [0.45, 0.7, 1.05, 0.25],
-                }}
-                transition={{
-                  duration: 3.2,
-                  delay: signalDelay(i),
-                  repeat: Infinity,
-                  repeatDelay: 2.1,
-                  ease: "easeInOut",
-                  times: [0, 0.14, 0.78, 1],
-                }}
-              />
-            ))}
-
-          {NODES.map((node, i) => {
-            return (
-              <motion.span
-                key={node.id}
-                className="teaser-node"
-                style={
-                  {
-                    left: `${node.x}%`,
-                    top: `${node.y}%`,
-                    "--signal-delay": `${signalDelay(i)}s`,
-                    "--flow-duration": `${FLOW_DURATION}s`,
-                  } as CSSProperties
-                }
-                variants={nodeVariants}
-                custom={i}
-                whileHover={{ scale: 1.12 }}
-                transition={{ type: "spring", stiffness: 280, damping: 22 }}
-                data-label={node.label}
-                title={node.label}
-                role="img"
-                aria-label={node.label}
-              >
-                <span className="teaser-node-ping" aria-hidden="true" />
-                <motion.span
-                  className="teaser-node-float"
-                  animate={
-                    reduce
-                      ? undefined
-                      : { y: [0, -5, 0, 3, 0], rotate: [0, -2, 0, 2, 0] }
-                  }
-                  transition={
-                    reduce
-                      ? undefined
-                      : {
-                          duration: 5.8 + (i % 4) * 0.5,
-                          delay: i * 0.22,
-                          repeat: Infinity,
-                          ease: "easeInOut",
-                        }
-                  }
-                >
-                  <Image
-                    className="teaser-logo"
-                    src={node.logoSrc}
-                    alt=""
-                    width={40}
-                    height={40}
-                  />
-                </motion.span>
-              </motion.span>
-            );
-          })}
-
-          <motion.div
-            className="teaser-core"
-            initial={{ opacity: 0, scale: 0.64 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true, amount: 0.6 }}
-            transition={{ duration: 0.7, ease: EASE, delay: 0.42 }}
-          >
-            <motion.span
-              className="teaser-core-glow"
-              aria-hidden="true"
-              animate={reduce ? undefined : { opacity: [0.5, 0.95, 0.5], scale: [1, 1.15, 1] }}
-              transition={reduce ? undefined : { duration: 3.2, repeat: Infinity, ease: "easeInOut" }}
-            />
-            <motion.span
-              className="teaser-core-ring"
-              aria-hidden="true"
-              animate={reduce ? undefined : { rotate: 360 }}
-              transition={reduce ? undefined : { duration: 20, repeat: Infinity, ease: "linear" }}
-            />
-            <Mark tone="light" />
-          </motion.div>
+            <div className="teaser-min-core">
+              <span className="teaser-min-ring" aria-hidden="true" />
+              <Mark tone="light" />
+            </div>
+          </div>
         </motion.div>
 
         <motion.div variants={lineUp} className="teaser-cta-row">
