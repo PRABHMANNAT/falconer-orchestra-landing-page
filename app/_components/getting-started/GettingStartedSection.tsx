@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { motion, type Variants } from "framer-motion";
+import { useEffect, useState } from "react";
+import { motion, useReducedMotion, type Variants } from "framer-motion";
 import { INTEGRATIONS } from "./integrations";
 import "./styles.css";
 
@@ -94,43 +94,162 @@ function ConnectPanel() {
   );
 }
 
+const STRUCTURE_PROMPTS = [
+  {
+    q: "What did we promise Northwind about retries?",
+    a: "A 24-hour replay window with idempotency keys — committed on the May 14 call.",
+    chips: ["May 14 · call", "NW-218 · ticket", "Scoping memo"],
+  },
+  {
+    q: "Who's blocked on the auth PR?",
+    a: "PR #47 (auth.ts) has been waiting on Sarah for 7 days. Devraj nudged her on Monday.",
+    chips: ["GitHub · PR #47", "Slack · #eng", "Apr 22 · Sarah"],
+  },
+  {
+    q: "Decisions from last week's call?",
+    a: "Three: ship magic-link first, defer OAuth to v1.1, and promise SAML by Q2 close.",
+    chips: ["Call · May 14", "Decision log", "PRD v3"],
+  },
+  {
+    q: "What's still open on the Driver Assignment spec?",
+    a: "Scoped in sprint 4 but untouched in sprint 5 — no PRs, no Linear tickets, no commits.",
+    chips: ["Spec · Drivers", "Linear · empty", "Sprint 5"],
+  },
+] as const;
+
 function StructurePanel() {
-  const messages = [
-    { from: "you", text: "What did we promise Northwind about retries?" },
-    {
-      from: "soc",
-      text: "A 24-hour replay window with idempotency keys — committed on the May 14 call.",
-      chips: ["May 14 · call", "NW-218 · ticket", "Scoping memo"],
-    },
-  ] as const;
+  const reduce = useReducedMotion();
+  const [idx, setIdx] = useState(0);
+  const [paused, setPaused] = useState(false);
+  const [thinking, setThinking] = useState(false);
+  const current = STRUCTURE_PROMPTS[idx];
+
+  useEffect(() => {
+    if (reduce || paused) return;
+    const tick = setInterval(() => {
+      setThinking(true);
+      const t = setTimeout(() => {
+        setIdx((i) => (i + 1) % STRUCTURE_PROMPTS.length);
+        setThinking(false);
+      }, 520);
+      return () => clearTimeout(t);
+    }, 4200);
+    return () => clearInterval(tick);
+  }, [reduce, paused]);
+
+  const choose = (i: number) => {
+    if (i === idx) return;
+    setThinking(true);
+    setTimeout(() => {
+      setIdx(i);
+      setThinking(false);
+    }, 280);
+  };
 
   return (
-    <motion.div
+    <div
       className="gs-structure"
-      initial="hidden"
-      animate="visible"
-      variants={stagger}
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
     >
-      {messages.map((m, i) => (
+      <div className="gs-structure-stream">
         <motion.div
-          key={i}
-          className={`gs-msg ${m.from === "you" ? "gs-msg-you" : "gs-msg-soc"}`}
-          variants={fadeUp}
+          key={`q-${idx}`}
+          className="gs-msg gs-msg-you"
+          initial={{ opacity: 0, y: 10, filter: "blur(4px)" }}
+          animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+          transition={{ duration: 0.36, ease: EASE }}
         >
-          <span className="gs-msg-who">{m.from === "you" ? "You" : "Socrates"}</span>
-          <p>{m.text}</p>
-          {"chips" in m && m.chips && (
-            <motion.div className="gs-chips" variants={stagger}>
-              {m.chips.map((c) => (
-                <motion.span key={c} className="gs-chip" variants={fadeUp}>
+          <span className="gs-msg-who">You</span>
+          <p>{current.q}</p>
+        </motion.div>
+
+        {thinking ? (
+          <motion.div
+            key="thinking"
+            className="gs-msg gs-msg-soc gs-msg-thinking"
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.22, ease: EASE }}
+            aria-live="polite"
+          >
+            <span className="gs-msg-who">Socrates</span>
+            <span className="gs-typing" aria-label="Thinking">
+              <span /><span /><span />
+            </span>
+          </motion.div>
+        ) : (
+          <motion.div
+            key={`a-${idx}`}
+            className="gs-msg gs-msg-soc"
+            initial={{ opacity: 0, y: 10, filter: "blur(4px)" }}
+            animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+            transition={{ duration: 0.4, ease: EASE }}
+          >
+            <span className="gs-msg-who">Socrates</span>
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.45, delay: 0.08, ease: EASE }}
+            >
+              {current.a}
+            </motion.p>
+            <motion.div
+              className="gs-chips"
+              initial="hidden"
+              animate="visible"
+              variants={{
+                hidden: {},
+                visible: { transition: { staggerChildren: 0.06, delayChildren: 0.24 } },
+              }}
+            >
+              {current.chips.map((c) => (
+                <motion.span
+                  key={c}
+                  className="gs-chip"
+                  variants={{
+                    hidden: { opacity: 0, y: 6, scale: 0.92 },
+                    visible: {
+                      opacity: 1,
+                      y: 0,
+                      scale: 1,
+                      transition: { duration: 0.3, ease: EASE },
+                    },
+                  }}
+                >
                   {c}
                 </motion.span>
               ))}
             </motion.div>
-          )}
-        </motion.div>
-      ))}
-    </motion.div>
+          </motion.div>
+        )}
+      </div>
+
+      <div className="gs-structure-dots" role="tablist" aria-label="Sample prompts">
+        {STRUCTURE_PROMPTS.map((p, i) => (
+          <button
+            key={p.q}
+            type="button"
+            role="tab"
+            aria-selected={i === idx}
+            aria-label={`Show prompt ${i + 1}`}
+            onClick={() => choose(i)}
+            className={`gs-structure-dot${i === idx ? " is-active" : ""}`}
+          >
+            {i === idx && !reduce && !paused && (
+              <motion.span
+                key={`fill-${idx}`}
+                className="gs-structure-dot-fill"
+                aria-hidden="true"
+                initial={{ scaleX: 0 }}
+                animate={{ scaleX: 1 }}
+                transition={{ duration: 4.2, ease: "linear" }}
+              />
+            )}
+          </button>
+        ))}
+      </div>
+    </div>
   );
 }
 
