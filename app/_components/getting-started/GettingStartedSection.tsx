@@ -1,9 +1,8 @@
 "use client";
 
-import { useState } from "react";
 import { motion, type Variants } from "framer-motion";
 import "./styles.css";
-import StepTabs, { type StepId } from "./StepTabs";
+import { STEPS, type StepId } from "./StepTabs";
 import IntegrationShowcase from "./IntegrationShowcase";
 import ContextDemo from "./ContextDemo";
 import AiPmSuggestions from "./AiPmSuggestions";
@@ -15,13 +14,16 @@ const fadeUp: Variants = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: EASE } },
 };
 
-export default function GettingStartedSection() {
-  const [step, setStep] = useState<StepId>("connect");
+function StepGraphic({ id }: { id: StepId }) {
+  if (id === "connect") return <IntegrationShowcase />;
+  if (id === "structure") return <ContextDemo />;
+  return <AiPmSuggestions />;
+}
 
+export default function GettingStartedSection() {
   return (
     <section id="getstarted" className="gs-section" aria-labelledby="gs-title">
       <div className="gs-grid">
-        {/* Copy column */}
         <motion.header
           className="gs-copy"
           initial="hidden"
@@ -42,38 +44,50 @@ export default function GettingStartedSection() {
           </motion.h2>
           <motion.p variants={fadeUp}>
             Plug Orchestra into the tools you already live in. We turn every
-            signal into one company brain — and Socrates rides along to answer,
+            signal into one company brain - and Socrates rides along to answer,
             surface risk, and keep your team in sync.
           </motion.p>
 
-          <motion.div variants={fadeUp}>
-            <StepTabs active={step} onChange={setStep} />
-          </motion.div>
-
           <motion.a href="#integrations" className="gs-link" variants={fadeUp}>
-            See all integrations →
+            {"See all integrations ->"}
           </motion.a>
         </motion.header>
 
-        {/* Stage column */}
-        <motion.div
-          className="gs-stage"
-          initial={{ opacity: 0, y: 26 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.25 }}
-          transition={{ duration: 0.6, ease: EASE }}
-        >
-          <motion.div
-            key={step}
-            initial={{ opacity: 0, y: 12, filter: "blur(5px)" }}
-            animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-            transition={{ duration: 0.35, ease: EASE }}
-          >
-            {step === "connect"   && <IntegrationShowcase />}
-            {step === "structure" && <ContextDemo />}
-            {step === "ask"       && <AiPmSuggestions />}
-          </motion.div>
-        </motion.div>
+        <div className="gs-scroll-copy" aria-label="Getting started walkthrough">
+          {STEPS.map((item) => (
+            <article key={item.id} className="gs-scroll-step" data-step={item.id}>
+              <motion.div
+                className="gs-scroll-step-copy"
+                initial={{ opacity: 0.45, y: 22 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ amount: 0.55 }}
+                transition={{ duration: 0.45, ease: EASE }}
+              >
+                <span className="gs-scroll-num">{item.n}</span>
+                <h3>{item.label}</h3>
+                <p>{item.desc}</p>
+              </motion.div>
+
+              <motion.div
+                className="gs-stage gs-scroll-stage"
+                initial={{ opacity: 0, y: 26 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: false, amount: 0.25 }}
+                transition={{ duration: 0.6, ease: EASE }}
+              >
+                <div className="gs-stage-stack">
+                  <div
+                    className={`gs-stage-panel gs-stage-panel-${item.id} is-active`}
+                    data-gs-panel={item.id}
+                    aria-hidden="false"
+                  >
+                    <StepGraphic id={item.id} />
+                  </div>
+                </div>
+              </motion.div>
+            </article>
+          ))}
+        </div>
       </div>
     </section>
   );

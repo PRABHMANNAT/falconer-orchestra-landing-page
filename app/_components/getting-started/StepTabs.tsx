@@ -4,7 +4,7 @@ import { memo, useRef } from "react";
 
 export type StepId = "connect" | "structure" | "ask";
 
-const STEPS: { id: StepId; label: string; n: string; desc: string }[] = [
+export const STEPS: { id: StepId; label: string; n: string; desc: string }[] = [
   {
     id: "connect",
     label: "Connect",
