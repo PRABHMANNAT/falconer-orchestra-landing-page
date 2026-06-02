@@ -39,8 +39,8 @@ const CARDS: Card[] = [
     accent: "#e0a020",
     category: "Stalled work",
     severity: null,
-    title: "PR #43 has had no activity in 7 days",
-    body: "Blocked on review from Sarah. Last comment was 7 days ago.",
+    title: "PR #43 has been waiting on review for 7 days",
+    body: "Blocked on Sarah, untouched since last week — and quietly holding up the release.",
   },
   {
     key: "coverage",
