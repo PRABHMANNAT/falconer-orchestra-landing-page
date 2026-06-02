@@ -4,11 +4,26 @@
    ============================================================ */
 
 .gs-section {
+  position: relative;
   padding: clamp(72px, 9vw, 120px) var(--pad);
-  background: var(--color-cream);
+  background: linear-gradient(180deg, var(--color-cream) 0%, var(--color-cream-2) 100%);
+  border-top: 1px solid var(--color-line);
+  overflow: hidden;
+}
+
+/* Soft accent glow drifting in from the top-right. */
+.gs-section::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(58% 48% at 80% 12%, rgba(217, 119, 87, 0.1), transparent 70%);
+  z-index: 0;
 }
 
 .gs-grid {
+  position: relative;
+  z-index: 1;
   max-width: 1180px;
   margin: 0 auto;
   display: grid;
@@ -19,13 +34,21 @@
 
 @media (min-width: 900px) {
   .gs-grid {
-    grid-template-columns: 0.85fr 1.15fr;
+    grid-template-columns: 0.9fr 1.1fr;
     gap: clamp(40px, 5vw, 80px);
   }
 }
 
 /* ---------- Copy column ---------- */
-.gs-copy { max-width: 38ch; }
+.gs-copy { max-width: 460px; }
+
+@media (min-width: 900px) {
+  .gs-copy {
+    position: sticky;
+    top: 92px;
+    align-self: start;
+  }
+}
 
 .gs-kicker {
   margin: 0 0 14px;
@@ -66,84 +89,157 @@
 
 .gs-link:hover { gap: 12px; color: var(--color-accent-deep); border-bottom-color: var(--color-accent-deep); }
 
-/* ---------- Step tabs ---------- */
-.gs-tabs {
+/* ---------- Step rail (vertical stepper) ---------- */
+.gs-steps {
   position: relative;
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  margin-bottom: 32px;
-  padding: 6px;
-  border-radius: 999px;
-  background: var(--color-paper);
-  border: 1px solid var(--color-line);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+  margin: 4px 0 30px;
+  padding: 0;
 }
 
-.gs-tab {
+.gs-step {
   position: relative;
-  display: inline-flex;
+  display: grid;
+  grid-template-columns: 38px 1fr;
   align-items: center;
-  gap: 8px;
-  padding: 9px 18px;
-  border: 0;
+  gap: 16px;
+  width: 100%;
+  padding: 13px 16px;
+  border: 1px solid transparent;
   background: transparent;
-  border-radius: 999px;
+  border-radius: 16px;
   cursor: pointer;
-  color: var(--color-muted);
-  font-family: var(--font-mono);
-  font-size: 12px;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  transition: color 0.25s ease;
-  z-index: 1;
+  text-align: left;
 }
 
-.gs-tab-num {
+.gs-step:hover:not(.is-active) {
+  background: color-mix(in srgb, var(--color-paper) 60%, transparent);
+}
+
+/* Active step sits in a raised card. */
+.gs-step.is-active {
+  background: var(--color-paper);
+  border-color: var(--color-line);
+  box-shadow: 0 12px 30px rgba(14, 29, 11, 0.07);
+}
+
+.gs-step:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
+}
+
+.gs-step-num {
   display: inline-grid;
   place-items: center;
-  width: 20px;
-  height: 20px;
+  width: 38px;
+  height: 38px;
   border-radius: 50%;
-  background: color-mix(in srgb, var(--color-ink) 8%, transparent);
-  font-size: 10.5px;
-  font-weight: 700;
+  border: 1.5px solid var(--color-line);
+  background: var(--color-cream);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--color-muted);
+}
+
+.gs-step-body {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.gs-step-label {
+  font-family: var(--font-nav);
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
   color: var(--color-ink);
-  transition: background 0.25s ease, color 0.25s ease;
+  transition: color 0.3s ease;
 }
 
-.gs-tab.is-active { color: #fff; }
-.gs-tab.is-active .gs-tab-num { background: rgba(255,255,255,0.22); color: #fff; }
-
-.gs-tab:focus-visible {
-  outline: 2px solid var(--color-accent);
-  outline-offset: 4px;
-  border-radius: 999px;
+.gs-step-desc {
+  font-size: 12.5px;
+  line-height: 1.45;
+  color: var(--color-muted);
+  opacity: 0.7;
 }
 
-/* keep label + number above the sliding thumb */
-.gs-tab-num,
-.gs-tab-label { position: relative; z-index: 1; }
+/* Completed steps */
+.gs-step.is-done .gs-step-num {
+  background: color-mix(in srgb, var(--color-accent) 16%, transparent);
+  border-color: transparent;
+  color: var(--color-accent-deep);
+}
 
-.gs-tab-thumb {
-  position: absolute;
-  top: 6px;
-  bottom: 6px;
-  left: 0;
-  width: 0;
-  border-radius: 999px;
-  background: var(--color-ink);
-  z-index: 0;
+/* Active step */
+.gs-step.is-active .gs-step-num {
+  background: linear-gradient(160deg, var(--color-accent), var(--color-accent-deep));
+  border-color: transparent;
+  color: #fff;
+  box-shadow: 0 8px 20px rgba(184, 92, 62, 0.28);
+}
+
+.gs-step.is-active .gs-step-desc { opacity: 1; }
+
+.gs-step:hover:not(.is-active) .gs-step-num {
+  border-color: color-mix(in srgb, var(--color-accent) 50%, transparent);
+  color: var(--color-accent-deep);
 }
 
 /* ---------- Stage (right column) ---------- */
 .gs-stage {
   position: relative;
-  padding: clamp(24px, 3vw, 36px);
+  padding: clamp(22px, 2.6vw, 34px);
   background: var(--color-paper);
   border: 1px solid var(--color-line);
-  border-radius: 24px;
-  box-shadow: 0 24px 60px rgba(14, 29, 11, 0.06);
+  border-radius: 28px;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.7),
+    0 30px 70px rgba(14, 29, 11, 0.08);
   min-height: 520px;
+  overflow: hidden;
+}
+
+/* Keep the active panel above the decorative glow. */
+.gs-stage > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* Gradient ring along the top-left edge. */
+.gs-stage::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(
+    150deg,
+    color-mix(in srgb, var(--color-accent) 45%, transparent),
+    transparent 42%
+  );
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+          mask-composite: exclude;
+  pointer-events: none;
+  z-index: 3;
+}
+
+/* Warm corner glow behind the panel content. */
+.gs-stage::after {
+  content: "";
+  position: absolute;
+  top: -38%;
+  right: -28%;
+  width: 70%;
+  height: 70%;
+  background: radial-gradient(circle, rgba(217, 119, 87, 0.16), transparent 64%);
+  pointer-events: none;
+  z-index: 0;
 }
 
 .gs-stage-pill {
