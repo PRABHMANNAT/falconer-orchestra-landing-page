@@ -26,12 +26,30 @@
   z-index: 1;
   max-width: 1180px;
   margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp(32px, 5vw, 64px);
+  align-items: start;
+}
+
+@media (min-width: 900px) {
+  .gs-grid {
+    grid-template-columns: 0.9fr 1.1fr;
+    gap: clamp(40px, 5vw, 80px);
+  }
 }
 
 /* ---------- Copy column ---------- */
 .gs-copy {
   max-width: 460px;
-  margin-bottom: clamp(36px, 5vw, 68px);
+}
+
+@media (min-width: 900px) {
+  /* Pin the copy + step indicator while the right column scrolls. */
+  .gs-copy {
+    position: sticky;
+    top: 92px;
+  }
 }
 
 .gs-kicker {
@@ -73,109 +91,36 @@
 
 .gs-link:hover { gap: 12px; color: var(--color-accent-deep); border-bottom-color: var(--color-accent-deep); }
 
-/* ---------- Scroll-driven step copy ---------- */
-.gs-scroll-copy {
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-  max-width: none;
+/* ---------- Scrollytelling: sticky stage + invisible scroll track ---------- */
+.gs-scroll-col {
+  position: relative;
+  min-width: 0;
+}
+
+/* Three tall, empty segments stacked beneath/behind the sticky stage.
+   Their position drives which step is active (via IntersectionObserver). */
+.gs-scroll-track {
+  position: relative;
+  pointer-events: none;
 }
 
 .gs-scroll-step {
-  position: relative;
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: clamp(28px, 5vw, 72px);
-  min-height: auto;
-  padding: clamp(28px, 5vw, 56px) 0;
-  border-top: 1px solid color-mix(in srgb, var(--color-ink) 10%, transparent);
+  height: 90vh;
 }
 
-.gs-scroll-step-copy {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding-left: 28px;
-  border-left: 1px solid color-mix(in srgb, var(--color-ink) 14%, transparent);
-}
-
-.gs-scroll-step-copy::before {
-  content: "";
-  position: absolute;
-  left: -1px;
-  top: 50%;
-  width: 2px;
-  height: min(132px, 62%);
-  transform: translateY(-50%);
-  background: var(--color-accent);
-}
-
-.gs-scroll-num {
-  width: 34px;
-  height: 34px;
-  display: inline-grid;
-  place-items: center;
-  margin-bottom: 16px;
-  border-radius: 50%;
-  border: 1px solid var(--color-line);
-  background: var(--color-paper);
-  color: var(--color-muted);
-  font-family: var(--font-mono);
-  font-size: 12px;
-  transition: color 0.25s ease, background 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
-}
-
-.gs-scroll-step .gs-scroll-num {
-  color: #fff;
-  border-color: transparent;
-  background: linear-gradient(160deg, var(--color-accent), var(--color-accent-deep));
-  box-shadow: 0 10px 24px rgba(184, 92, 62, 0.24);
-}
-
-.gs-scroll-step h3 {
-  margin: 0 0 10px;
-  color: var(--color-ink);
-  font-family: var(--font-display);
-  font-size: clamp(28px, 3.4vw, 44px);
-  font-weight: 400;
-  line-height: 1;
-  text-transform: uppercase;
-}
-
-.gs-scroll-step p {
-  max-width: 340px;
-  margin: 0;
-  color: var(--color-muted);
-  font-size: 15px;
-  line-height: 1.6;
-}
-
-.gs-scroll-stage {
-  align-self: start;
-}
-
-@media (min-width: 900px) {
-  .gs-scroll-step {
-    grid-template-columns: minmax(300px, 0.82fr) minmax(0, 1.18fr);
-    min-height: clamp(640px, 92vh, 860px);
-    align-items: start;
-  }
-
-  .gs-scroll-step-copy {
-    min-height: clamp(520px, 74vh, 720px);
-  }
-
-  .gs-scroll-stage {
-    position: sticky;
-    top: 92px;
-  }
+/* The stage stays pinned while the track scrolls past it. */
+.gs-stage-sticky {
+  position: sticky;
+  top: 92px;
+  margin-bottom: -270vh; /* 3 steps × 90vh — pulls the track up alongside */
+  z-index: 1;
 }
 
 @media (max-width: 899px) {
-  .gs-scroll-step-copy {
-    padding-left: 24px;
-  }
+  /* On mobile we drop the sticky layout — the stage just sits above three
+     short scroll cues so the section remains short and tappable. */
+  .gs-scroll-step { height: auto; min-height: 40vh; }
+  .gs-stage-sticky { position: static; margin-bottom: 0; }
 }
 
 /* ---------- Step rail (vertical stepper) ---------- */
