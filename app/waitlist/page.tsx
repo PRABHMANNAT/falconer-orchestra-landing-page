@@ -2,12 +2,10 @@
 
 import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
 import Link from "next/link";
-import { motion } from "framer-motion";
+import { Check, ChevronLeft, Mail } from "lucide-react";
 import HalftoneGlobe from "../HalftoneGlobe";
 import Mark from "../_components/Mark";
 import "./waitlist.css";
-
-// ── Types & globals ────────────────────────────────────────────────
 
 declare global {
   interface Window {
@@ -34,14 +32,26 @@ type GoogleTokenClient = {
   requestAccessToken: (overrides?: Record<string, unknown>) => void;
 };
 
-// ── Validation ─────────────────────────────────────────────────────
-
 const DISPOSABLE_EMAIL_DOMAINS = new Set([
-  "mailinator.com", "10minutemail.com", "guerrillamail.com", "tempmail.com",
-  "temp-mail.org", "throwawaymail.com", "yopmail.com", "trashmail.com",
-  "getnada.com", "fakeinbox.com", "sharklasers.com", "dispostable.com",
-  "maildrop.cc", "mintemail.com", "mohmal.com", "spambox.us",
-  "tempinbox.com", "tempr.email", "throwaway.email",
+  "mailinator.com",
+  "10minutemail.com",
+  "guerrillamail.com",
+  "tempmail.com",
+  "temp-mail.org",
+  "throwawaymail.com",
+  "yopmail.com",
+  "trashmail.com",
+  "getnada.com",
+  "fakeinbox.com",
+  "sharklasers.com",
+  "dispostable.com",
+  "maildrop.cc",
+  "mintemail.com",
+  "mohmal.com",
+  "spambox.us",
+  "tempinbox.com",
+  "tempr.email",
+  "throwaway.email",
 ]);
 
 const EMAIL_REGEX =
@@ -51,21 +61,23 @@ function validateEmail(raw: string): { ok: boolean; reason?: string } {
   const email = raw.trim().toLowerCase();
   if (!email) return { ok: false, reason: "Please enter your email address." };
   if (email.length > 254) return { ok: false, reason: "Email is too long." };
-  if (!EMAIL_REGEX.test(email))
+  if (!EMAIL_REGEX.test(email)) {
     return { ok: false, reason: "Please enter a valid email address." };
+  }
+
   const domain = email.split("@")[1];
-  if (!domain || domain.includes("..") || domain.startsWith("-") || domain.endsWith("-"))
+  if (!domain || domain.includes("..") || domain.startsWith("-") || domain.endsWith("-")) {
     return { ok: false, reason: "Please enter a valid email address." };
-  if (DISPOSABLE_EMAIL_DOMAINS.has(domain))
-    return { ok: false, reason: "Disposable email addresses aren't allowed." };
+  }
+  if (DISPOSABLE_EMAIL_DOMAINS.has(domain)) {
+    return { ok: false, reason: "Disposable email addresses are not allowed." };
+  }
   return { ok: true };
 }
 
-// ── Static content ─────────────────────────────────────────────────
-
 type Chip = {
   label: string;
-  cls: string;
+  tone: "mint" | "amber" | "violet" | "yellow";
   top?: string;
   bottom?: string;
   left?: string;
@@ -73,28 +85,22 @@ type Chip = {
 };
 
 const CHIPS: Chip[] = [
-  { label: "Maya shipped retries",      cls: "wl-chip-mint",     top: "8%",     left: "0%"  },
-  { label: "Socrates flagged a risk",   cls: "wl-chip-amber",    top: "14%",    right: "-4%" },
-  { label: "Devraj closed NW-218",      cls: "wl-chip-lavender", bottom: "20%", right: "-2%" },
-  { label: "Renewal review on Jun 3",   cls: "wl-chip-yellow",   bottom: "6%",  left: "2%"  },
-];
+  { label: "Maya matched a decision", tone: "mint", top: "7%", left: "3%" },
+  { label: "Arun flagged the blocker", tone: "amber", top: "15%", right: "-2%" },
+  { label: "Devraj found the source", tone: "violet", bottom: "18%", right: "4%" },
+  { label: "Renewal notes are cited", tone: "yellow", bottom: "5%", left: "4%" },
+] as const;
 
 const INTEGRATIONS = [
-  { name: "Slack",       domain: "slack.com" },
-  { name: "GitHub",      domain: "github.com" },
-  { name: "Notion",      domain: "notion.so" },
-  { name: "Gmail",       domain: "gmail.com" },
-  { name: "Linear",      domain: "linear.app" },
-  { name: "Granola",     domain: "granola.ai" },
-  { name: "Google Docs", domain: "docs.google.com" },
-  { name: "Fireflies",   domain: "fireflies.ai" },
-  { name: "Teams",       domain: "teams.microsoft.com" },
-  { name: "VS Code",     domain: "code.visualstudio.com" },
-  { name: "Calendly",    domain: "calendly.com" },
-  { name: "Zoom",        domain: "zoom.us" },
+  { name: "Slack", src: "/teaser-logos/slack.png" },
+  { name: "GitHub", src: "/teaser-logos/github.png" },
+  { name: "Notion", src: "/teaser-logos/notion.png" },
+  { name: "Gmail", src: "/teaser-logos/gmail.png" },
+  { name: "Linear", src: "/teaser-logos/linear.png" },
+  { name: "Docs", src: "/teaser-logos/google-docs.png" },
+  { name: "Fireflies", src: "/teaser-logos/fireflies.png" },
+  { name: "Teams", src: "/teaser-logos/teams.png" },
 ];
-
-// ── Icons ──────────────────────────────────────────────────────────
 
 const GoogleIcon = (
   <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true">
@@ -105,22 +111,7 @@ const GoogleIcon = (
   </svg>
 );
 
-const EmailIcon = (
-  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-    <rect x="3" y="5" width="18" height="14" rx="2" stroke="currentColor" strokeWidth="1.6" />
-    <path d="M3.5 6.5L12 13L20.5 6.5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
-  </svg>
-);
-
-const CheckIcon = (
-  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-    <path d="M5 12.5l4.5 4.5L19 7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-  </svg>
-);
-
-// ── UI building blocks ────────────────────────────────────────────
-
-function ProviderButton({
+function WaitlistButton({
   children,
   icon,
   onClick,
@@ -140,9 +131,9 @@ function ProviderButton({
       type={type}
       onClick={onClick}
       disabled={disabled}
-      className={`wl-btn${variant === "primary" ? " wl-btn-primary" : ""}`}
+      className={`wl-button ${variant === "primary" ? "wl-button-primary" : ""}`}
     >
-      {icon && <span aria-hidden="true">{icon}</span>}
+      {icon ? <span className="wl-button-icon">{icon}</span> : null}
       <span>{children}</span>
     </button>
   );
@@ -150,43 +141,40 @@ function ProviderButton({
 
 function FloatingChips() {
   return (
-    <>
-      {CHIPS.map((c, i) => (
-        <motion.span
-          key={c.label}
-          className={`wl-chip ${c.cls}`}
-          style={{ top: c.top, bottom: c.bottom, left: c.left, right: c.right }}
-          initial={{ opacity: 0, y: 6, scale: 0.9 }}
-          animate={{ opacity: 1, y: 0, scale: 1 }}
-          transition={{ delay: 0.4 + i * 0.12, duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+    <div className="wl-chips" aria-hidden="true">
+      {CHIPS.map((chip, index) => (
+        <span
+          key={chip.label}
+          className={`wl-chip wl-chip-${chip.tone}`}
+          style={{
+            top: chip.top,
+            bottom: chip.bottom,
+            left: chip.left,
+            right: chip.right,
+            animationDelay: `${0.22 + index * 0.08}s`,
+          }}
         >
-          {c.label}
-          <span className="wl-chip-x" aria-hidden="true">×</span>
-        </motion.span>
+          {chip.label}
+          <span>x</span>
+        </span>
       ))}
-    </>
+    </div>
   );
 }
 
-function IntegrationsMarquee() {
+function IntegrationRail() {
   const loop = [...INTEGRATIONS, ...INTEGRATIONS];
+
   return (
-    <div className="wl-integrations">
-      <div className="wl-integrations-label">Connects with the tools you already use</div>
-      <div className="wl-marquee">
-        <div className="wl-marquee-track">
-          {loop.map((it, i) => (
-            <div className="wl-int-item" key={`${it.domain}-${i}`}>
+    <div className="wl-integrations" aria-label="Supported integrations">
+      <p>Connects with the tools you already use</p>
+      <div className="wl-integration-window">
+        <div className="wl-integration-track">
+          {loop.map((integration, index) => (
+            <div className="wl-integration" key={`${integration.name}-${index}`}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={`https://www.google.com/s2/favicons?domain=${it.domain}&sz=64`}
-                alt=""
-                loading="lazy"
-                onError={(e) => {
-                  (e.currentTarget as HTMLImageElement).style.visibility = "hidden";
-                }}
-              />
-              <span>{it.name}</span>
+              <img src={integration.src} alt="" loading="lazy" />
+              <span>{integration.name}</span>
             </div>
           ))}
         </div>
@@ -194,8 +182,6 @@ function IntegrationsMarquee() {
     </div>
   );
 }
-
-// ── Waitlist auth panel ───────────────────────────────────────────
 
 function WaitlistPanel() {
   const [view, setView] = useState<"choices" | "email">("choices");
@@ -209,17 +195,11 @@ function WaitlistPanel() {
   const googleClientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
 
   const submitWaitlist = useCallback(
-    async (
-      payload:
-        | { type: "email"; email: string }
-        | { type: "google"; access_token: string }
-    ) => {
+    async (payload: { type: "email"; email: string } | { type: "google"; access_token: string }) => {
       setError(null);
       setStatus("submitting");
+
       try {
-        // Best-effort POST to /api/waitlist if the route exists.
-        // If it doesn't, we still register the email locally and show success
-        // so the user gets a confirmation. Replace with your real backend.
         const res = await fetch("/api/waitlist", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -227,18 +207,18 @@ function WaitlistPanel() {
         }).catch(() => null);
 
         let confirmed: string | null = null;
-        if (res && res.ok) {
+        if (res?.ok) {
           const data = (await res.json().catch(() => ({}))) as { email?: string };
           confirmed = data.email || (payload.type === "email" ? payload.email : null);
         } else {
-          // Fall back to local persistence so the demo still feels real.
           confirmed = payload.type === "email" ? payload.email : null;
           if (typeof window !== "undefined" && confirmed) {
-            const prior = JSON.parse(localStorage.getItem("orchestra-waitlist") || "[]");
+            const prior = JSON.parse(localStorage.getItem("orchestra-waitlist") || "[]") as string[];
             if (!prior.includes(confirmed)) prior.push(confirmed);
             localStorage.setItem("orchestra-waitlist", JSON.stringify(prior));
           }
         }
+
         setConfirmedEmail(confirmed);
         setStatus("success");
       } catch {
@@ -254,6 +234,7 @@ function WaitlistPanel() {
 
     const initialize = () => {
       if (!window.google?.accounts?.oauth2) return;
+
       googleClientRef.current = window.google.accounts.oauth2.initTokenClient({
         client_id: googleClientId,
         scope: "openid email profile",
@@ -282,6 +263,7 @@ function WaitlistPanel() {
       initialize();
       return;
     }
+
     const script = document.createElement("script");
     script.id = "google-identity-services";
     script.src = "https://accounts.google.com/gsi/client";
@@ -291,23 +273,23 @@ function WaitlistPanel() {
     document.head.appendChild(script);
   }, [googleClientId, submitWaitlist]);
 
-  const handleEmailSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleEmailSubmit = (event: React.FormEvent) => {
+    event.preventDefault();
     if (status === "submitting") return;
+
     const result = validateEmail(email);
     if (!result.ok) {
       setError(result.reason ?? "Please enter a valid email address.");
       return;
     }
+
     submitWaitlist({ type: "email", email: email.trim().toLowerCase() });
   };
 
   const handleGoogleClick = () => {
     if (status === "submitting") return;
     if (!googleClientId) {
-      setError(
-        "Google sign-in isn't wired up yet — use email to join the waitlist."
-      );
+      setError("Google sign-in is not wired up yet. Use email to join the waitlist.");
       return;
     }
     if (!googleClientRef.current) {
@@ -318,172 +300,144 @@ function WaitlistPanel() {
     googleClientRef.current.requestAccessToken();
   };
 
-  if (status === "success") {
-    return (
-      <motion.div
-        className="wl-success"
-        initial={{ opacity: 0, y: 8 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-      >
-        <div className="wl-success-check" aria-hidden="true">{CheckIcon}</div>
-        <h3>You&apos;re on the list</h3>
-        <p>
-          We&apos;ll email{" "}
-          <b>{confirmedEmail || "your address"}</b>{" "}
-          as soon as your spot opens.
-        </p>
-        <button
-          type="button"
-          className="wl-link-btn"
-          style={{ marginTop: 18 }}
-          onClick={() => {
-            setEmail("");
-            setConfirmedEmail(null);
-            setStatus("idle");
-            setView("choices");
-          }}
-        >
-          Add another email
-        </button>
-      </motion.div>
-    );
-  }
-
   return (
-    <div className="wl-auth-panel">
-      {view === "choices" && (
-        <>
-          <ProviderButton
-            icon={GoogleIcon}
-            onClick={handleGoogleClick}
-            disabled={status === "submitting"}
-          >
-            {status === "submitting" ? "Joining…" : "Continue with Google"}
-          </ProviderButton>
-          <ProviderButton
-            icon={EmailIcon}
-            onClick={() => setView("email")}
-            disabled={status === "submitting"}
-          >
-            Continue with Email
-          </ProviderButton>
-          {error && <p className="wl-error">{error}</p>}
-          {googleClientId && !googleReady && (
-            <p className="wl-hint">Loading Google sign-in…</p>
-          )}
-        </>
-      )}
-
-      {view === "email" && (
-        <form onSubmit={handleEmailSubmit} noValidate style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-          <label htmlFor="wl-email" className="wl-input-label">Work email</label>
-          <input
-            id="wl-email"
-            type="email"
-            inputMode="email"
-            autoComplete="email"
-            autoFocus
-            value={email}
-            onChange={(e) => {
-              setEmail(e.target.value);
-              if (error) setError(null);
-            }}
-            placeholder="you@company.com"
-            aria-invalid={error ? "true" : "false"}
-            aria-describedby={error ? "wl-email-error" : undefined}
-            className={`wl-input${error ? " has-error" : ""}`}
-          />
-          {error && <p id="wl-email-error" className="wl-error">{error}</p>}
-          <ProviderButton type="submit" variant="primary" disabled={status === "submitting"}>
-            {status === "submitting" ? "Joining…" : "Join waiting list"}
-          </ProviderButton>
+    <>
+      {status === "success" ? (
+        <div className="wl-success">
+          <span className="wl-success-icon" aria-hidden="true">
+            <Check size={24} strokeWidth={2} />
+          </span>
+          <h3>You are on the list</h3>
+          <p>
+            We will email <b>{confirmedEmail || "your address"}</b> as soon as your spot opens.
+          </p>
           <button
             type="button"
-            className="wl-link-btn"
+            className="wl-text-button"
             onClick={() => {
+              setEmail("");
+              setConfirmedEmail(null);
+              setStatus("idle");
               setView("choices");
-              setError(null);
             }}
           >
-            ← Back
+            Add another email
           </button>
-        </form>
-      )}
+        </div>
+      ) : (
+        <div className="wl-auth-panel">
+          {view === "choices" ? (
+            <>
+              <WaitlistButton
+                icon={GoogleIcon}
+                onClick={handleGoogleClick}
+                disabled={status === "submitting"}
+              >
+                {status === "submitting" ? "Joining..." : "Continue with Google"}
+              </WaitlistButton>
+              <WaitlistButton
+                icon={<Mail size={18} strokeWidth={1.8} />}
+                onClick={() => {
+                  setView("email");
+                  setError(null);
+                }}
+                disabled={status === "submitting"}
+              >
+                Continue with Email
+              </WaitlistButton>
+              {error ? <p className="wl-error">{error}</p> : null}
+              {googleClientId && !googleReady ? <p className="wl-hint">Loading Google sign-in...</p> : null}
+            </>
+          ) : (
+            <form className="wl-email-form" onSubmit={handleEmailSubmit} noValidate>
+              <label htmlFor="wl-email">Work email</label>
+              <input
+                id="wl-email"
+                type="email"
+                inputMode="email"
+                autoComplete="email"
+                autoFocus
+                value={email}
+                onChange={(event) => {
+                  setEmail(event.target.value);
+                  if (error) setError(null);
+                }}
+                placeholder="you@company.com"
+                aria-invalid={error ? "true" : "false"}
+                aria-describedby={error ? "wl-email-error" : undefined}
+              />
+              {error ? (
+                <p id="wl-email-error" className="wl-error">
+                  {error}
+                </p>
+              ) : null}
+              <WaitlistButton type="submit" variant="primary" disabled={status === "submitting"}>
+                {status === "submitting" ? "Joining..." : "Join waiting list"}
+              </WaitlistButton>
+              <button
+                type="button"
+                className="wl-text-button"
+                onClick={() => {
+                  setView("choices");
+                  setError(null);
+                }}
+              >
+                Back
+              </button>
+            </form>
+          )}
 
-      <p className="wl-terms">
-        By proceeding, you agree to our{" "}
-        <Link href="/terms">Terms of Service</Link>
-      </p>
-    </div>
+          <p className="wl-terms">
+            By proceeding, you agree to our <Link href="/terms">Terms of Service</Link>.
+          </p>
+        </div>
+      )}
+    </>
   );
 }
-
-// ── Page ──────────────────────────────────────────────────────────
-
-const EASE = [0.22, 1, 0.36, 1] as const;
 
 export default function WaitlistPage() {
   return (
     <main className="wl-page">
       <Link href="/" aria-label="Go back to home" className="wl-back">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-          <path d="M15 6l-6 6 6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-        </svg>
-        <span className="wl-back-label">Go back</span>
+        <ChevronLeft size={18} strokeWidth={2.2} />
+        <span>Back</span>
       </Link>
 
-      <motion.div
-        className="wl-grid"
-        initial={{ opacity: 0, y: 18 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.55, ease: EASE }}
-      >
-        {/* LEFT — welcome */}
-        <motion.section
-          className="wl-card wl-card-left"
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.6, ease: EASE, delay: 0.1 }}
-        >
-          <div className="wl-left-head">
+      <div className="wl-shell">
+        <section className="wl-panel wl-story">
+          <div className="wl-story-copy">
             <h1>Welcome to Orchestra</h1>
-            <p>Your company&apos;s brain. Always up to date. Always cited.</p>
+            <p>Proof-first company memory for teams. Every answer mapped back to the work.</p>
           </div>
 
-          <div className="wl-globe-wrap">
+          <div className="wl-globe-area">
             <div className="wl-globe">
               <span className="wl-globe-halo" aria-hidden="true" />
-              <HalftoneGlobe />
+              <span className="wl-static-globe" aria-hidden="true" />
+              <HalftoneGlobe ink={[9, 13, 16]} accent={[217, 119, 87]} />
               <FloatingChips />
             </div>
           </div>
 
-          <IntegrationsMarquee />
-        </motion.section>
+          <IntegrationRail />
+        </section>
 
-        {/* RIGHT — auth */}
-        <motion.section
-          className="wl-card wl-card-right"
-          initial={{ opacity: 0, x: 20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.6, ease: EASE, delay: 0.18 }}
-        >
-          <div className="wl-brand">
-            <Link href="/" aria-label="Orchestra home">
-              <Mark />
-              Orchestra
-            </Link>
-          </div>
+        <section className="wl-panel wl-auth">
+          <Link href="/" className="wl-brand" aria-label="Orchestra home">
+            <Mark />
+            <span>Orchestra</span>
+          </Link>
 
-          <div className="wl-auth-body">
-            <div className="wl-auth-head">
+          <div className="wl-auth-center">
+            <div className="wl-auth-copy">
               <h2>Join the waiting list</h2>
+              <p>Get early access when the next team cohort opens.</p>
             </div>
             <WaitlistPanel />
           </div>
-        </motion.section>
-      </motion.div>
+        </section>
+      </div>
     </main>
   );
 }
