@@ -3,6 +3,9 @@
 import { useEffect, useState, type CSSProperties, type ComponentType, type SVGProps } from "react";
 import Link from "next/link";
 import { AnimatePresence, motion, useMotionValueEvent, useReducedMotion, useScroll } from "framer-motion";
+import { cn } from "@/lib/utils";
+import { InteractiveGridPattern } from "@/registry/magicui/interactive-grid-pattern";
+import { StripedPattern } from "@/registry/magicui/striped-pattern";
 import Footer from "./_components/Footer";
 import GettingStarted from "./_components/GettingStarted";
 import Mark from "./_components/Mark";
@@ -25,11 +28,11 @@ const navItems: { label: string; href: string }[] = [
 ];
 
 const heroContainer = {
-  hidden: {},
-  visible: { transition: { staggerChildren: 0.08, delayChildren: 0.15 } }
+  hidden: { opacity: 1 },
+  visible: { opacity: 1, transition: { staggerChildren: 0.08, delayChildren: 0.15 } }
 };
 const heroItem = {
-  hidden: { opacity: 0, y: 24 },
+  hidden: { opacity: 1, y: 0 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] as const } }
 };
 
@@ -527,6 +530,12 @@ const BRAIN_POINTS = BRAIN_NODES.map((_, i) => {
   return { x: 50 + 34 * Math.cos(a), y: 50 + 34 * Math.sin(a) };
 });
 
+const SOCRATES_TRACE_STEPS = [
+  { label: "Ask", detail: "Reads account intent" },
+  { label: "Trace", detail: "Pulls docs, calls, tickets" },
+  { label: "Cite", detail: "Returns proof-backed answer" }
+];
+
 function SocratesPanel() {
   const [idx, setIdx] = useState(0);
   const [thinking, setThinking] = useState(false);
@@ -555,7 +564,7 @@ function SocratesPanel() {
   return (
     <motion.div
       className="copilot"
-      initial={{ opacity: 0, y: 24 }}
+      initial={{ opacity: 1, y: 0 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.25 }}
       transition={{ duration: 0.7, ease: softEase }}
@@ -573,18 +582,18 @@ function SocratesPanel() {
 
       <div className="copilot-cmd">
         <kbd className="copilot-kbd">⌘K</kbd>
-        <AnimatePresence mode="wait">
-          <motion.span
-            key={entry.q}
-            className="copilot-cmd-text"
-            initial={{ opacity: 0, y: 6 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -6 }}
-            transition={{ duration: 0.3, ease: softEase }}
-          >
-            {entry.q}
-          </motion.span>
-        </AnimatePresence>
+        <motion.span
+          key={entry.q}
+          className="copilot-cmd-text"
+          initial={false}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.25, ease: softEase }}
+        >
+          {entry.q}
+        </motion.span>
+        <span className={`copilot-status${thinking ? " is-thinking" : ""}`}>
+          {thinking ? "Tracing" : "Live"}
+        </span>
         <span className="copilot-cmd-caret" aria-hidden="true" />
       </div>
 
@@ -593,39 +602,30 @@ function SocratesPanel() {
           <div className="copilot-answer">
             <span className="copilot-answer-avatar"><Mark tone="light" /></span>
             <div className="copilot-answer-body">
-              <span className="copilot-answer-name">Socrates</span>
+              <div className="copilot-answer-top">
+                <span className="copilot-answer-name">Socrates</span>
+                <span className={`copilot-answer-state${thinking ? " is-thinking" : ""}`}>
+                  {thinking ? "checking sources" : "grounded answer"}
+                </span>
+              </div>
               <AnimatePresence mode="wait">
-                {thinking ? (
-                  <motion.span
-                    key="thinking"
-                    className="copilot-thinking"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 0.2 }}
-                    aria-label="Thinking"
-                  >
-                    <span /><span /><span />
-                  </motion.span>
-                ) : (
-                  <motion.p
-                    key={entry.a}
-                    className="copilot-answer-text"
-                    initial={{ opacity: 0, y: 6 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -6 }}
-                    transition={{ duration: 0.35, ease: softEase }}
-                  >
-                    {entry.a}
-                  </motion.p>
-                )}
+                <motion.p
+                  key={entry.a}
+                  className="copilot-answer-text"
+                  initial={false}
+                  animate={{ opacity: thinking ? 0.72 : 1, y: 0 }}
+                  exit={{ opacity: 0, y: -6 }}
+                  transition={{ duration: 0.28, ease: softEase }}
+                >
+                  {entry.a}
+                </motion.p>
               </AnimatePresence>
 
               <motion.div
                 className="copilot-sources"
                 key={entry.q + "-src"}
-                initial="hidden"
-                animate={thinking ? "hidden" : "visible"}
+                initial={false}
+                animate="visible"
                 variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.08, delayChildren: 0.1 } } }}
               >
                 <span className="copilot-sources-label">Grounded in</span>
@@ -645,12 +645,31 @@ function SocratesPanel() {
             </div>
           </div>
 
+          <div className="copilot-trace" aria-label="How Socrates uses the company brain">
+            {SOCRATES_TRACE_STEPS.map((step, stepIndex) => (
+              <motion.div
+                key={step.label}
+                className={`copilot-trace-step${thinking || stepIndex <= idx % SOCRATES_TRACE_STEPS.length ? " is-active" : ""}`}
+                initial={false}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.24, ease: softEase, delay: stepIndex * 0.04 }}
+              >
+                <span className="copilot-trace-index">{stepIndex + 1}</span>
+                <span className="copilot-trace-copy">
+                  <b>{step.label}</b>
+                  <small>{step.detail}</small>
+                </span>
+              </motion.div>
+            ))}
+          </div>
+
           <div className="copilot-suggest">
             {COPILOT_ENTRIES.map((e, i) => (
               <button
                 key={e.q}
                 type="button"
                 className={`copilot-suggest-chip${i === idx ? " is-active" : ""}`}
+                aria-pressed={i === idx}
                 onClick={() => choose(i)}
               >
                 {e.q}
@@ -770,6 +789,14 @@ export default function Home() {
       <main>
         {/* ── SECTION 1: HERO ── */}
         <section className="hero" style={{ minHeight: "90vh", display: "flex", alignItems: "center" }}>
+          <div className="hero-grid-bg">
+            <InteractiveGridPattern
+              className={cn(
+                "[mask-image:radial-gradient(400px_circle_at_center,white,transparent)]",
+                "inset-x-0 inset-y-[-30%] h-[200%] skew-y-12"
+              )}
+            />
+          </div>
           <div className="hero-two-col">
             {/* Left column */}
             <motion.div className="hero-left hero-copy" initial="hidden" animate="visible" variants={heroContainer}>
@@ -778,7 +805,7 @@ export default function Home() {
               </motion.span>
 
               <motion.h1 variants={heroContainer} style={{ margin: 0 }}>
-                <motion.span className="hero-line" variants={heroItem}>Your company's brain.</motion.span>
+                <motion.span className="hero-line" variants={heroItem}>Your company&apos;s brain.</motion.span>
                 <motion.span className="hero-line" variants={heroItem}>Always up to date.</motion.span>
                 <motion.span className="hero-line" variants={heroItem}>Always honest.</motion.span>
               </motion.h1>
@@ -901,10 +928,13 @@ export default function Home() {
 
         {/* ── SECTION 6: SOCRATES ── */}
         <section className="record" id="record">
+          <div className="record-pattern-bg">
+            <StripedPattern className="[mask-image:radial-gradient(300px_circle_at_center,white,transparent)]" />
+          </div>
           <SocratesPanel />
           <motion.div
             className="record-copy"
-            initial="hidden"
+            initial={false}
             whileInView="visible"
             viewport={{ once: true }}
             variants={fadeUp}

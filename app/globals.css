@@ -1387,6 +1387,7 @@ svg {
 
 /* ---------- System of record ---------- */
 .record {
+  position: relative;
   display: grid;
   grid-template-columns: 0.92fr 1.08fr;
   align-items: center;
@@ -1394,6 +1395,20 @@ svg {
   max-width: var(--maxw);
   margin: 0 auto;
   padding: clamp(64px, 8vw, 120px) var(--pad);
+  overflow: hidden;
+}
+
+.record-pattern-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  color: rgba(217, 119, 87, 0.2);
+  pointer-events: none;
+}
+
+.record > :not(.record-pattern-bg) {
+  position: relative;
+  z-index: 1;
 }
 
 .record-copy h2 {
@@ -1503,6 +1518,39 @@ svg {
   text-overflow: ellipsis;
 }
 
+.copilot-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex: 0 0 auto;
+  padding: 4px 9px;
+  border-radius: 999px;
+  background: rgba(111, 154, 138, 0.12);
+  color: #3f6a59;
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.copilot-status::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+  box-shadow: 0 0 0 3px rgba(111, 154, 138, 0.16);
+}
+
+.copilot-status.is-thinking {
+  background: rgba(217, 119, 87, 0.12);
+  color: var(--color-accent-darker);
+}
+
+.copilot-status.is-thinking::before {
+  animation: brain-pulse 1.2s ease-out infinite;
+}
+
 .copilot-cmd-caret {
   width: 2px;
   height: 18px;
@@ -1543,17 +1591,48 @@ svg {
 .copilot-answer-body {
   min-width: 0;
   flex: 1;
-  min-height: 118px;
+  min-height: 146px;
+}
+
+.copilot-answer-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 7px;
 }
 
 .copilot-answer-name {
-  display: block;
-  margin-bottom: 4px;
+  display: inline-flex;
   color: var(--color-accent-darker);
   font-family: var(--font-mono);
   font-size: 11px;
   letter-spacing: 0.08em;
   text-transform: uppercase;
+}
+
+.copilot-answer-state {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex: 0 0 auto;
+  color: #6f9a8a;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.copilot-answer-state::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.copilot-answer-state.is-thinking {
+  color: var(--color-accent);
 }
 
 .copilot-answer-text {
@@ -1614,6 +1693,69 @@ svg {
 .copilot-chip.thread { background: rgba(80, 120, 200, 0.12); color: #3a5aa0; }
 .copilot-chip.ticket { background: rgba(111, 154, 138, 0.16); color: #3f6a59; }
 .copilot-chip.call   { background: rgba(199, 154, 62, 0.16); color: #8a6a1e; }
+
+.copilot-trace {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  margin-top: 18px;
+}
+
+.copilot-trace-step {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  min-height: 72px;
+  padding: 10px;
+  border: 1px solid var(--color-line);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.62);
+  color: #6a655e;
+  transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease, transform 0.2s ease;
+}
+
+.copilot-trace-step:hover,
+.copilot-trace-step.is-active {
+  transform: translateY(-1px);
+  border-color: rgba(217, 119, 87, 0.42);
+  background: var(--color-accent-tint-2);
+  color: var(--color-ink);
+}
+
+.copilot-trace-index {
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #fff;
+  color: var(--color-accent-darker);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  box-shadow: 0 1px 0 rgba(14, 29, 11, 0.08);
+}
+
+.copilot-trace-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.copilot-trace-copy b {
+  color: inherit;
+  font-family: var(--font-nav);
+  font-size: 12.5px;
+  line-height: 1.15;
+}
+
+.copilot-trace-copy small {
+  color: var(--color-muted);
+  font-size: 11.5px;
+  line-height: 1.25;
+}
 
 .copilot-suggest {
   display: flex;
@@ -3299,6 +3441,10 @@ svg {
   }
 
   .copilot-body {
+    grid-template-columns: 1fr;
+  }
+
+  .copilot-trace {
     grid-template-columns: 1fr;
   }
 

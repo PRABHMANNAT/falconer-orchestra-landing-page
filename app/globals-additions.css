@@ -151,6 +151,10 @@
 /* ---------------------------------------------------------
    DARK MODE — copilot (Socrates panel)
    --------------------------------------------------------- */
+[data-theme="dark"] .record-pattern-bg {
+  color: rgba(217, 119, 87, 0.24);
+}
+
 [data-theme="dark"] .copilot {
   background: #1A1714;
   border-color: rgba(255, 255, 255, 0.1);
@@ -158,6 +162,37 @@
 [data-theme="dark"] .copilot-bar { background: #161310; }
 [data-theme="dark"] .copilot-brain { background: #161310; }
 [data-theme="dark"] .copilot-cmd { background: #161310; border-color: rgba(255, 255, 255, 0.1); }
+[data-theme="dark"] .copilot-cmd-text,
+[data-theme="dark"] .copilot-answer-text,
+[data-theme="dark"] .brain-legend-item.is-active {
+  color: #FAF7F1;
+}
+[data-theme="dark"] .copilot-status {
+  background: rgba(111, 154, 138, 0.18);
+  color: #b9ccae;
+}
+[data-theme="dark"] .copilot-status.is-thinking,
+[data-theme="dark"] .copilot-answer-state.is-thinking {
+  color: #ecab8e;
+}
+[data-theme="dark"] .copilot-answer-state {
+  color: #b9ccae;
+}
+[data-theme="dark"] .copilot-trace-step {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(255, 255, 255, 0.1);
+  color: rgba(250, 247, 241, 0.78);
+}
+[data-theme="dark"] .copilot-trace-step:hover,
+[data-theme="dark"] .copilot-trace-step.is-active {
+  background: rgba(217, 119, 87, 0.14);
+  border-color: rgba(217, 119, 87, 0.42);
+  color: #FAF7F1;
+}
+[data-theme="dark"] .copilot-trace-index {
+  background: #1A1714;
+  color: #ecab8e;
+}
 
 /* ---------------------------------------------------------
    DARK MODE — getstarted
@@ -358,7 +393,27 @@
 }
 
 /* Hero layout for the two-column hero */
+.hero-grid-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  color: rgba(14, 29, 11, 0.12);
+}
+
+.hero-grid-bg::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 76% 32%, rgba(217, 119, 87, 0.12), transparent 30%),
+    linear-gradient(90deg, var(--color-cream) 0%, rgba(248, 245, 235, 0.78) 38%, rgba(248, 245, 235, 0.34) 100%);
+}
+
 .hero-two-col {
+  position: relative;
+  z-index: 2;
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: clamp(40px, 5vw, 80px);
@@ -390,6 +445,16 @@
   border-color: rgba(255, 255, 255, 0.10);
   background: #1A1714;
   box-shadow: 0 40px 90px -38px rgba(0, 0, 0, 0.7);
+}
+
+[data-theme="dark"] .hero-grid-bg {
+  color: rgba(250, 247, 241, 0.12);
+}
+
+[data-theme="dark"] .hero-grid-bg::after {
+  background:
+    radial-gradient(circle at 76% 32%, rgba(217, 119, 87, 0.16), transparent 32%),
+    linear-gradient(90deg, #0F0D0B 0%, rgba(15, 13, 11, 0.78) 42%, rgba(15, 13, 11, 0.34) 100%);
 }
 
 @media (max-width: 900px) {
