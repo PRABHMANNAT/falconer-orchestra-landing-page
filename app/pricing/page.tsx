@@ -455,7 +455,7 @@ export default function PricingPage() {
             <h2 id="pricing-cta-title">Ready to put it all in one brain?</h2>
             <p>Join the waitlist and we&apos;ll reach out the moment your spot opens.</p>
             <div className="pricing-page-cta-actions">
-              <a href="#" className="pricing-page-btn pricing-page-btn--primary">
+              <a href="/waitlist" className="pricing-page-btn pricing-page-btn--primary">
                 Join Waitlist
               </a>
               <a

@@ -302,7 +302,7 @@ function CtaFrame() {
           {"Start free.\nGrow without\nlosing context."}
         </h2>
         <div style={{ display: "flex", gap: 14, justifyContent: "center", marginTop: 40 }}>
-          <a href="#" style={{
+          <a href="/waitlist" style={{
             padding: "14px 32px", borderRadius: 999,
             background: "var(--color-accent)", color: "#fff",
             fontFamily: "var(--font-mono)", fontSize: 13, letterSpacing: "0.14em",

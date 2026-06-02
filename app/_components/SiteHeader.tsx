@@ -71,7 +71,7 @@ export default function SiteHeader() {
       <div className="nav-right">
         <a className="nav-signin" href="#" style={{ display: "none" as const }} aria-label="Sign in" />
         <DarkModeToggle />
-        <a className="btn btn-accent" href="#">
+        <a className="btn btn-accent" href="/waitlist">
           Join Waitlist
         </a>
         <a
@@ -123,7 +123,7 @@ export default function SiteHeader() {
                 Sign In
               </a>
             </nav>
-            <a className="btn btn-accent" href="#" onClick={() => setMenuOpen(false)}>
+            <a className="btn btn-accent" href="/waitlist" onClick={() => setMenuOpen(false)}>
               Join Waitlist
             </a>
             <a

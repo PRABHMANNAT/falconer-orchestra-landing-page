@@ -139,7 +139,7 @@ function Header() {
           {/* shown via CSS at wider breakpoints */}
         </a>
         <DarkModeToggle />
-        <a className="btn btn-accent" href="#">
+        <a className="btn btn-accent" href="/waitlist">
           Join Waitlist
         </a>
         <a
@@ -188,7 +188,7 @@ function Header() {
                 Sign In
               </a>
             </nav>
-            <a className="btn btn-accent" href="#" onClick={() => setMenuOpen(false)}>
+            <a className="btn btn-accent" href="/waitlist" onClick={() => setMenuOpen(false)}>
               Join Waitlist
             </a>
             <a
@@ -788,7 +788,7 @@ export default function Home() {
               </motion.p>
 
               <motion.div className="hero-actions" variants={heroItem}>
-                <motion.a className="primary" href="#" whileHover={{ scale: 0.97 }} whileTap={{ scale: 0.95 }}>
+                <motion.a className="primary" href="/waitlist" whileHover={{ scale: 0.97 }} whileTap={{ scale: 0.95 }}>
                   Join Waitlist
                 </motion.a>
                 <a

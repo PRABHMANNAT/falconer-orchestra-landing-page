@@ -60,7 +60,7 @@ export default function MobileStickyCta() {
           delay: 1,
         }}
       >
-        <a href="#" className="mobile-sticky-cta-btn">
+        <a href="/waitlist" className="mobile-sticky-cta-btn">
           JOIN WAITLIST
         </a>
       </motion.div>

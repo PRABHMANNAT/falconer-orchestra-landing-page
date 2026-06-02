@@ -386,7 +386,7 @@ export default function ReducedMotionFallback() {
           }}
         >
           <a
-            href="#waitlist"
+            href="/waitlist"
             style={{
               display: "inline-block",
               fontFamily: "var(--font-sans)",
