@@ -33,18 +33,15 @@ const spaceGrotesk = Space_Grotesk({
 });
 
 export const metadata: Metadata = {
-  title: "Orchestra — The source of truth for teams that ship",
+  title: "Orchestra",
   description:
     "Orchestra is an AI-powered company brain that ingests every doc, thread, commit, and decision your team touches — then turns it into a living source of truth you can query, slice, and trust.",
   openGraph: {
-    title: "Orchestra — The source of truth for teams that ship",
+    title: "Orchestra",
     description:
       "Orchestra is an AI-powered company brain that ingests every doc, thread, commit, and decision your team touches — then turns it into a living source of truth you can query, slice, and trust.",
     type: "website"
   },
-  icons: {
-    icon: [{ url: "/orchestra-icon.png", type: "image/png" }]
-  }
 };
 
 export const viewport: Viewport = {
