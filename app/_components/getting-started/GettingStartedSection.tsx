@@ -1,8 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import { motion, useReducedMotion, type Variants } from "framer-motion";
 import { INTEGRATIONS } from "./integrations";
+import Mark from "../Mark";
 import "./styles.css";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
@@ -51,6 +52,93 @@ const fadeUp: Variants = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease: EASE } },
 };
 
+function BeamNode({ className = "", children }: { className?: string; children: ReactNode }) {
+  return <div className={`gs-beam-node ${className}`}>{children}</div>;
+}
+
+function BeamLogo({ id }: { id: string }) {
+  const integration = INTEGRATIONS.find((item) => item.id === id);
+  if (!integration) return null;
+
+  return (
+    <>
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src={integration.src} alt="" draggable={false} />
+      <span>{integration.name}</span>
+    </>
+  );
+}
+
+function OrchestraBeamMap() {
+  const beamPaths = [
+    { d: "M 88 72 Q 205 34 340 150", delay: "0s" },
+    { d: "M 88 150 Q 210 150 340 150", delay: "0.25s" },
+    { d: "M 88 228 Q 205 266 340 150", delay: "0.5s" },
+    { d: "M 592 72 Q 475 34 340 150", delay: "0.75s", reverse: true },
+    { d: "M 592 150 Q 470 150 340 150", delay: "1s", reverse: true },
+    { d: "M 592 228 Q 475 266 340 150", delay: "1.25s", reverse: true },
+  ];
+
+  return (
+    <div className="gs-beam-stage" aria-label="Connected tools flowing into Orchestra">
+      <svg className="gs-beam-svg" viewBox="0 0 680 300" aria-hidden="true">
+        <defs>
+          <linearGradient id="gs-beam-gradient" x1="0%" x2="100%" y1="0%" y2="0%">
+            <stop offset="0%" stopColor="transparent" />
+            <stop offset="36%" stopColor="var(--color-accent)" stopOpacity="0.22" />
+            <stop offset="54%" stopColor="var(--color-accent)" stopOpacity="0.95" />
+            <stop offset="100%" stopColor="transparent" />
+          </linearGradient>
+        </defs>
+        {beamPaths.map((path) => (
+          <path key={`base-${path.d}`} className="animated-beam-base" d={path.d} />
+        ))}
+        {beamPaths.map((path) => (
+          <path
+            key={`flow-${path.d}`}
+            className="animated-beam-flow"
+            d={path.d}
+            stroke="url(#gs-beam-gradient)"
+            style={{
+              animationDelay: path.delay,
+              animationDirection: path.reverse ? "reverse" : "normal",
+            }}
+          />
+        ))}
+      </svg>
+      <div className="gs-beam-grid">
+        <BeamNode>
+          <BeamLogo id="slack" />
+        </BeamNode>
+        <BeamNode>
+          <BeamLogo id="gdocs" />
+        </BeamNode>
+
+        <BeamNode>
+          <BeamLogo id="github" />
+        </BeamNode>
+        <BeamNode className="gs-beam-brain">
+          <span className="gs-beam-brain-mark">
+            <Mark tone="light" />
+          </span>
+          <b>Orchestra</b>
+          <small>Company brain</small>
+        </BeamNode>
+        <BeamNode>
+          <BeamLogo id="notion" />
+        </BeamNode>
+
+        <BeamNode>
+          <BeamLogo id="fireflies" />
+        </BeamNode>
+        <BeamNode>
+          <BeamLogo id="teams" />
+        </BeamNode>
+      </div>
+    </div>
+  );
+}
+
 function ConnectPanel() {
   return (
     <motion.div
@@ -60,7 +148,7 @@ function ConnectPanel() {
       animate="visible"
     >
       <motion.div className="gs-connect-grid" variants={stagger}>
-        {INTEGRATIONS.map((t) => (
+        {INTEGRATIONS.map((t, index) => (
           <motion.figure
             key={t.id}
             className="gs-tile"
@@ -81,7 +169,7 @@ function ConnectPanel() {
               aria-hidden="true"
               initial={{ scale: 0, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
-              transition={{ delay: 0.4 + Math.random() * 0.6, type: "spring", stiffness: 380, damping: 18 }}
+              transition={{ delay: 0.28 + index * 0.06, type: "spring", stiffness: 380, damping: 18 }}
             >
               <svg viewBox="0 0 12 12" width="10" height="10" aria-hidden="true">
                 <path d="M2 6.5 L5 9.5 L10 3.5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
@@ -90,6 +178,7 @@ function ConnectPanel() {
           </motion.figure>
         ))}
       </motion.div>
+      <OrchestraBeamMap />
     </motion.div>
   );
 }
@@ -317,9 +406,8 @@ export default function GettingStartedSection() {
     <section id="getstarted" className="gs-section" aria-labelledby="gs-title">
       <motion.header
         className="gs-head"
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, amount: 0.4 }}
+        initial={false}
+        animate="visible"
         variants={{
           hidden: {},
           visible: { transition: { staggerChildren: 0.08, delayChildren: 0.05 } },
@@ -342,9 +430,8 @@ export default function GettingStartedSection() {
         role="tablist"
         aria-label="Getting started steps"
         className="gs-tabs"
-        initial={{ opacity: 0, y: 8 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, amount: 0.4 }}
+        initial={false}
+        animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, ease: EASE, delay: 0.15 }}
       >
         {STEPS.map((s) => {
@@ -379,9 +466,8 @@ export default function GettingStartedSection() {
 
       <motion.div
         className="gs-stage"
-        initial={{ opacity: 0, y: 16 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, amount: 0.2 }}
+        initial={false}
+        animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.55, ease: EASE, delay: 0.2 }}
       >
         <motion.div
@@ -389,7 +475,7 @@ export default function GettingStartedSection() {
           id={`gs-panel-${active}`}
           role="tabpanel"
           aria-labelledby={`gs-tab-${active}`}
-          initial={{ opacity: 0, y: 12 }}
+          initial={false}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.32, ease: EASE }}
           className="gs-stage-inner"

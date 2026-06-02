@@ -4,6 +4,7 @@
 
 .gs-section {
   position: relative;
+  scroll-margin-top: 92px;
   padding: clamp(72px, 9vw, 120px) var(--pad);
   background: var(--color-cream);
   border-top: 1px solid var(--color-line);
@@ -292,6 +293,141 @@
   border-radius: 50%;
   background: #21b07a;
   color: #fff;
+}
+
+.gs-beam-stage {
+  position: relative;
+  width: min(100%, 680px);
+  min-height: 300px;
+  margin: clamp(22px, 3vw, 34px) auto 0;
+  padding: clamp(18px, 3vw, 34px);
+  overflow: hidden;
+  border: 1px solid var(--color-line);
+  border-radius: 18px;
+  background:
+    radial-gradient(circle at 50% 50%, rgba(217, 119, 87, 0.1), transparent 38%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.76), rgba(248, 245, 235, 0.8));
+}
+
+.gs-beam-stage::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(rgba(14, 29, 11, 0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(14, 29, 11, 0.025) 1px, transparent 1px);
+  background-size: 34px 34px;
+  mask-image: radial-gradient(360px circle at center, #000, transparent 75%);
+}
+
+.gs-beam-grid {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: minmax(110px, 1fr) minmax(132px, 1.05fr) minmax(110px, 1fr);
+  grid-template-rows: repeat(3, minmax(60px, auto));
+  align-items: center;
+  justify-items: center;
+  gap: clamp(16px, 4vw, 34px) clamp(22px, 5vw, 54px);
+  min-height: 230px;
+}
+
+.gs-beam-svg {
+  position: absolute;
+  inset: clamp(18px, 3vw, 34px);
+  z-index: 1;
+  width: calc(100% - clamp(18px, 3vw, 34px) * 2);
+  height: calc(100% - clamp(18px, 3vw, 34px) * 2);
+  pointer-events: none;
+  overflow: visible;
+}
+
+.gs-beam-node {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-width: 118px;
+  min-height: 48px;
+  padding: 10px 12px;
+  border: 1px solid var(--color-line);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.92);
+  color: var(--color-ink);
+  font-family: var(--font-nav);
+  font-size: 13px;
+  font-weight: 600;
+  box-shadow: 0 10px 28px rgba(14, 29, 11, 0.07);
+}
+
+.gs-beam-node img {
+  width: 22px;
+  height: 22px;
+  object-fit: contain;
+  border-radius: 5px;
+}
+
+.gs-beam-brain {
+  grid-column: 2;
+  grid-row: 2;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 138px;
+  min-height: 138px;
+  border-radius: 32px;
+  border-color: rgba(217, 119, 87, 0.38);
+  background:
+    radial-gradient(circle at 50% 22%, rgba(255, 255, 255, 0.32), transparent 34%),
+    linear-gradient(160deg, #e8825a 0%, #b85c3e 100%);
+  color: #fff;
+  box-shadow: 0 22px 50px rgba(184, 92, 62, 0.26);
+}
+
+.gs-beam-brain-mark {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  margin-bottom: 4px;
+}
+
+.gs-beam-brain-mark .falcon-mark {
+  width: 100%;
+  height: 100%;
+}
+
+.gs-beam-brain b {
+  font-size: 15px;
+  line-height: 1;
+}
+
+.gs-beam-brain small {
+  color: rgba(255, 255, 255, 0.78);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.animated-beam-base {
+  fill: none;
+  stroke: rgba(14, 29, 11, 0.08);
+  stroke-width: 1.2;
+}
+
+.animated-beam-flow {
+  fill: none;
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-dasharray: 18 160;
+  animation: gs-beam-flow 3.8s linear infinite;
+}
+
+@keyframes gs-beam-flow {
+  from { stroke-dashoffset: 178; }
+  to { stroke-dashoffset: 0; }
 }
 
 /* ---------- Structure — conversation ---------- */
@@ -604,6 +740,30 @@
 [data-theme="dark"] .gs-tile-meta b { color: #FAF7F1; }
 [data-theme="dark"] .gs-tile-meta small { color: #9a9088; }
 
+[data-theme="dark"] .gs-beam-stage {
+  background:
+    radial-gradient(circle at 50% 50%, rgba(217, 119, 87, 0.18), transparent 38%),
+    linear-gradient(180deg, rgba(37, 32, 28, 0.92), rgba(28, 25, 22, 0.96));
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+[data-theme="dark"] .gs-beam-stage::before {
+  background:
+    linear-gradient(rgba(250, 247, 241, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(250, 247, 241, 0.035) 1px, transparent 1px);
+}
+
+[data-theme="dark"] .gs-beam-node {
+  background: rgba(15, 13, 11, 0.86);
+  border-color: rgba(255, 255, 255, 0.1);
+  color: #FAF7F1;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.32);
+}
+
+[data-theme="dark"] .animated-beam-base {
+  stroke: rgba(250, 247, 241, 0.08);
+}
+
 [data-theme="dark"] .gs-msg {
   border-color: rgba(255, 255, 255, 0.08);
 }
@@ -640,4 +800,37 @@
 /* ---------- Reduced motion ---------- */
 @media (prefers-reduced-motion: reduce) {
   .gs-tile-check { transition: none; }
+  .animated-beam-flow { animation: none; }
+}
+
+@media (max-width: 640px) {
+  .gs-beam-stage {
+    min-height: 360px;
+    padding: 18px 12px;
+  }
+
+  .gs-beam-grid {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: repeat(4, minmax(58px, auto));
+    gap: 14px;
+  }
+
+  .gs-beam-brain {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    min-width: 128px;
+    min-height: 128px;
+  }
+
+  .gs-beam-node {
+    min-width: 0;
+    width: 100%;
+    padding-inline: 10px;
+    font-size: 12px;
+  }
+
+  .gs-beam-node img {
+    width: 20px;
+    height: 20px;
+  }
 }
