@@ -1,13 +1,18 @@
 "use client";
 
-import { memo, useEffect, useMemo, useRef, useState } from "react";
+import { memo, useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
 import { motion, useReducedMotion, useInView } from "framer-motion";
 import Mark from "../Mark";
 import { INTEGRATIONS } from "./integrations";
 import IntegrationCard from "./IntegrationCard";
 
-const RADIUS = 38;
 const EASE = [0.22, 1, 0.36, 1] as const;
+
+// Core sits on the right; sources fan down the left edge. Coordinates are a
+// percentage of the container (SVG uses preserveAspectRatio="none"), so no
+// runtime measurement is needed — the layout is fully deterministic.
+const CORE = { x: 79, y: 50 };
+const SOURCE_X = 13;
 
 function IntegrationShowcaseImpl() {
   const reduce = useReducedMotion();
@@ -17,20 +22,23 @@ function IntegrationShowcaseImpl() {
   const [active, setActive] = useState(0);
   const [paused, setPaused] = useState(false);
 
-  // Deterministic orbit positions in a 0–100 square coordinate space.
+  // Evenly spread the sources down the left edge.
   const points = useMemo(
     () =>
-      INTEGRATIONS.map((_, i) => {
-        const a = (i / INTEGRATIONS.length) * Math.PI * 2 - Math.PI / 2;
-        return { x: 50 + RADIUS * Math.cos(a), y: 50 + RADIUS * Math.sin(a) };
-      }),
+      INTEGRATIONS.map((_, i) => ({
+        x: SOURCE_X,
+        y: 8 + (i * 84) / (INTEGRATIONS.length - 1),
+      })),
     []
   );
 
   // Auto-advance — only when visible, not paused, and motion is allowed.
   useEffect(() => {
     if (paused || reduce || !inView) return;
-    const id = setInterval(() => setActive((a) => (a + 1) % INTEGRATIONS.length), 2400);
+    const id = setInterval(
+      () => setActive((a) => (a + 1) % INTEGRATIONS.length),
+      2200
+    );
     return () => clearInterval(id);
   }, [paused, reduce, inView]);
 
@@ -44,135 +52,163 @@ function IntegrationShowcaseImpl() {
       onMouseLeave={() => setPaused(false)}
     >
       <header
-        style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 10 }}
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          marginBottom: 10,
+        }}
       >
         <span className="gs-stage-pill">
           <span className="gs-stage-pill-dot" aria-hidden="true" />
           {INTEGRATIONS.length} live integrations
         </span>
-        <span
-          className="gs-convo-status"
-          aria-live="polite"
-        >
-          Now · {integration.name}
+        <span className="gs-convo-status" aria-live="polite">
+          Syncing · {integration.name}
         </span>
       </header>
 
-      <div className="gs-orbit" ref={ref}>
-        <span className="gs-orbit-ring" aria-hidden="true" />
-
-        <svg className="gs-orbit-beams" viewBox="0 0 100 100" aria-hidden="true">
+      <div className="gs-conv" ref={ref}>
+        <svg
+          className="gs-conv-beams"
+          viewBox="0 0 100 100"
+          preserveAspectRatio="none"
+          aria-hidden="true"
+        >
           <defs>
             <linearGradient
-              id="gs-flow"
+              id="gs-conv-flow"
               gradientUnits="userSpaceOnUse"
               x1={points[active].x}
               y1={points[active].y}
-              x2={50}
-              y2={50}
+              x2={CORE.x}
+              y2={CORE.y}
             >
               <stop offset="0%" stopColor="rgba(217,119,87,0)" />
-              <stop offset="50%" stopColor="rgba(217,119,87,0.9)" />
+              <stop offset="55%" stopColor="rgba(217,119,87,0.9)" />
               <stop offset="100%" stopColor="#b85c3e" />
             </linearGradient>
           </defs>
+
+          {/* Always-on streaming beams — every source feeds the brain. */}
           {points.map((p, i) => (
             <line
-              key={i}
+              key={`beam-${i}`}
               x1={p.x}
               y1={p.y}
-              x2={50}
-              y2={50}
+              x2={CORE.x}
+              y2={CORE.y}
+              pathLength={100}
               vectorEffect="non-scaling-stroke"
-              className={`gs-wire${i === active ? " is-active" : ""}`}
+              className={`gs-conv-beam${i === active ? " is-active" : ""}`}
+              style={{ animationDelay: `${(i * 0.4).toFixed(2)}s` } as CSSProperties}
             />
           ))}
+
+          {/* Bright sweep that establishes the active connection. */}
           <motion.line
-            key={active}
+            key={`flow-${active}`}
             x1={points[active].x}
             y1={points[active].y}
-            x2={50}
-            y2={50}
-            stroke="url(#gs-flow)"
+            x2={CORE.x}
+            y2={CORE.y}
+            stroke="url(#gs-conv-flow)"
             vectorEffect="non-scaling-stroke"
-            className="gs-flow"
+            className="gs-conv-sweep"
             initial={{ pathLength: 0, opacity: 0 }}
             animate={{ pathLength: 1, opacity: 1 }}
-            transition={{ duration: 0.55, ease: EASE }}
+            transition={{ duration: 0.5, ease: EASE }}
           />
+
+          {/* Data packet riding the active beam into the core. */}
           {!reduce && inView && (
             <motion.circle
               key={`packet-${active}`}
-              r={1.6}
-              className="gs-packet"
+              r={1.7}
+              className="gs-conv-packet"
               initial={{ cx: points[active].x, cy: points[active].y, opacity: 0 }}
               animate={{
-                cx: [points[active].x, 50],
-                cy: [points[active].y, 50],
+                cx: [points[active].x, CORE.x],
+                cy: [points[active].y, CORE.y],
                 opacity: [0, 1, 1, 0],
               }}
-              transition={{ duration: 1.5, ease: "easeInOut", repeat: Infinity, repeatDelay: 0.2, delay: 0.3 }}
+              transition={{
+                duration: 1.4,
+                ease: "easeInOut",
+                repeat: Infinity,
+                repeatDelay: 0.2,
+                delay: 0.25,
+              }}
             />
           )}
         </svg>
 
+        {/* Pulse that ripples out of the core when a packet lands. */}
         {!reduce && inView && (
           <motion.span
-            key={`halo-${active}`}
-            className="gs-active-halo"
+            key={`core-pulse-${active}`}
+            className="gs-conv-core-pulse"
             aria-hidden="true"
-            style={{ left: `${points[active].x}%`, top: `${points[active].y}%` }}
-            initial={{ opacity: 0.55, scale: 0.6 }}
-            animate={{ opacity: 0, scale: 1.9 }}
-            transition={{ duration: 1.2, ease: "easeOut", repeat: Infinity }}
+            initial={{ opacity: 0.5, scale: 0.5 }}
+            animate={{ opacity: 0, scale: 2.1 }}
+            transition={{ duration: 1.4, ease: "easeOut", repeat: Infinity }}
           />
         )}
 
+        {/* Source chips down the left edge. */}
         {INTEGRATIONS.map((t, i) => (
           <motion.span
             key={t.id}
-            className="gs-node-slot"
+            className="gs-conv-chip-slot"
             style={{ left: `${points[i].x}%`, top: `${points[i].y}%` }}
-            initial={reduce ? false : { opacity: 0, scale: 0.2 }}
-            animate={inView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.2 }}
-            transition={{ type: "spring", stiffness: 320, damping: 18, delay: 0.2 + i * 0.06 }}
+            initial={reduce ? false : { opacity: 0, x: "-50%", y: "-50%", scale: 0.4 }}
+            animate={
+              inView
+                ? { opacity: 1, x: "-50%", y: "-50%", scale: 1 }
+                : { opacity: 0, x: "-50%", y: "-50%", scale: 0.4 }
+            }
+            transition={{ type: "spring", stiffness: 320, damping: 20, delay: 0.15 + i * 0.05 }}
           >
-            <motion.button
+            <button
               type="button"
-              className={`gs-node${i === active ? " is-active" : ""}`}
-              onMouseEnter={() => { setActive(i); setPaused(true); }}
-              onFocus={() => { setActive(i); setPaused(true); }}
+              className={`gs-conv-chip${i === active ? " is-active" : ""}`}
+              onMouseEnter={() => {
+                setActive(i);
+                setPaused(true);
+              }}
+              onFocus={() => {
+                setActive(i);
+                setPaused(true);
+              }}
               onClick={() => setActive(i)}
               onBlur={() => setPaused(false)}
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.94 }}
-              animate={{ scale: i === active ? 1.14 : 1 }}
-              transition={{ type: "spring", stiffness: 300, damping: 20 }}
               aria-label={`${t.name} — ${t.detail}`}
               aria-pressed={i === active}
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img className="gs-node-img" src={t.src} alt="" loading="lazy" draggable={false} />
-            </motion.button>
+              <img className="gs-conv-chip-img" src={t.src} alt="" loading="lazy" draggable={false} />
+              <span className="gs-conv-chip-dot" aria-hidden="true" />
+            </button>
           </motion.span>
         ))}
 
-        {/* Rotating core — disabled under reduced motion. */}
-        <motion.div
-          className="gs-orbit-core"
-          animate={reduce ? undefined : { rotate: 360 }}
-          transition={reduce ? undefined : { duration: 28, repeat: Infinity, ease: "linear" }}
-        >
-          <span className="gs-orbit-core-shimmer" aria-hidden="true" />
-          {/* Counter-rotate so the Mark stays upright */}
+        {/* Orchestra core — the unified company brain. */}
+        <div className="gs-conv-core" style={{ left: `${CORE.x}%`, top: `${CORE.y}%` }}>
+          <span className="gs-conv-core-ring" aria-hidden="true" />
+          <span className="gs-conv-core-ring gs-conv-core-ring-2" aria-hidden="true" />
           <motion.div
-            animate={reduce ? undefined : { rotate: -360 }}
-            transition={reduce ? undefined : { duration: 28, repeat: Infinity, ease: "linear" }}
-            style={{ display: "grid", placeItems: "center", width: "52%", height: "52%" }}
+            className="gs-conv-core-orb"
+            initial={reduce ? false : { scale: 0.7, opacity: 0 }}
+            animate={inView ? { scale: 1, opacity: 1 } : { scale: 0.7, opacity: 0 }}
+            transition={{ duration: 0.6, ease: EASE, delay: 0.3 }}
           >
+            <span className="gs-conv-core-shimmer" aria-hidden="true" />
             <Mark tone="light" />
           </motion.div>
-        </motion.div>
+          <span className="gs-conv-core-label" aria-hidden="true">
+            Company brain
+          </span>
+        </div>
       </div>
 
       <IntegrationCard key={integration.id} integration={integration} />

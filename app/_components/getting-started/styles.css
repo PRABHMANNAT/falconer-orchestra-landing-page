@@ -271,101 +271,198 @@
 }
 
 /* ============================================================
-   1. Connect — orbit
+   1. Connect — convergence flow (sources stream into the brain)
    ============================================================ */
-.gs-orbit {
+.gs-conv {
   position: relative;
   width: 100%;
-  aspect-ratio: 1 / 1;
-  margin: 18px 0 18px;
+  height: clamp(300px, 34vw, 380px);
+  margin: 16px 0;
 }
 
-.gs-orbit-ring {
-  position: absolute;
-  inset: 12%;
-  border: 1px dashed color-mix(in srgb, var(--color-accent) 32%, transparent);
-  border-radius: 50%;
-}
-
-.gs-orbit-beams { position: absolute; inset: 0; }
-
-.gs-wire {
-  stroke: var(--color-line);
-  stroke-width: 1;
-  opacity: 0.85;
-}
-
-.gs-wire.is-active { stroke: color-mix(in srgb, var(--color-accent) 28%, transparent); }
-
-.gs-flow { stroke-width: 2; stroke-linecap: round; }
-
-.gs-packet { fill: var(--color-accent); filter: drop-shadow(0 0 2px rgba(217,119,87,0.8)); }
-
-.gs-orbit-core {
-  position: absolute;
-  left: 50%; top: 50%;
-  transform: translate(-50%, -50%);
-  display: grid; place-items: center;
-  width: clamp(76px, 22%, 110px);
-  height: clamp(76px, 22%, 110px);
-  border-radius: 26px;
-  background: linear-gradient(160deg, #e8825a 0%, #b85c3e 100%);
-  color: #fff;
-  box-shadow: 0 18px 40px rgba(184, 92, 62, 0.28), inset 0 1px 0 rgba(255,255,255,0.25);
-  z-index: 3;
-  overflow: hidden;
-}
-
-.gs-orbit-core .falcon-mark { width: 52%; height: 52%; }
-
-.gs-orbit-core-shimmer {
+.gs-conv-beams {
   position: absolute;
   inset: 0;
-  background: linear-gradient(120deg, transparent 35%, rgba(255,255,255,0.32) 50%, transparent 65%);
-  pointer-events: none;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
 }
 
-.gs-active-halo {
+/* Faint, always-on data beams marching toward the core. */
+.gs-conv-beam {
+  stroke: color-mix(in srgb, var(--color-accent) 26%, transparent);
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-dasharray: 2 7;
+  opacity: 0.55;
+  animation: gs-conv-march 1.8s linear infinite;
+}
+
+.gs-conv-beam.is-active {
+  stroke: color-mix(in srgb, var(--color-accent) 60%, transparent);
+  opacity: 0.9;
+}
+
+@keyframes gs-conv-march {
+  to { stroke-dashoffset: -18; }
+}
+
+.gs-conv-sweep {
+  stroke-width: 2.4;
+  stroke-linecap: round;
+}
+
+.gs-conv-packet {
+  fill: var(--color-accent);
+  filter: drop-shadow(0 0 2.5px rgba(217, 119, 87, 0.85));
+}
+
+/* Source chips fanned down the left edge. */
+.gs-conv-chip-slot {
   position: absolute;
-  width: clamp(44px, 12%, 60px);
-  height: clamp(44px, 12%, 60px);
-  border-radius: 50%;
-  transform: translate(-50%, -50%);
-  background: radial-gradient(circle, rgba(217,119,87,0.5), transparent 70%);
-  pointer-events: none;
+  z-index: 3;
 }
 
-.gs-node-slot {
-  position: absolute;
-  transform: translate(-50%, -50%);
-  z-index: 2;
-}
-
-.gs-node {
-  display: grid; place-items: center;
-  width: clamp(44px, 12%, 60px);
-  height: clamp(44px, 12%, 60px);
+.gs-conv-chip {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: clamp(40px, 9.5%, 54px);
+  height: clamp(40px, 9.5%, 54px);
   padding: 0;
-  border-radius: 16px;
+  border-radius: 14px;
   border: 1px solid var(--color-line);
   background: #fff;
-  box-shadow: 0 4px 14px rgba(14, 29, 11, 0.06);
+  box-shadow: 0 4px 14px rgba(14, 29, 11, 0.07);
   cursor: pointer;
-  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-.gs-node-img { width: 62%; height: 62%; object-fit: contain; border-radius: 6px; }
+.gs-conv-chip-img {
+  width: 60%;
+  height: 60%;
+  object-fit: contain;
+  border-radius: 6px;
+}
 
-.gs-node:focus-visible {
+.gs-conv-chip-dot {
+  position: absolute;
+  top: -3px;
+  right: -3px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #21b07a;
+  border: 2px solid var(--color-paper);
+  opacity: 0;
+}
+
+.gs-conv-chip:focus-visible {
   outline: 2px solid var(--color-accent);
   outline-offset: 3px;
   border-color: var(--color-accent);
 }
 
-.gs-node.is-active {
+.gs-conv-chip.is-active {
   border-color: var(--color-accent);
   background: linear-gradient(180deg, #fff, color-mix(in srgb, var(--color-accent) 14%, transparent));
-  box-shadow: 0 10px 26px rgba(217, 119, 87, 0.22);
+  box-shadow: 0 10px 26px rgba(217, 119, 87, 0.24);
+}
+
+.gs-conv-chip.is-active .gs-conv-chip-dot { opacity: 1; }
+
+/* The unified company-brain core on the right. */
+.gs-conv-core {
+  position: absolute;
+  z-index: 4;
+  display: grid;
+  place-items: center;
+  translate: -50% -50%;
+}
+
+.gs-conv-core-orb {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: clamp(74px, 17vw, 104px);
+  height: clamp(74px, 17vw, 104px);
+  border-radius: 50%;
+  background: radial-gradient(circle at 32% 28%, #ef9b75, #d97757 42%, #b85c3e 100%);
+  color: #fff;
+  box-shadow: 0 18px 44px rgba(184, 92, 62, 0.34), inset 0 2px 0 rgba(255, 255, 255, 0.28);
+  overflow: hidden;
+}
+
+.gs-conv-core-orb .falcon-mark { width: 50%; height: 50%; }
+
+.gs-conv-core-shimmer {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(120deg, transparent 35%, rgba(255, 255, 255, 0.4) 50%, transparent 65%);
+  animation: gs-conv-shimmer 3.4s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes gs-conv-shimmer {
+  0%, 100% { transform: translateX(-120%); }
+  50% { transform: translateX(120%); }
+}
+
+/* Rotating dashed ring + a static halo ring around the core. */
+.gs-conv-core-ring {
+  position: absolute;
+  width: clamp(104px, 23vw, 150px);
+  height: clamp(104px, 23vw, 150px);
+  border-radius: 50%;
+  border: 1px dashed color-mix(in srgb, var(--color-accent) 38%, transparent);
+  animation: gs-conv-spin 22s linear infinite;
+  pointer-events: none;
+}
+
+.gs-conv-core-ring-2 {
+  width: clamp(132px, 30vw, 196px);
+  height: clamp(132px, 30vw, 196px);
+  border-style: solid;
+  border-color: color-mix(in srgb, var(--color-accent) 12%, transparent);
+  animation-direction: reverse;
+  animation-duration: 34s;
+}
+
+@keyframes gs-conv-spin {
+  to { transform: rotate(360deg); }
+}
+
+.gs-conv-core-pulse {
+  position: absolute;
+  left: 79%;
+  top: 50%;
+  width: clamp(74px, 17vw, 104px);
+  height: clamp(74px, 17vw, 104px);
+  margin: 0;
+  border-radius: 50%;
+  translate: -50% -50%;
+  background: radial-gradient(circle, rgba(217, 119, 87, 0.4), transparent 68%);
+  z-index: 2;
+  pointer-events: none;
+}
+
+.gs-conv-core-label {
+  position: absolute;
+  top: calc(100% + 10px);
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gs-conv-beam,
+  .gs-conv-core-shimmer,
+  .gs-conv-core-ring { animation: none; }
 }
 
 /* Integration card under orbit */
