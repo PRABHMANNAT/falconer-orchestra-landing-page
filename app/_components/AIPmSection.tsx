@@ -48,8 +48,8 @@ const CARDS: Card[] = [
     accent: "#10a5a0",
     category: "Coverage gap",
     severity: null,
-    title: "Driver Assignment spec has no engineering activity",
-    body: "Scoped for sprint 4. We're in sprint 5. Nothing's been touched.",
+    title: "The Driver Assignment spec has zero engineering activity",
+    body: "Scoped for sprint 4. It's sprint 5 now and nobody has started — this is how features quietly slip.",
   },
 ];
 
