@@ -30,11 +30,6 @@ const faqs = [
       "Per seat per month. Free tier for up to 5 teammates remains forever.",
   },
   {
-    question: "What's the SOC 2 status?",
-    answer:
-      "Type II in progress, expected Q3 2026. Type I report available on request.",
-  },
-  {
     question: "Do you have a Slack/MS Teams integration?",
     answer: "Slack is live. Teams is in beta.",
   },
