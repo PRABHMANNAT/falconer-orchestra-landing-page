@@ -62,21 +62,21 @@ const featureCards = [
 const reviews = [
   {
     quote:
-      "Monday mornings used to mean re-reading three weeks of customer Slack just to remember where the deployment stood. That ritual is gone.",
+      "I used to spend Monday mornings scrolling three weeks of Slack just to find where we left off. Now I ask Orchestra and it already knows.",
     name: "Maya R.",
     role: "Forward-Deployed Engineer · Logistics",
     tint: "a"
   },
   {
     quote:
-      "The first time Socrates pushed back on a scoping assumption — citing the actual call transcript — I knew this was built for FDEs.",
+      "Socrates pushed back on a scope I half-remembered, then pulled the exact call transcript that proved me wrong. I haven't second-guessed it since.",
     name: "Devin K.",
     role: "Senior FDE · Fintech",
     tint: "b"
   },
   {
     quote:
-      "Orchestra knows what we promised on-site, what shipped, and what's still open. I stopped tab-switching to hold the account in my head.",
+      "Orchestra holds the whole account in its head. What we promised, what shipped, what's still open. I haven't touched a status doc in months.",
     name: "Sana A.",
     role: "FDE Lead · DevTools",
     tint: "c"
