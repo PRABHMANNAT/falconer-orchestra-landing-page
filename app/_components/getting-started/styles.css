@@ -325,12 +325,12 @@
   position: relative;
   z-index: 2;
   display: grid;
-  grid-template-columns: minmax(110px, 1fr) minmax(132px, 1.05fr) minmax(110px, 1fr);
-  grid-template-rows: repeat(3, minmax(60px, auto));
+  grid-template-columns: minmax(138px, 1fr) minmax(146px, 0.92fr) minmax(138px, 1fr);
+  grid-template-rows: repeat(3, 66px);
   align-items: center;
   justify-items: center;
-  gap: clamp(16px, 4vw, 34px) clamp(22px, 5vw, 54px);
-  min-height: 230px;
+  gap: 16px clamp(42px, 6vw, 72px);
+  min-height: 260px;
 }
 
 .gs-beam-svg {
@@ -366,6 +366,33 @@
   height: 22px;
   object-fit: contain;
   border-radius: 5px;
+}
+
+.gs-beam-node-slack,
+.gs-beam-node-notion,
+.gs-beam-node-teams {
+  grid-column: 1;
+}
+
+.gs-beam-node-gdocs,
+.gs-beam-node-github,
+.gs-beam-node-fireflies {
+  grid-column: 3;
+}
+
+.gs-beam-node-slack,
+.gs-beam-node-gdocs {
+  grid-row: 1;
+}
+
+.gs-beam-node-notion,
+.gs-beam-node-github {
+  grid-row: 2;
+}
+
+.gs-beam-node-teams,
+.gs-beam-node-fireflies {
+  grid-row: 3;
 }
 
 .gs-beam-brain {
@@ -815,11 +842,45 @@
     gap: 14px;
   }
 
+  .gs-beam-svg {
+    display: none;
+  }
+
+  .gs-beam-node-slack {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .gs-beam-node-gdocs {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
   .gs-beam-brain {
     grid-column: 1 / -1;
     grid-row: 2;
     min-width: 128px;
     min-height: 128px;
+  }
+
+  .gs-beam-node-notion {
+    grid-column: 1;
+    grid-row: 3;
+  }
+
+  .gs-beam-node-github {
+    grid-column: 2;
+    grid-row: 3;
+  }
+
+  .gs-beam-node-teams {
+    grid-column: 1;
+    grid-row: 4;
+  }
+
+  .gs-beam-node-fireflies {
+    grid-column: 2;
+    grid-row: 4;
   }
 
   .gs-beam-node {

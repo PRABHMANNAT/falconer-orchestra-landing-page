@@ -71,12 +71,12 @@ function BeamLogo({ id }: { id: string }) {
 
 function OrchestraBeamMap() {
   const beamPaths = [
-    { d: "M 88 72 Q 205 34 340 150", delay: "0s" },
-    { d: "M 88 150 Q 210 150 340 150", delay: "0.25s" },
-    { d: "M 88 228 Q 205 266 340 150", delay: "0.5s" },
-    { d: "M 592 72 Q 475 34 340 150", delay: "0.75s", reverse: true },
-    { d: "M 592 150 Q 470 150 340 150", delay: "1s", reverse: true },
-    { d: "M 592 228 Q 475 266 340 150", delay: "1.25s", reverse: true },
+    { d: "M 116 68 Q 226 34 340 150", delay: "0s" },
+    { d: "M 116 150 Q 232 150 340 150", delay: "0.25s" },
+    { d: "M 116 232 Q 226 266 340 150", delay: "0.5s" },
+    { d: "M 564 68 Q 454 34 340 150", delay: "0.75s", reverse: true },
+    { d: "M 564 150 Q 448 150 340 150", delay: "1s", reverse: true },
+    { d: "M 564 232 Q 454 266 340 150", delay: "1.25s", reverse: true },
   ];
 
   return (
@@ -107,15 +107,15 @@ function OrchestraBeamMap() {
         ))}
       </svg>
       <div className="gs-beam-grid">
-        <BeamNode>
+        <BeamNode className="gs-beam-node-slack">
           <BeamLogo id="slack" />
         </BeamNode>
-        <BeamNode>
+        <BeamNode className="gs-beam-node-gdocs">
           <BeamLogo id="gdocs" />
         </BeamNode>
 
-        <BeamNode>
-          <BeamLogo id="github" />
+        <BeamNode className="gs-beam-node-notion">
+          <BeamLogo id="notion" />
         </BeamNode>
         <BeamNode className="gs-beam-brain">
           <span className="gs-beam-brain-mark">
@@ -124,15 +124,15 @@ function OrchestraBeamMap() {
           <b>Orchestra</b>
           <small>Company brain</small>
         </BeamNode>
-        <BeamNode>
-          <BeamLogo id="notion" />
+        <BeamNode className="gs-beam-node-github">
+          <BeamLogo id="github" />
         </BeamNode>
 
-        <BeamNode>
-          <BeamLogo id="fireflies" />
-        </BeamNode>
-        <BeamNode>
+        <BeamNode className="gs-beam-node-teams">
           <BeamLogo id="teams" />
+        </BeamNode>
+        <BeamNode className="gs-beam-node-fireflies">
+          <BeamLogo id="fireflies" />
         </BeamNode>
       </div>
     </div>

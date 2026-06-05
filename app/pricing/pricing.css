@@ -254,14 +254,59 @@
   color: var(--color-muted);
 }
 
+.pricing-table-shell {
+  position: relative;
+  isolation: isolate;
+  padding: 1px;
+  border-radius: 24px;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.74), rgba(255, 255, 255, 0.18)),
+    linear-gradient(135deg, rgba(217, 119, 87, 0.22), rgba(14, 29, 11, 0.08));
+  box-shadow:
+    0 34px 90px rgba(14, 29, 11, 0.13),
+    inset 0 1px 0 rgba(255, 255, 255, 0.78);
+  backdrop-filter: blur(22px) saturate(145%);
+  -webkit-backdrop-filter: blur(22px) saturate(145%);
+}
+
+.pricing-table-shell::before,
+.pricing-table-shell::after {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+  z-index: 0;
+  border-radius: inherit;
+}
+
+.pricing-table-shell::before {
+  inset: -28px 8%;
+  background:
+    radial-gradient(circle at 24% 16%, rgba(255, 255, 255, 0.84), transparent 30%),
+    radial-gradient(circle at 76% 0%, rgba(217, 119, 87, 0.22), transparent 34%),
+    radial-gradient(circle at 52% 100%, rgba(14, 29, 11, 0.08), transparent 42%);
+  filter: blur(18px);
+  opacity: 0.9;
+}
+
+.pricing-table-shell::after {
+  inset: 1px;
+  background:
+    linear-gradient(120deg, rgba(255, 255, 255, 0.55), transparent 28%),
+    linear-gradient(180deg, transparent 0%, rgba(255, 255, 255, 0.14) 100%);
+  mix-blend-mode: screen;
+}
+
 .pricing-table {
   position: relative;
+  z-index: 1;
   width: 100%;
   border-collapse: separate;
   border-spacing: 0;
-  border: 1px solid var(--color-line);
-  border-radius: 18px;
-  background: var(--color-paper);
+  border: 1px solid rgba(255, 255, 255, 0.46);
+  border-radius: 23px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.58), rgba(255, 255, 255, 0.3)),
+    rgba(248, 245, 235, 0.58);
   overflow: hidden;
 }
 
@@ -271,21 +316,35 @@
   text-align: left;
   font-size: 14.5px;
   color: var(--color-ink);
-  border-bottom: 1px solid var(--color-line);
+  border-bottom: 1px solid rgba(14, 29, 11, 0.08);
 }
 
 .pricing-table tbody tr:last-child td {
   border-bottom: 0;
 }
 
+.pricing-table tbody tr {
+  background: rgba(255, 255, 255, 0.08);
+  transition: background 180ms ease, box-shadow 180ms ease;
+}
+
+.pricing-table tbody tr:hover {
+  background: rgba(255, 255, 255, 0.34);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.48);
+}
+
 .pricing-table th {
-  background: color-mix(in srgb, var(--color-ink) 4%, transparent);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.52), rgba(255, 255, 255, 0.18)),
+    rgba(255, 255, 255, 0.2);
   font-family: var(--font-mono);
   font-size: 11px;
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--color-muted);
   white-space: nowrap;
+  backdrop-filter: blur(18px) saturate(140%);
+  -webkit-backdrop-filter: blur(18px) saturate(140%);
 }
 
 .pricing-table th:not(:first-child),
@@ -294,14 +353,27 @@
   width: 18%;
 }
 
+.pricing-table th:not(:last-child),
+.pricing-table td:not(:last-child) {
+  border-right: 1px solid rgba(14, 29, 11, 0.06);
+}
+
 .pricing-table td:first-child {
   color: var(--color-ink);
   font-weight: 500;
 }
 
 .pricing-table .pricing-table-popular {
+  background:
+    linear-gradient(180deg, rgba(217, 119, 87, 0.18), rgba(255, 255, 255, 0.2)),
+    rgba(255, 255, 255, 0.22);
   color: var(--color-accent);
   text-transform: none;
+}
+
+.pricing-table th:nth-child(3),
+.pricing-table td:nth-child(3) {
+  background: rgba(217, 119, 87, 0.055);
 }
 
 .cell-yes {

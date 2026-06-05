@@ -13,7 +13,6 @@ import { GmailLogo, SlackLogo, LinearLogo, NotionLogo } from "./_components/Inte
 
 // Lazy-loaded new sections (all "use client" components)
 import dynamic from "next/dynamic";
-const TrustedBy = dynamic(() => import("./_components/TrustedBy"), { ssr: false });
 const AIPmSection = dynamic(() => import("./_components/AIPmSection"), { ssr: false });
 const TimelineSection = dynamic(() => import("./_components/TimelineSection"), { ssr: false });
 const PricingSection = dynamic(() => import("./_components/PricingSection"), { ssr: false });
@@ -852,9 +851,6 @@ export default function Home() {
             </div>
           </div>
         </section>
-
-        {/* ── SECTION 2: TRUSTED BY ── */}
-        <TrustedBy />
 
         {/* ── SECTION 3: LIVE DOC (terracotta) ── */}
         <motion.section

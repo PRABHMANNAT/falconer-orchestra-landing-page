@@ -371,12 +371,7 @@ export default function PricingPage() {
             </motion.p>
           </motion.div>
 
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.2 }}
-            transition={{ duration: 0.55, ease: EASE }}
-          >
+          <div className="pricing-table-shell">
             <table className="pricing-table">
               <thead>
                 <tr>
@@ -386,34 +381,20 @@ export default function PricingPage() {
                   <th scope="col">Enterprise</th>
                 </tr>
               </thead>
-              <motion.tbody
-                variants={{
-                  hidden: {},
-                  visible: { transition: { staggerChildren: 0.04, delayChildren: 0.2 } },
-                }}
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true, amount: 0.15 }}
-              >
+              <tbody>
                 {COMPARE.map((row) => (
-                  <motion.tr
-                    key={row.feature}
-                    variants={{
-                      hidden: { opacity: 0, y: 8 },
-                      visible: { opacity: 1, y: 0, transition: { duration: 0.35, ease: EASE } },
-                    }}
-                  >
+                  <tr key={row.feature}>
                     <td>{row.feature}</td>
                     {row.values.map((v, i) => (
                       <td key={i}>
                         <Cell v={v} />
                       </td>
                     ))}
-                  </motion.tr>
+                  </tr>
                 ))}
-              </motion.tbody>
+              </tbody>
             </table>
-          </motion.div>
+          </div>
         </section>
 
         {/* FAQ */}
