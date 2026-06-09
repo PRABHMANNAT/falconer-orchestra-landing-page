@@ -3115,6 +3115,7 @@ svg {
 .footer-cta-card-copy {
   position: relative;
   z-index: 2;
+  min-width: 0; /* let the grid track shrink to the card; prevents the title forcing overflow on mobile */
   padding: clamp(32px, 4vw, 56px);
 }
 
@@ -3331,6 +3332,30 @@ svg {
   }
   .footer-sitemap-cols--3 {
     grid-template-columns: 1fr;
+  }
+
+  /* CTA card: tighter padding so copy isn't cramped against the card edge */
+  .footer-cta-card-copy {
+    padding: clamp(24px, 7vw, 36px) clamp(20px, 6vw, 28px);
+  }
+  .footer-cta-title {
+    font-size: clamp(28px, 8.5vw, 44px);
+  }
+
+  /* Waitlist stacks: full-width input over full-width button — no cramped pill */
+  .footer-waitlist {
+    flex-direction: column;
+    gap: 10px;
+    max-width: 100%;
+    padding: 10px;
+    border-radius: 18px;
+  }
+  .footer-waitlist-input {
+    padding: 12px 16px;
+  }
+  .footer-waitlist-btn {
+    width: 100%;
+    padding: 14px;
   }
 
   .footer-bar {
