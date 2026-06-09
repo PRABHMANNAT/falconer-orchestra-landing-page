@@ -15,7 +15,6 @@ import { GmailLogo, SlackLogo, LinearLogo, NotionLogo } from "./_components/Inte
 import dynamic from "next/dynamic";
 const AIPmSection = dynamic(() => import("./_components/AIPmSection"), { ssr: false });
 const TimelineSection = dynamic(() => import("./_components/TimelineSection"), { ssr: false });
-const PricingSection = dynamic(() => import("./_components/PricingSection"), { ssr: false });
 const FaqSection = dynamic(() => import("./_components/FaqSection"), { ssr: false });
 const DarkModeToggle = dynamic(() => import("./_components/DarkModeToggle"), { ssr: false });
 const MobileStickyCta = dynamic(() => import("./_components/MobileStickyCta"), { ssr: false });
@@ -903,9 +902,6 @@ export default function Home() {
 
         {/* ── SECTION 8: TIMELINE — NEW ── */}
         <TimelineSection />
-
-        {/* ── SECTION 10: PRICING — NEW ── */}
-        <PricingSection />
 
         {/* ── SECTION 11: FAQ — NEW ── */}
         <FaqSection />
