@@ -20,9 +20,7 @@ const FOOTER_COLUMNS: Array<{
     heading: "Company",
     links: [
       { label: "About", href: "/about" },
-      { label: "Customers", href: "#" },
-      { label: "Careers", href: "#" },
-      { label: "Manifesto", href: "#" }
+      { label: "Careers", href: "#" }
     ]
   },
   {
@@ -39,8 +37,7 @@ const FOOTER_COLUMNS: Array<{
     links: [
       { label: "Privacy", href: "/privacy" },
       { label: "Terms", href: "/terms" },
-      { label: "Security", href: "/security" },
-      { label: "SOC 2", href: "#" }
+      { label: "Security", href: "/security" }
     ]
   }
 ];
