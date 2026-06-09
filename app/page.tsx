@@ -59,30 +59,6 @@ const featureCards = [
   }
 ];
 
-const reviews = [
-  {
-    quote:
-      "I used to spend Monday mornings scrolling three weeks of Slack just to find where we left off. Now I ask Orchestra and it already knows.",
-    name: "Maya R.",
-    role: "Forward-Deployed Engineer · Logistics",
-    tint: "a"
-  },
-  {
-    quote:
-      "Socrates pushed back on a scope I half-remembered, then pulled the exact call transcript that proved me wrong. I haven't second-guessed it since.",
-    name: "Devin K.",
-    role: "Senior FDE · Fintech",
-    tint: "b"
-  },
-  {
-    quote:
-      "Orchestra holds the whole account in its head. What we promised, what shipped, what's still open. I haven't touched a status doc in months.",
-    name: "Sana A.",
-    role: "FDE Lead · DevTools",
-    tint: "c"
-  }
-];
-
 const fadeUp = {
   hidden: { opacity: 0, y: 34 },
   visible: { opacity: 1, y: 0 }
@@ -760,26 +736,6 @@ function SocratesPanel() {
   );
 }
 
-function FdeAvatar({ name, tint }: { name: string; tint: string }) {
-  // DiceBear HTTP API — deterministic SVG portrait seeded by the person's name.
-  const src = `https://api.dicebear.com/9.x/notionists/svg?seed=${encodeURIComponent(
-    name
-  )}&radius=50&backgroundType=gradientLinear`;
-  return (
-    <motion.span
-      className={`fde-avatar fde-avatar--${tint}`}
-      aria-hidden="true"
-      initial={{ scale: 0.5, opacity: 0 }}
-      whileInView={{ scale: 1, opacity: 1 }}
-      viewport={{ once: true }}
-      transition={{ type: "spring", stiffness: 320, damping: 18, delay: 0.15 }}
-    >
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src={src} alt="" width={40} height={40} loading="lazy" />
-    </motion.span>
-  );
-}
-
 export default function Home() {
   return (
     <>
@@ -947,90 +903,6 @@ export default function Home() {
 
         {/* ── SECTION 8: TIMELINE — NEW ── */}
         <TimelineSection />
-
-        {/* ── SECTION 9: TESTIMONIALS ── */}
-        <section className="builders fde-section">
-          <motion.div
-            className="fde-heading"
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, amount: 0.5 }}
-            variants={{
-              hidden: {},
-              visible: { transition: { staggerChildren: 0.08, delayChildren: 0.04 } }
-            }}
-          >
-            <motion.span
-              className="fde-eyebrow"
-              variants={{ hidden: { opacity: 0, y: 10 }, visible: { opacity: 1, y: 0 } }}
-              transition={{ duration: 0.5, ease: softEase }}
-            >
-              Forward-Deployed Engineers
-            </motion.span>
-            <h2 className="fde-h2">
-              <motion.span
-                variants={{ hidden: { opacity: 0, y: 18 }, visible: { opacity: 1, y: 0 } }}
-                transition={{ duration: 0.6, ease: softEase }}
-              >
-                Made for{" "}
-              </motion.span>
-              <motion.span
-                className="accent-word"
-                variants={{ hidden: { opacity: 0, y: 18 }, visible: { opacity: 1, y: 0 } }}
-                transition={{ duration: 0.6, ease: softEase }}
-              >
-                FDEs.
-              </motion.span>
-            </h2>
-            <motion.p
-              className="fde-sub"
-              variants={{ hidden: { opacity: 0, y: 12 }, visible: { opacity: 1, y: 0 } }}
-              transition={{ duration: 0.5, ease: softEase }}
-            >
-              Forward-deployed engineers live in the customer&apos;s reality. Orchestra keeps every thread,
-              decision, and commit in one brain they can trust on-site.
-            </motion.p>
-          </motion.div>
-
-          <motion.div
-            className="fde-grid"
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, amount: 0.2 }}
-            variants={{
-              hidden: {},
-              visible: { transition: { staggerChildren: 0.12, delayChildren: 0.1 } }
-            }}
-          >
-            {reviews.map((item) => (
-              <motion.figure
-                key={item.name}
-                className="fde-card"
-                variants={{
-                  hidden: { opacity: 0, y: 28, filter: "blur(6px)" },
-                  visible: {
-                    opacity: 1,
-                    y: 0,
-                    filter: "blur(0px)",
-                    transition: { duration: 0.6, ease: softEase }
-                  }
-                }}
-                whileHover={{ y: -6 }}
-                transition={{ type: "spring", stiffness: 300, damping: 24 }}
-              >
-                <span className="fde-card-bar" aria-hidden="true" />
-                <blockquote className="fde-quote">{item.quote}</blockquote>
-                <figcaption className="fde-person">
-                  <FdeAvatar name={item.name} tint={item.tint} />
-                  <span className="fde-person-meta">
-                    <b>{item.name}</b>
-                    <small>{item.role}</small>
-                  </span>
-                </figcaption>
-              </motion.figure>
-            ))}
-          </motion.div>
-        </section>
 
         {/* ── SECTION 10: PRICING — NEW ── */}
         <PricingSection />
