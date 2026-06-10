@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, type CSSProperties, type ComponentType, type SVGProps } from "react";
+import { useEffect, useRef, useState, type CSSProperties, type ComponentType, type SVGProps } from "react";
 import Link from "next/link";
 import { AnimatePresence, motion, useMotionValueEvent, useReducedMotion, useScroll } from "framer-motion";
 import { cn } from "@/lib/utils";
@@ -186,81 +186,158 @@ function Header() {
 
 const softEase = [0.22, 1, 0.36, 1] as const;
 
-const TIMELINE_EVENTS = [
-  { source: "github", tag: "GitHub", title: "Auth merged to main", ref: "PR #47", who: "DP", milestone: true },
-  { source: "slack", tag: "Slack", title: "Pro tier deferred", who: "MC", diff: { old: "v1", new: "v2" } },
-  { source: "manual", tag: "Decision", title: "Database switched", who: "SC", diff: { old: "PlanetScale", new: "Supabase" } },
-  { source: "socrates", tag: "Socrates", title: "API map synthesized", ref: "34 endpoints", who: "AI" },
-  { source: "milestone", tag: "Milestone", title: "Launch date revised", who: "SC", milestone: true, diff: { old: "Jun 1", new: "Jun 15" } }
+type TimelineEvt = {
+  id: string;
+  source: "github" | "slack" | "manual" | "socrates" | "milestone";
+  tag: string;
+  title: string;
+  ref?: string;
+  who: string;
+  diff?: { old: string; new: string };
+  milestone?: boolean;
+};
+
+const TIMELINE_POOL: TimelineEvt[] = [
+  { id: "auth", source: "github", tag: "GitHub", title: "Auth merged to main", ref: "PR #47", who: "DP", milestone: true },
+  { id: "pro", source: "slack", tag: "Slack", title: "Pro tier deferred", who: "MC", diff: { old: "v1", new: "v2" } },
+  { id: "db", source: "manual", tag: "Decision", title: "Database switched", who: "SC", diff: { old: "PlanetScale", new: "Supabase" } },
+  { id: "api", source: "socrates", tag: "Socrates", title: "API map synthesized", ref: "34 endpoints", who: "AI" },
+  { id: "launch", source: "milestone", tag: "Milestone", title: "Launch date revised", who: "SC", milestone: true, diff: { old: "Jun 1", new: "Jun 15" } },
+  { id: "rate", source: "github", tag: "GitHub", title: "Rate limiter shipped", ref: "PR #54", who: "LO" },
+  { id: "standup", source: "slack", tag: "Slack", title: "Standup moved earlier", who: "MC", diff: { old: "9:30", new: "9:00" } },
+  { id: "promo", source: "socrates", tag: "Socrates", title: "Promo code scope drafted", ref: "from #product", who: "AI" },
+  { id: "host", source: "manual", tag: "Decision", title: "Hosting selected", who: "PS", diff: { old: "AWS EC2", new: "Vercel Pro" } },
+  { id: "stripe", source: "milestone", tag: "Milestone", title: "Stripe Connect chosen", who: "SC", milestone: true }
 ];
 
 function TimelinePanel() {
-  const reveal = {
-    hidden: {},
-    visible: { transition: { staggerChildren: 0.16, delayChildren: 0.15 } }
-  };
-  const item = {
-    hidden: { opacity: 0, x: -14 },
-    visible: { opacity: 1, x: 0, transition: { duration: 0.5, ease: softEase } }
-  };
-  const pop = {
-    hidden: { scale: 0 },
-    visible: { scale: 1, transition: { type: "spring" as const, stiffness: 360, damping: 18 } }
-  };
+  const reduced = useReducedMotion();
+  const [events, setEvents] = useState<TimelineEvt[]>(() => TIMELINE_POOL.slice(0, 5));
+  const [count, setCount] = useState(5);
+  const [flashId, setFlashId] = useState<string | null>(null);
+  const cursorRef = useRef(5);
+
+  useEffect(() => {
+    if (reduced) return;
+    const tick = () => {
+      const next = TIMELINE_POOL[cursorRef.current % TIMELINE_POOL.length];
+      cursorRef.current += 1;
+      const incoming: TimelineEvt = { ...next, id: `${next.id}-${cursorRef.current}` };
+      setEvents((prev) => [incoming, ...prev.slice(0, 4)]);
+      setFlashId(incoming.id);
+      setCount((n) => n + 1);
+      window.setTimeout(() => setFlashId(null), 1100);
+    };
+    const t = window.setInterval(tick, 3800);
+    return () => window.clearInterval(t);
+  }, [reduced]);
 
   return (
     <motion.div
       className="tlx"
-      initial="hidden"
-      whileInView="visible"
+      initial={{ opacity: 0, y: 18 }}
+      whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.3 }}
-      variants={reveal}
+      transition={{ duration: 0.7, ease: softEase }}
     >
-      <div className="livedoc-chrome">
+      <div className="tlx-chrome">
         <span className="livedoc-dot" aria-hidden="true" />
         <span className="livedoc-dot" aria-hidden="true" />
         <span className="livedoc-dot" aria-hidden="true" />
         <span className="livedoc-path">BloomFast / Timeline · Project memory</span>
+        <span className="tlx-live" aria-label="Live">
+          <motion.span
+            className="tlx-live-dot"
+            animate={reduced ? {} : { scale: [1, 1.5, 1], opacity: [1, 0.5, 1] }}
+            transition={{ duration: 1.4, repeat: Infinity, ease: "easeInOut" }}
+          />
+          <span className="tlx-live-text">LIVE</span>
+          <motion.span
+            key={count}
+            className="tlx-live-count"
+            initial={{ y: -8, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ type: "spring", stiffness: 360, damping: 22 }}
+          >
+            {count}
+          </motion.span>
+        </span>
       </div>
       <div className="tlx-body">
-        <motion.span
-          className="tlx-rail"
-          aria-hidden="true"
-          variants={{
-            hidden: { scaleY: 0 },
-            visible: { scaleY: 1, transition: { duration: 1.1, ease: softEase } }
-          }}
-        />
-        <ol className="tlx-list">
-          {TIMELINE_EVENTS.map((e, i) => (
-            <motion.li
-              key={e.title}
-              className={`tlx-event ${e.source}${e.milestone ? " milestone" : ""}`}
-              variants={item}
-            >
-              <motion.span
-                className={`tlx-node${i === TIMELINE_EVENTS.length - 1 ? " pulse" : ""}`}
-                variants={pop}
-                aria-hidden="true"
-              />
-              <div className="tlx-main">
-                <span className="tlx-meta">
-                  <span className="tlx-tag">{e.tag}</span>
-                  {e.ref && <span className="tlx-ref">{e.ref}</span>}
-                </span>
-                <p className="tlx-title">{e.title}</p>
-                {e.diff && (
-                  <span className="tlx-diff">
-                    <s>{e.diff.old}</s>
-                    <span className="tlx-arrow" aria-hidden="true">→</span>
-                    <b>{e.diff.new}</b>
+        {/* Shimmer along the rail */}
+        <span className="tlx-rail" aria-hidden="true" />
+        {!reduced && (
+          <motion.span
+            className="tlx-rail-shimmer"
+            aria-hidden="true"
+            animate={{ y: ["-10%", "110%"] }}
+            transition={{ duration: 2.6, repeat: Infinity, ease: "easeInOut" }}
+          />
+        )}
+
+        <motion.ol className="tlx-list" layout>
+          <AnimatePresence initial={false} mode="popLayout">
+            {events.map((e, i) => (
+              <motion.li
+                key={e.id}
+                layout
+                className={`tlx-event ${e.source}${e.milestone ? " milestone" : ""}${flashId === e.id ? " is-fresh" : ""}`}
+                initial={{ opacity: 0, y: -22, scale: 0.96 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: 22, scale: 0.96, transition: { duration: 0.32 } }}
+                transition={{ type: "spring", stiffness: 340, damping: 28 }}
+                whileHover={reduced ? undefined : { x: 4, transition: { duration: 0.2 } }}
+              >
+                <motion.span
+                  className={`tlx-node${i === 0 ? " pulse" : ""}`}
+                  aria-hidden="true"
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  transition={{ type: "spring", stiffness: 380, damping: 16, delay: 0.05 }}
+                >
+                  {e.milestone && !reduced && (
+                    <motion.span
+                      className="tlx-node-ring"
+                      aria-hidden="true"
+                      animate={{ scale: [1, 1.9], opacity: [0.6, 0] }}
+                      transition={{ duration: 1.6, repeat: Infinity, ease: "easeOut" }}
+                    />
+                  )}
+                </motion.span>
+                <div className="tlx-main">
+                  <span className="tlx-meta">
+                    <span className="tlx-tag">{e.tag}</span>
+                    {e.ref && <span className="tlx-ref">{e.ref}</span>}
+                    {flashId === e.id && <span className="tlx-new-pill">NEW</span>}
                   </span>
-                )}
-              </div>
-              <span className="tlx-avatar" aria-hidden="true">{e.who}</span>
-            </motion.li>
-          ))}
-        </ol>
+                  <p className="tlx-title">{e.title}</p>
+                  {e.diff && (
+                    <span className="tlx-diff">
+                      <s>{e.diff.old}</s>
+                      <motion.span
+                        className="tlx-arrow"
+                        aria-hidden="true"
+                        animate={reduced ? {} : { x: [0, 3, 0] }}
+                        transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
+                      >
+                        →
+                      </motion.span>
+                      <b>{e.diff.new}</b>
+                    </span>
+                  )}
+                </div>
+                <motion.span
+                  className="tlx-avatar"
+                  aria-hidden="true"
+                  whileHover={reduced ? undefined : { scale: 1.12, rotate: -6 }}
+                  transition={{ type: "spring", stiffness: 360, damping: 14 }}
+                >
+                  {e.who}
+                </motion.span>
+              </motion.li>
+            ))}
+          </AnimatePresence>
+        </motion.ol>
       </div>
     </motion.div>
   );
