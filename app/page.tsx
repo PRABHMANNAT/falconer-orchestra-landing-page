@@ -27,7 +27,6 @@ import {
 // Lazy-loaded new sections (all "use client" components)
 import dynamic from "next/dynamic";
 const AIPmSection = dynamic(() => import("./_components/AIPmSection"), { ssr: false });
-const TimelineSection = dynamic(() => import("./_components/TimelineSection"), { ssr: false });
 const FaqSection = dynamic(() => import("./_components/FaqSection"), { ssr: false });
 const DarkModeToggle = dynamic(() => import("./_components/DarkModeToggle"), { ssr: false });
 const MobileStickyCta = dynamic(() => import("./_components/MobileStickyCta"), { ssr: false });
@@ -1043,8 +1042,6 @@ export default function Home() {
         <AIPmSection />
 
         {/* ── SECTION 8: TIMELINE — NEW ── */}
-        <TimelineSection />
-
         {/* ── SECTION 11: FAQ — NEW ── */}
         <FaqSection />
       </main>
