@@ -905,18 +905,12 @@ export default function Home() {
           <div className="hero-two-col">
             {/* Left column */}
             <motion.div className="hero-left hero-copy" initial="hidden" animate="visible" variants={heroContainer}>
-              <motion.span className="hero-eyebrow" variants={heroItem}>
-                One source of truth — Powered by AI
-              </motion.span>
-
               <motion.h1 variants={heroContainer} style={{ margin: 0 }}>
-                <motion.span className="hero-line" variants={heroItem}>Your company&apos;s brain.</motion.span>
-                <motion.span className="hero-line" variants={heroItem}>Always up to date.</motion.span>
-                <motion.span className="hero-line" variants={heroItem}>Always honest.</motion.span>
+                <motion.span className="hero-line" variants={heroItem}>One source of truth for your company</motion.span>
               </motion.h1>
 
               <motion.p className="hero-sub" variants={heroItem}>
-                Orchestra ingests every doc, thread, commit, and decision your team touches — then turns it into a living source of truth that Socrates, our AI, queries on demand.
+                Orchestra turns your docs, chats, code, and decisions into a self-updating company brain.
               </motion.p>
 
               <motion.div className="hero-actions" variants={heroItem}>
@@ -936,9 +930,6 @@ export default function Home() {
                 </a>
               </motion.div>
 
-              <motion.p className="hero-note" variants={heroItem}>
-                Free during beta · No credit card · 5 min setup
-              </motion.p>
             </motion.div>
 
             {/* Right column — product video */}
