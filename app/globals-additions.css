@@ -684,17 +684,17 @@
 
 .tlx-body {
   position: relative;
-  padding: clamp(18px, 2vw, 26px) clamp(18px, 2vw, 24px) clamp(20px, 2.4vw, 28px);
+  padding: clamp(24px, 2.8vw, 34px) clamp(22px, 2.6vw, 30px) clamp(26px, 3vw, 36px);
 }
 
 .tlx-rail {
   position: absolute;
-  top: clamp(30px, 3vw, 40px);
-  bottom: clamp(30px, 3vw, 40px);
-  left: calc(clamp(20px, 2.6vw, 32px) + 6px);
+  top: clamp(36px, 3.6vw, 48px);
+  bottom: clamp(36px, 3.6vw, 48px);
+  left: calc(clamp(22px, 2.6vw, 30px) + 6px);
   width: 2px;
   border-radius: 2px;
-  background: linear-gradient(180deg, rgba(200, 74, 31, 0.55), rgba(200, 74, 31, 0.18) 70%, rgba(200, 74, 31, 0));
+  background: linear-gradient(180deg, rgba(200, 74, 31, 0.45), rgba(200, 74, 31, 0.12) 70%, rgba(200, 74, 31, 0));
   transform-origin: top;
   pointer-events: none;
 }
@@ -703,7 +703,7 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  gap: clamp(12px, 1.6vw, 18px);
+  gap: clamp(20px, 2.4vw, 28px);
   margin: 0;
   padding: 0;
   list-style: none;
@@ -711,9 +711,10 @@
 
 .tlx-event {
   display: flex;
-  align-items: center;
-  gap: 12px;
+  align-items: flex-start;
+  gap: 16px;
   min-width: 0;
+  padding-top: 1px;
 }
 
 .tlx-node {
@@ -760,8 +761,9 @@
 
 .tlx-main {
   min-width: 0;
-  flex: 0 1 auto;
-  max-width: 320px;
+  flex: 1 1 auto;
+  max-width: 420px;
+  padding-top: 1px;
 }
 
 .tlx-meta {
@@ -774,23 +776,23 @@
 .tlx-tag {
   display: inline-flex;
   align-items: center;
-  gap: 5px;
-  padding: 3px 9px 3px 4px;
+  gap: 6px;
+  padding: 4px 10px 4px 5px;
   border-radius: 999px;
   font-family: var(--font-mono);
-  font-size: 10px;
+  font-size: 10.5px;
   font-weight: 600;
-  letter-spacing: 0.06em;
-  background: rgba(154, 143, 134, 0.12);
-  color: #5f554c;
+  letter-spacing: 0.04em;
+  background: rgba(154, 143, 134, 0.11);
+  color: #4f4842;
   line-height: 1;
 }
 
 .tlx-tag-logo {
-  width: 14px;
-  height: 14px;
+  width: 15px;
+  height: 15px;
   flex: 0 0 auto;
-  border-radius: 3px;
+  border-radius: 4px;
 }
 
 .tlx-event.github .tlx-tag { background: rgba(124, 111, 217, 0.14); color: #5b4fb8; }
@@ -808,12 +810,12 @@
 }
 
 .tlx-title {
-  margin: 4px 0 0;
+  margin: 6px 0 0;
   font-family: var(--font-sans);
-  font-size: clamp(14px, 1.2vw, 15.5px);
+  font-size: clamp(14.5px, 1.25vw, 16px);
   font-weight: 600;
-  letter-spacing: -0.01em;
-  line-height: 1.3;
+  letter-spacing: -0.012em;
+  line-height: 1.35;
   color: #1b1c1a;
   white-space: nowrap;
   overflow: hidden;
@@ -823,26 +825,26 @@
 .tlx-diff {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  margin-top: 7px;
+  gap: 8px;
+  margin-top: 10px;
   font-family: var(--font-mono);
-  font-size: 11px;
+  font-size: 11.5px;
 }
 
 .tlx-chip {
   display: inline-flex;
   align-items: center;
-  gap: 5px;
-  padding: 3px 8px;
+  gap: 6px;
+  padding: 4px 10px;
   border-radius: 6px;
-  background: #f7f3ef;
-  border: 1px solid rgba(20, 18, 16, 0.06);
+  background: #faf6f0;
+  border: 1px solid rgba(20, 18, 16, 0.07);
   line-height: 1;
 }
 
 .tlx-chip-logo {
-  width: 13px;
-  height: 13px;
+  width: 14px;
+  height: 14px;
   flex: 0 0 auto;
   border-radius: 3px;
 }
@@ -876,24 +878,26 @@
 
 .tlx-avatar {
   flex: 0 0 auto;
-  width: 26px;
-  height: 26px;
+  width: 30px;
+  height: 30px;
+  margin-left: auto;
+  align-self: center;
   border-radius: 50%;
   background: #f7f3ef;
   object-fit: cover;
   display: block;
   box-shadow:
     0 0 0 1.5px #fffdfb,
-    0 0 0 2.5px rgba(154, 143, 134, 0.55),
+    0 0 0 2.5px rgba(154, 143, 134, 0.45),
     0 3px 8px rgba(20, 18, 16, 0.08);
   user-select: none;
 }
 
-.tlx-event.github .tlx-avatar { box-shadow: 0 0 0 1.5px #fffdfb, 0 0 0 2.5px #7c6fd9, 0 3px 8px rgba(124, 111, 217, 0.18); }
-.tlx-event.slack .tlx-avatar { box-shadow: 0 0 0 1.5px #fffdfb, 0 0 0 2.5px #2a9d8f, 0 3px 8px rgba(42, 157, 143, 0.18); }
-.tlx-event.socrates .tlx-avatar { box-shadow: 0 0 0 1.5px #fffdfb, 0 0 0 2.5px #a89be0, 0 3px 8px rgba(168, 155, 224, 0.2); }
-.tlx-event.manual .tlx-avatar { box-shadow: 0 0 0 1.5px #fffdfb, 0 0 0 2.5px #e5a663, 0 3px 8px rgba(229, 166, 99, 0.22); }
-.tlx-event.milestone .tlx-avatar { box-shadow: 0 0 0 1.5px #fffdfb, 0 0 0 2.5px #c84a1f, 0 3px 8px rgba(200, 74, 31, 0.22); }
+.tlx-event.github .tlx-avatar { box-shadow: 0 0 0 1.5px #fffdfb, 0 0 0 2.5px rgba(124, 111, 217, 0.5), 0 3px 8px rgba(124, 111, 217, 0.16); }
+.tlx-event.slack .tlx-avatar { box-shadow: 0 0 0 1.5px #fffdfb, 0 0 0 2.5px rgba(42, 157, 143, 0.5), 0 3px 8px rgba(42, 157, 143, 0.16); }
+.tlx-event.socrates .tlx-avatar { box-shadow: 0 0 0 1.5px #fffdfb, 0 0 0 2.5px rgba(168, 155, 224, 0.55), 0 3px 8px rgba(168, 155, 224, 0.18); }
+.tlx-event.manual .tlx-avatar { box-shadow: 0 0 0 1.5px #fffdfb, 0 0 0 2.5px rgba(229, 166, 99, 0.55), 0 3px 8px rgba(229, 166, 99, 0.2); }
+.tlx-event.milestone .tlx-avatar { box-shadow: 0 0 0 1.5px #fffdfb, 0 0 0 2.5px rgba(200, 74, 31, 0.55), 0 3px 8px rgba(200, 74, 31, 0.2); }
 
 @media (prefers-reduced-motion: reduce) {
   .tlx-node.pulse { animation: none; }
@@ -971,13 +975,13 @@
 
 .tlx-rail-shimmer {
   position: absolute;
-  top: clamp(30px, 3vw, 40px);
-  left: calc(clamp(20px, 2.6vw, 32px) + 3px);
+  top: clamp(36px, 3.6vw, 48px);
+  left: calc(clamp(22px, 2.6vw, 30px) + 3px);
   width: 8px;
-  height: 44px;
+  height: 48px;
   border-radius: 999px;
-  background: radial-gradient(closest-side, rgba(200, 74, 31, 0.55), rgba(200, 74, 31, 0));
-  filter: blur(2px);
+  background: radial-gradient(closest-side, rgba(200, 74, 31, 0.45), rgba(200, 74, 31, 0));
+  filter: blur(2.5px);
   pointer-events: none;
   z-index: 1;
 }
@@ -998,16 +1002,15 @@
 
 .tlx-new-pill {
   display: inline-block;
-  padding: 1px 6px;
+  padding: 2px 7px;
   border-radius: 999px;
-  background: linear-gradient(90deg, #c84a1f, #e07a4d);
+  background: #c84a1f;
   color: #fff;
   font-family: var(--font-mono);
   font-size: 9px;
-  font-weight: 800;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  box-shadow: 0 4px 14px rgba(200, 74, 31, 0.4);
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  line-height: 1;
 }
 
 .tlx-event.is-fresh {
@@ -1017,16 +1020,20 @@
 .tlx-event.is-fresh::before {
   content: "";
   position: absolute;
-  inset: -6px -10px;
-  border-radius: 12px;
-  background: radial-gradient(circle at left center, rgba(200, 74, 31, 0.16), rgba(200, 74, 31, 0) 70%);
+  top: -2px;
+  bottom: -2px;
+  left: -8px;
+  width: 3px;
+  border-radius: 3px;
+  background: #c84a1f;
   pointer-events: none;
-  animation: tlx-fresh 1.1s ease-out forwards;
+  animation: tlx-fresh 1.4s ease-out forwards;
 }
 
 @keyframes tlx-fresh {
-  0% { opacity: 0.95; transform: scale(0.92); }
-  100% { opacity: 0; transform: scale(1.04); }
+  0% { opacity: 1; transform: scaleY(0); transform-origin: top; }
+  35% { opacity: 1; transform: scaleY(1); transform-origin: top; }
+  100% { opacity: 0; transform: scaleY(1); transform-origin: top; }
 }
 
 .tlx-event {
