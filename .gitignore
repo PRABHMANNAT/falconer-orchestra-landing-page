@@ -8,3 +8,6 @@ dist
 *.tsbuildinfo
 .turbo
 .DS_Store
+orchestrav2/
+.playwright-cli/
+output/
