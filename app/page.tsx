@@ -186,76 +186,82 @@ function Header() {
 
 const softEase = [0.22, 1, 0.36, 1] as const;
 
-const LIVE_DOC_EVENTS = [
-  { time: "Apr 30", tag: "Email", tone: "thread", title: "Northwind asks for at-least-once delivery", note: "Ingested from inbox" },
-  { time: "May 14", tag: "Call note", tone: "call", title: "Committed to a 24-hour replay window", note: "Promise captured" },
-  { time: "May 16", tag: "NW-218", tone: "ticket", title: "Dead-letter queue tracked in Linear", note: "Decision linked" }
+const TIMELINE_EVENTS = [
+  { source: "github", tag: "GitHub", title: "Auth merged to main", ref: "PR #47", who: "DP", milestone: true },
+  { source: "slack", tag: "Slack", title: "Pro tier deferred", who: "MC", diff: { old: "v1", new: "v2" } },
+  { source: "manual", tag: "Decision", title: "Database switched", who: "SC", diff: { old: "PlanetScale", new: "Supabase" } },
+  { source: "socrates", tag: "Socrates", title: "API map synthesized", ref: "34 endpoints", who: "AI" },
+  { source: "milestone", tag: "Milestone", title: "Launch date revised", who: "SC", milestone: true, diff: { old: "Jun 1", new: "Jun 15" } }
 ];
 
-const LIVE_DOC_LINES = [
-  "Northwind wants at-least-once delivery with idempotent replays.",
-  "We committed to a 24-hour replay window on the May 14 call.",
-  "Dead-letter queue is tracked in NW-218 before we ship."
-];
-
-function LiveDocPanel() {
+function TimelinePanel() {
   const reveal = {
     hidden: {},
-    visible: { transition: { staggerChildren: 0.14, delayChildren: 0.1 } }
+    visible: { transition: { staggerChildren: 0.16, delayChildren: 0.15 } }
   };
   const item = {
-    hidden: { opacity: 0, y: 12 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: softEase } }
+    hidden: { opacity: 0, x: -14 },
+    visible: { opacity: 1, x: 0, transition: { duration: 0.5, ease: softEase } }
+  };
+  const pop = {
+    hidden: { scale: 0 },
+    visible: { scale: 1, transition: { type: "spring" as const, stiffness: 360, damping: 18 } }
   };
 
   return (
     <motion.div
-      className="livedoc"
+      className="tlx"
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, amount: 0.3 }}
       variants={reveal}
     >
-      <motion.div className="livedoc-doc" variants={item}>
-        <div className="livedoc-chrome">
-          <span className="livedoc-dot" aria-hidden="true" />
-          <span className="livedoc-dot" aria-hidden="true" />
-          <span className="livedoc-dot" aria-hidden="true" />
-          <span className="livedoc-path">Northwind / Live Doc · Webhook Retry Design</span>
-        </div>
-        <div className="livedoc-page">
-          <h4 className="livedoc-doc-title">Scoping the webhook retry flow</h4>
-          <motion.div className="livedoc-lines" variants={reveal}>
-            {LIVE_DOC_LINES.map((line, i) => (
-              <motion.p key={line} className="livedoc-line" variants={item}>
-                {line}
-                {i === LIVE_DOC_LINES.length - 1 && (
-                  <span className="livedoc-caret" aria-hidden="true" />
-                )}
-              </motion.p>
-            ))}
-          </motion.div>
-        </div>
-      </motion.div>
-
-      <motion.div className="livedoc-rail" variants={item}>
-        <span className="livedoc-rail-head">In context</span>
-        <ol className="livedoc-timeline">
-          {LIVE_DOC_EVENTS.map((e) => (
-            <motion.li key={e.title} className={`livedoc-event ${e.tone}`} variants={item}>
-              <span className="livedoc-node" aria-hidden="true" />
-              <div className="livedoc-event-body">
-                <span className="livedoc-event-meta">
-                  <span className="livedoc-tag">{e.tag}</span>
-                  <span className="livedoc-time">{e.time}</span>
+      <div className="livedoc-chrome">
+        <span className="livedoc-dot" aria-hidden="true" />
+        <span className="livedoc-dot" aria-hidden="true" />
+        <span className="livedoc-dot" aria-hidden="true" />
+        <span className="livedoc-path">BloomFast / Timeline · Project memory</span>
+      </div>
+      <div className="tlx-body">
+        <motion.span
+          className="tlx-rail"
+          aria-hidden="true"
+          variants={{
+            hidden: { scaleY: 0 },
+            visible: { scaleY: 1, transition: { duration: 1.1, ease: softEase } }
+          }}
+        />
+        <ol className="tlx-list">
+          {TIMELINE_EVENTS.map((e, i) => (
+            <motion.li
+              key={e.title}
+              className={`tlx-event ${e.source}${e.milestone ? " milestone" : ""}`}
+              variants={item}
+            >
+              <motion.span
+                className={`tlx-node${i === TIMELINE_EVENTS.length - 1 ? " pulse" : ""}`}
+                variants={pop}
+                aria-hidden="true"
+              />
+              <div className="tlx-main">
+                <span className="tlx-meta">
+                  <span className="tlx-tag">{e.tag}</span>
+                  {e.ref && <span className="tlx-ref">{e.ref}</span>}
                 </span>
-                <p className="livedoc-event-title">{e.title}</p>
-                <span className="livedoc-event-note">{e.note}</span>
+                <p className="tlx-title">{e.title}</p>
+                {e.diff && (
+                  <span className="tlx-diff">
+                    <s>{e.diff.old}</s>
+                    <span className="tlx-arrow" aria-hidden="true">→</span>
+                    <b>{e.diff.new}</b>
+                  </span>
+                )}
               </div>
+              <span className="tlx-avatar" aria-hidden="true">{e.who}</span>
             </motion.li>
           ))}
         </ol>
-      </motion.div>
+      </div>
     </motion.div>
   );
 }
@@ -807,7 +813,7 @@ export default function Home() {
           </div>
         </section>
 
-        {/* ── SECTION 3: LIVE DOC (terracotta) ── */}
+        {/* ── SECTION 3: TIMELINE (terracotta) ── */}
         <motion.section
           className="memory"
           initial="hidden"
@@ -816,12 +822,12 @@ export default function Home() {
           variants={fadeUp}
           transition={{ duration: 0.6, ease: softEase }}
         >
-          <LiveDocPanel />
+          <TimelinePanel />
           <div>
-            <p className="kicker" style={{ color: "rgba(255,255,255,0.65)" }}>Live Doc</p>
-            <h2>Your working doc, always in context</h2>
-            <p>Draft PRDs, scoping memos, and status updates in a document that already knows your team — every decision, thread, and promise in scope as you write.</p>
-            <a href="#" className="memory-explore">Explore Live Doc →</a>
+            <p className="kicker" style={{ color: "rgba(255,255,255,0.65)" }}>Timeline</p>
+            <h2>Every change, on one timeline</h2>
+            <p>Commits, Slack decisions, and Socrates syntheses land on a single project timeline — watch scope shift in real time instead of reading about it later.</p>
+            <a href="#" className="memory-explore">Explore Timeline →</a>
           </div>
         </motion.section>
 
