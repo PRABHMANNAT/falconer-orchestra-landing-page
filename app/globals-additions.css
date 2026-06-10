@@ -691,11 +691,12 @@
   position: absolute;
   top: clamp(30px, 3vw, 40px);
   bottom: clamp(30px, 3vw, 40px);
-  left: calc(clamp(20px, 2.6vw, 32px) + 11px);
+  left: calc(clamp(20px, 2.6vw, 32px) + 6px);
   width: 2px;
   border-radius: 2px;
-  background: linear-gradient(180deg, rgba(200, 74, 31, 0.45), rgba(200, 74, 31, 0.08));
+  background: linear-gradient(180deg, rgba(200, 74, 31, 0.55), rgba(200, 74, 31, 0.18) 70%, rgba(200, 74, 31, 0));
   transform-origin: top;
+  pointer-events: none;
 }
 
 .tlx-list {
@@ -716,35 +717,45 @@
 }
 
 .tlx-node {
+  position: relative;
   flex: 0 0 auto;
   width: 12px;
   height: 12px;
   border-radius: 50%;
-  background: #fffdfb;
-  border: 3px solid #9a8f86;
-  box-shadow: 0 0 0 4px rgba(154, 143, 134, 0.12);
+  background: #9a8f86;
+  box-shadow:
+    0 0 0 4px #fffdfb,
+    0 0 0 5px rgba(154, 143, 134, 0.28);
+  z-index: 2;
 }
 
 .tlx-event.milestone .tlx-node {
-  width: 16px;
-  height: 16px;
-  margin-left: -2px;
+  width: 14px;
+  height: 14px;
+  margin-left: -1px;
+  margin-right: -1px;
 }
 
-.tlx-event.github .tlx-node { border-color: #7c6fd9; box-shadow: 0 0 0 4px rgba(124, 111, 217, 0.16); }
-.tlx-event.slack .tlx-node { border-color: #2a9d8f; box-shadow: 0 0 0 4px rgba(42, 157, 143, 0.16); }
-.tlx-event.socrates .tlx-node { border-color: #a89be0; box-shadow: 0 0 0 4px rgba(168, 155, 224, 0.18); }
-.tlx-event.manual .tlx-node { border-color: #e5a663; box-shadow: 0 0 0 4px rgba(229, 166, 99, 0.18); }
-.tlx-event.milestone .tlx-node { border-color: #c84a1f; box-shadow: 0 0 0 4px rgba(200, 74, 31, 0.16); }
+.tlx-event.github .tlx-node { background: #7c6fd9; box-shadow: 0 0 0 4px #fffdfb, 0 0 0 5px rgba(124, 111, 217, 0.32); }
+.tlx-event.slack .tlx-node { background: #2a9d8f; box-shadow: 0 0 0 4px #fffdfb, 0 0 0 5px rgba(42, 157, 143, 0.32); }
+.tlx-event.socrates .tlx-node { background: #a89be0; box-shadow: 0 0 0 4px #fffdfb, 0 0 0 5px rgba(168, 155, 224, 0.38); }
+.tlx-event.manual .tlx-node { background: #e5a663; box-shadow: 0 0 0 4px #fffdfb, 0 0 0 5px rgba(229, 166, 99, 0.36); }
+.tlx-event.milestone .tlx-node { background: #c84a1f; box-shadow: 0 0 0 4px #fffdfb, 0 0 0 5px rgba(200, 74, 31, 0.36); }
 
-.tlx-node.pulse {
+.tlx-node.pulse::after {
+  content: "";
+  position: absolute;
+  inset: -3px;
+  border-radius: 50%;
+  border: 2px solid currentColor;
+  color: #c84a1f;
+  opacity: 0;
   animation: tlx-pulse 2.2s ease-out infinite;
 }
 
 @keyframes tlx-pulse {
-  0% { box-shadow: 0 0 0 4px rgba(200, 74, 31, 0.18); }
-  55% { box-shadow: 0 0 0 12px rgba(200, 74, 31, 0); }
-  100% { box-shadow: 0 0 0 4px rgba(200, 74, 31, 0); }
+  0% { transform: scale(0.6); opacity: 0.85; }
+  100% { transform: scale(2.4); opacity: 0; }
 }
 
 .tlx-main {
@@ -924,26 +935,29 @@
 .tlx-rail-shimmer {
   position: absolute;
   top: clamp(30px, 3vw, 40px);
-  left: calc(clamp(20px, 2.6vw, 32px) + 8px);
+  left: calc(clamp(20px, 2.6vw, 32px) + 3px);
   width: 8px;
-  height: 36px;
+  height: 44px;
   border-radius: 999px;
   background: radial-gradient(closest-side, rgba(200, 74, 31, 0.55), rgba(200, 74, 31, 0));
   filter: blur(2px);
   pointer-events: none;
-}
-
-.tlx-node {
-  position: relative;
+  z-index: 1;
 }
 
 .tlx-node-ring {
   position: absolute;
-  inset: -3px;
+  inset: -4px;
   border-radius: 50%;
-  border: 2px solid rgba(200, 74, 31, 0.5);
+  border: 2px solid currentColor;
+  color: #c84a1f;
   pointer-events: none;
 }
+
+.tlx-event.github .tlx-node-ring { color: #7c6fd9; }
+.tlx-event.slack .tlx-node-ring { color: #2a9d8f; }
+.tlx-event.socrates .tlx-node-ring { color: #a89be0; }
+.tlx-event.manual .tlx-node-ring { color: #e5a663; }
 
 .tlx-new-pill {
   display: inline-block;
