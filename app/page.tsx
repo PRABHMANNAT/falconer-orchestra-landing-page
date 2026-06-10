@@ -290,14 +290,40 @@ function TimelinePanel() {
         </span>
       </div>
       <div className="tlx-body">
-        {/* Shimmer along the rail */}
-        <span className="tlx-rail" aria-hidden="true" />
+        {/* Animated rail: draws in on first view */}
+        <motion.span
+          className="tlx-rail"
+          aria-hidden="true"
+          initial={{ scaleY: 0 }}
+          whileInView={{ scaleY: 1 }}
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{ duration: 1.1, ease: softEase, delay: 0.15 }}
+        />
+        {/* Continuous gentle shimmer */}
         {!reduced && (
           <motion.span
             className="tlx-rail-shimmer"
             aria-hidden="true"
-            animate={{ y: ["-10%", "110%"] }}
-            transition={{ duration: 2.6, repeat: Infinity, ease: "easeInOut" }}
+            initial={{ opacity: 0 }}
+            animate={{ y: ["-12%", "112%"], opacity: [0, 0.85, 0.85, 0] }}
+            transition={{
+              duration: 3.2,
+              repeat: Infinity,
+              ease: "easeInOut",
+              times: [0, 0.15, 0.85, 1],
+              repeatDelay: 0.4
+            }}
+          />
+        )}
+        {/* Fast pulse that fires every time a new event lands */}
+        {!reduced && flashId && (
+          <motion.span
+            key={`pulse-${flashId}`}
+            className="tlx-rail-pulse"
+            aria-hidden="true"
+            initial={{ y: "0%", opacity: 0 }}
+            animate={{ y: "110%", opacity: [0, 1, 1, 0] }}
+            transition={{ duration: 1.1, ease: [0.2, 0.7, 0.4, 1], times: [0, 0.1, 0.8, 1] }}
           />
         )}
 
