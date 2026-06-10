@@ -9,5 +9,6 @@ dist
 .turbo
 .DS_Store
 orchestrav2/
+orchestrav2-adifrontend/
 .playwright-cli/
 output/

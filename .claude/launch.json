@@ -15,6 +15,14 @@
       "cwd": "orchestrav2/apps/beta-web",
       "port": 5173,
       "autoPort": false
+    },
+    {
+      "name": "orchestrav2-adifrontend",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev", "--", "--port", "5174", "--strictPort"],
+      "cwd": "orchestrav2-adifrontend/apps/beta-web",
+      "port": 5174,
+      "autoPort": false
     }
   ]
 }
