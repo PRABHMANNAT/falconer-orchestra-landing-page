@@ -326,14 +326,15 @@ function TimelinePanel() {
                     </span>
                   )}
                 </div>
-                <motion.span
+                <motion.img
                   className="tlx-avatar"
                   aria-hidden="true"
+                  alt=""
+                  draggable={false}
+                  src={`https://api.dicebear.com/9.x/notionists/svg?seed=${encodeURIComponent(e.who)}&radius=50&backgroundColor=f7f3ef,fbeee8,eef7f5,eeeafc,fef3e2&backgroundType=solid`}
                   whileHover={reduced ? undefined : { scale: 1.12, rotate: -6 }}
                   transition={{ type: "spring", stiffness: 360, damping: 14 }}
-                >
-                  {e.who}
-                </motion.span>
+                />
               </motion.li>
             ))}
           </AnimatePresence>
