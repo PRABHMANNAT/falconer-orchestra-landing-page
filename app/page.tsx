@@ -9,7 +9,20 @@ import { StripedPattern } from "@/registry/magicui/striped-pattern";
 import Footer from "./_components/Footer";
 import GettingStarted from "./_components/GettingStarted";
 import Mark from "./_components/Mark";
-import { GmailLogo, SlackLogo, LinearLogo, NotionLogo } from "./_components/IntegrationLogos";
+import {
+  GmailLogo,
+  SlackLogo,
+  LinearLogo,
+  NotionLogo,
+  GitHubLogo,
+  VercelLogo,
+  SupabaseLogo,
+  StripeLogo,
+  AwsLogo,
+  PlanetScaleLogo,
+  OrchestraMarkLogo,
+  MilestoneFlagLogo
+} from "./_components/IntegrationLogos";
 
 // Lazy-loaded new sections (all "use client" components)
 import dynamic from "next/dynamic";
@@ -186,29 +199,42 @@ function Header() {
 
 const softEase = [0.22, 1, 0.36, 1] as const;
 
+type LogoComponent = ComponentType<SVGProps<SVGSVGElement>>;
+type DiffSide = { label: string; logo?: LogoComponent };
+
 type TimelineEvt = {
   id: string;
   source: "github" | "slack" | "manual" | "socrates" | "milestone";
   tag: string;
+  Logo: LogoComponent;
   title: string;
   ref?: string;
   who: string;
-  diff?: { old: string; new: string };
+  diff?: { old: DiffSide; new: DiffSide };
   milestone?: boolean;
 };
 
 const TIMELINE_POOL: TimelineEvt[] = [
-  { id: "auth", source: "github", tag: "GitHub", title: "Auth merged to main", ref: "PR #47", who: "DP", milestone: true },
-  { id: "pro", source: "slack", tag: "Slack", title: "Pro tier deferred", who: "MC", diff: { old: "v1", new: "v2" } },
-  { id: "db", source: "manual", tag: "Decision", title: "Database switched", who: "SC", diff: { old: "PlanetScale", new: "Supabase" } },
-  { id: "api", source: "socrates", tag: "Socrates", title: "API map synthesized", ref: "34 endpoints", who: "AI" },
-  { id: "launch", source: "milestone", tag: "Milestone", title: "Launch date revised", who: "SC", milestone: true, diff: { old: "Jun 1", new: "Jun 15" } },
-  { id: "rate", source: "github", tag: "GitHub", title: "Rate limiter shipped", ref: "PR #54", who: "LO" },
-  { id: "standup", source: "slack", tag: "Slack", title: "Standup moved earlier", who: "MC", diff: { old: "9:30", new: "9:00" } },
-  { id: "promo", source: "socrates", tag: "Socrates", title: "Promo code scope drafted", ref: "from #product", who: "AI" },
-  { id: "host", source: "manual", tag: "Decision", title: "Hosting selected", who: "PS", diff: { old: "AWS EC2", new: "Vercel Pro" } },
-  { id: "stripe", source: "milestone", tag: "Milestone", title: "Stripe Connect chosen", who: "SC", milestone: true }
+  { id: "auth", source: "github", tag: "GitHub", Logo: GitHubLogo, title: "Auth merged to main", ref: "PR #47 · main", who: "Devraj P", milestone: true },
+  { id: "pro", source: "slack", tag: "#product", Logo: SlackLogo, title: "Pro tier deferred to v2", who: "Maya C", diff: { old: { label: "v1" }, new: { label: "v2" } } },
+  { id: "db", source: "manual", tag: "Decision", Logo: LinearLogo, title: "Database provider switched", who: "Sarah C", diff: { old: { label: "PlanetScale", logo: PlanetScaleLogo }, new: { label: "Supabase", logo: SupabaseLogo } } },
+  { id: "api", source: "socrates", tag: "Socrates", Logo: OrchestraMarkLogo, title: "API map synthesised", ref: "34 endpoints", who: "Orchestra" },
+  { id: "launch", source: "milestone", tag: "Milestone", Logo: MilestoneFlagLogo, title: "Launch date revised", who: "Sarah C", milestone: true, diff: { old: { label: "Jun 1" }, new: { label: "Jun 15" } } },
+  { id: "rate", source: "github", tag: "GitHub", Logo: GitHubLogo, title: "Rate limiter shipped", ref: "PR #54 · main", who: "Liam O" },
+  { id: "standup", source: "slack", tag: "#general", Logo: SlackLogo, title: "Standup moved earlier", who: "Maya C", diff: { old: { label: "9:30" }, new: { label: "9:00" } } },
+  { id: "promo", source: "socrates", tag: "Socrates", Logo: OrchestraMarkLogo, title: "Promo code scope drafted", ref: "from #product", who: "Orchestra" },
+  { id: "host", source: "manual", tag: "Decision", Logo: LinearLogo, title: "Hosting platform selected", who: "Priya S", diff: { old: { label: "AWS EC2", logo: AwsLogo }, new: { label: "Vercel Pro", logo: VercelLogo } } },
+  { id: "stripe", source: "milestone", tag: "Milestone", Logo: MilestoneFlagLogo, title: "Stripe Connect chosen", ref: "70/30 split", who: "Sarah C", milestone: true }
 ];
+
+const SEED_FROM_NAME: Record<string, string> = {
+  "Devraj P": "Devraj",
+  "Maya C": "Maya",
+  "Sarah C": "Sarah",
+  "Liam O": "Liam",
+  "Priya S": "Priya",
+  "Orchestra": "orchestra-ai"
+};
 
 function TimelinePanel() {
   const reduced = useReducedMotion();
@@ -277,66 +303,81 @@ function TimelinePanel() {
 
         <motion.ol className="tlx-list" layout>
           <AnimatePresence initial={false} mode="popLayout">
-            {events.map((e, i) => (
-              <motion.li
-                key={e.id}
-                layout
-                className={`tlx-event ${e.source}${e.milestone ? " milestone" : ""}${flashId === e.id ? " is-fresh" : ""}`}
-                initial={{ opacity: 0, y: -22, scale: 0.96 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={{ opacity: 0, y: 22, scale: 0.96, transition: { duration: 0.32 } }}
-                transition={{ type: "spring", stiffness: 340, damping: 28 }}
-                whileHover={reduced ? undefined : { x: 4, transition: { duration: 0.2 } }}
-              >
-                <motion.span
-                  className={`tlx-node${i === 0 ? " pulse" : ""}`}
-                  aria-hidden="true"
-                  initial={{ scale: 0 }}
-                  animate={{ scale: 1 }}
-                  transition={{ type: "spring", stiffness: 380, damping: 16, delay: 0.05 }}
+            {events.map((e, i) => {
+              const Logo = e.Logo;
+              const OldLogo = e.diff?.old.logo;
+              const NewLogo = e.diff?.new.logo;
+              const seed = SEED_FROM_NAME[e.who] ?? e.who;
+              return (
+                <motion.li
+                  key={e.id}
+                  layout
+                  className={`tlx-event ${e.source}${e.milestone ? " milestone" : ""}${flashId === e.id ? " is-fresh" : ""}`}
+                  initial={{ opacity: 0, y: -18 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 14, transition: { duration: 0.3 } }}
+                  transition={{ type: "spring", stiffness: 360, damping: 30 }}
+                  whileHover={reduced ? undefined : { x: 3, transition: { duration: 0.2 } }}
                 >
-                  {e.milestone && !reduced && (
-                    <motion.span
-                      className="tlx-node-ring"
-                      aria-hidden="true"
-                      animate={{ scale: [1, 1.9], opacity: [0.6, 0] }}
-                      transition={{ duration: 1.6, repeat: Infinity, ease: "easeOut" }}
-                    />
-                  )}
-                </motion.span>
-                <div className="tlx-main">
-                  <span className="tlx-meta">
-                    <span className="tlx-tag">{e.tag}</span>
-                    {e.ref && <span className="tlx-ref">{e.ref}</span>}
-                    {flashId === e.id && <span className="tlx-new-pill">NEW</span>}
-                  </span>
-                  <p className="tlx-title">{e.title}</p>
-                  {e.diff && (
-                    <span className="tlx-diff">
-                      <s>{e.diff.old}</s>
+                  <motion.span
+                    className={`tlx-node${i === 0 ? " pulse" : ""}`}
+                    aria-hidden="true"
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    transition={{ type: "spring", stiffness: 380, damping: 16, delay: 0.05 }}
+                  >
+                    {e.milestone && !reduced && (
                       <motion.span
-                        className="tlx-arrow"
+                        className="tlx-node-ring"
                         aria-hidden="true"
-                        animate={reduced ? {} : { x: [0, 3, 0] }}
-                        transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
-                      >
-                        →
-                      </motion.span>
-                      <b>{e.diff.new}</b>
+                        animate={{ scale: [1, 1.9], opacity: [0.6, 0] }}
+                        transition={{ duration: 1.6, repeat: Infinity, ease: "easeOut" }}
+                      />
+                    )}
+                  </motion.span>
+                  <div className="tlx-main">
+                    <span className="tlx-meta">
+                      <span className="tlx-tag">
+                        <Logo className="tlx-tag-logo" />
+                        <span>{e.tag}</span>
+                      </span>
+                      {e.ref && <span className="tlx-ref">{e.ref}</span>}
+                      {flashId === e.id && <span className="tlx-new-pill">NEW</span>}
                     </span>
-                  )}
-                </div>
-                <motion.img
-                  className="tlx-avatar"
-                  aria-hidden="true"
-                  alt=""
-                  draggable={false}
-                  src={`https://api.dicebear.com/9.x/notionists/svg?seed=${encodeURIComponent(e.who)}&radius=50&backgroundColor=f7f3ef,fbeee8,eef7f5,eeeafc,fef3e2&backgroundType=solid`}
-                  whileHover={reduced ? undefined : { scale: 1.12, rotate: -6 }}
-                  transition={{ type: "spring", stiffness: 360, damping: 14 }}
-                />
-              </motion.li>
-            ))}
+                    <p className="tlx-title">{e.title}</p>
+                    {e.diff && (
+                      <span className="tlx-diff">
+                        <span className="tlx-chip is-old">
+                          {OldLogo && <OldLogo className="tlx-chip-logo" />}
+                          <s>{e.diff.old.label}</s>
+                        </span>
+                        <motion.span
+                          className="tlx-arrow"
+                          aria-hidden="true"
+                          animate={reduced ? {} : { x: [0, 3, 0] }}
+                          transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
+                        >
+                          →
+                        </motion.span>
+                        <span className="tlx-chip is-new">
+                          {NewLogo && <NewLogo className="tlx-chip-logo" />}
+                          <b>{e.diff.new.label}</b>
+                        </span>
+                      </span>
+                    )}
+                  </div>
+                  <motion.img
+                    className="tlx-avatar"
+                    aria-hidden="true"
+                    alt=""
+                    draggable={false}
+                    src={`https://api.dicebear.com/9.x/notionists/svg?seed=${encodeURIComponent(seed)}&radius=50&backgroundColor=f7f3ef,fbeee8,eef7f5,eeeafc,fef3e2&backgroundType=solid`}
+                    whileHover={reduced ? undefined : { scale: 1.12, rotate: -6 }}
+                    transition={{ type: "spring", stiffness: 360, damping: 14 }}
+                  />
+                </motion.li>
+              );
+            })}
           </AnimatePresence>
         </motion.ol>
       </div>

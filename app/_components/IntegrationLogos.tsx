@@ -153,3 +153,82 @@ export function VSCodeLogo(props: LogoProps) {
     </svg>
   );
 }
+
+export function VercelLogo(props: LogoProps) {
+  return (
+    <svg viewBox="0 0 32 32" fill="none" aria-hidden="true" {...props}>
+      <path d="M16 5.5 28.5 26.5h-25L16 5.5z" fill="#000" />
+    </svg>
+  );
+}
+
+export function SupabaseLogo(props: LogoProps) {
+  return (
+    <svg viewBox="0 0 32 32" fill="none" aria-hidden="true" {...props}>
+      <defs>
+        <linearGradient id="sb-a" x1="6" y1="6" x2="26" y2="26" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stopColor="#3ECF8E" />
+          <stop offset="100%" stopColor="#249E63" />
+        </linearGradient>
+      </defs>
+      <path d="M17 4.5c.6-.7 1.7-.3 1.7.6V14h7.6c1 0 1.5 1.2.9 2L15 27.5c-.6.7-1.7.3-1.7-.6V18H5.7c-1 0-1.5-1.2-.9-2L17 4.5z" fill="url(#sb-a)" />
+    </svg>
+  );
+}
+
+export function StripeLogo(props: LogoProps) {
+  return (
+    <svg viewBox="0 0 32 32" fill="none" aria-hidden="true" {...props}>
+      <rect width="32" height="32" rx="8" fill="#635BFF" />
+      <path
+        d="M17.5 13.4c0-.7.6-1 1.5-1 1.4 0 3.2.4 4.6 1.2V9.4a12 12 0 0 0-4.6-.9c-3.8 0-6.3 2-6.3 5.3 0 5.2 7 4.4 7 6.7 0 .8-.7 1-1.7 1-1.5 0-3.6-.6-5.2-1.5v4.3c1.7.7 3.4 1 5.2 1 3.9 0 6.5-1.9 6.5-5.4 0-5.6-7-4.7-7-6.5z"
+        fill="#fff"
+      />
+    </svg>
+  );
+}
+
+export function AwsLogo(props: LogoProps) {
+  return (
+    <svg viewBox="0 0 32 32" fill="none" aria-hidden="true" {...props}>
+      <rect width="32" height="32" rx="6" fill="#232F3E" />
+      <path d="M10 17.6c0 .6.1 1 .2 1.4l.4.8c.1.1.1.2.1.3 0 .1-.1.3-.3.4l-.9.6h-.3c-.1 0-.3-.1-.4-.2a4 4 0 0 1-.7-1.2 4.7 4.7 0 0 1-3.6 1.7c-1 0-1.9-.3-2.5-.9-.6-.6-.9-1.4-.9-2.4 0-1.1.4-2 1.2-2.6.8-.7 1.9-1 3.3-1 .5 0 1 .1 1.5.1l1.5.3v-1c0-1-.2-1.6-.6-2-.4-.4-1.1-.5-2.1-.5-.5 0-.9.1-1.4.2l-1.4.4-.5.2h-.2c-.2 0-.3-.1-.3-.4v-.7l.1-.4c0-.1.1-.2.3-.2l1.5-.5a7 7 0 0 1 1.9-.2c1.4 0 2.5.3 3.2 1 .7.7 1 1.7 1 3v4z" fill="#fff" />
+      <path d="M19 22a16 16 0 0 1-9.5-1.4c-.2-.1-.3-.2-.1-.4.2-.1.3 0 .5 0a16 16 0 0 0 6.5 1.1c1.4 0 2.7-.1 4-.3.2-.1.4.1.2.4-.5.3-1 .5-1.6.6z" fill="#FF9900" />
+      <path d="M20.3 21c-.2-.2-.9-.1-1.3 0-.1 0-.2 0-.1-.1.5-.4 1.3-.3 1.6-.2.3.2 0 1-.4 1.4 0 .1-.1 0 0-.1.1-.3.3-.8.2-1z" fill="#FF9900" />
+    </svg>
+  );
+}
+
+export function PlanetScaleLogo(props: LogoProps) {
+  return (
+    <svg viewBox="0 0 32 32" fill="none" aria-hidden="true" {...props}>
+      <circle cx="16" cy="16" r="14" fill="#000" />
+      <path d="M5 17c0-6.1 4.9-11 11-11 3 0 5.8 1.3 7.8 3.3L13 20.1l-3 6.6c-2.9-1.8-5-4.9-5-9.7z" fill="#fff" />
+      <path d="M17 27c-1.4 0-2.7-.3-3.9-.7l3.4-7.4 7.4-3.4c.5 1.2.8 2.5.8 3.9 0 4.2-3.3 7.6-7.7 7.6z" fill="#C0C0C0" />
+    </svg>
+  );
+}
+
+export function OrchestraMarkLogo(props: LogoProps) {
+  return (
+    <svg viewBox="0 0 32 32" fill="none" aria-hidden="true" {...props}>
+      <rect width="32" height="32" rx="8" fill="#1B1714" />
+      <circle cx="16" cy="16" r="6.5" stroke="#C84A1F" strokeWidth="1.6" fill="none" />
+      <circle cx="16" cy="16" r="2.2" fill="#C84A1F" />
+      <circle cx="16" cy="6" r="1.4" fill="#E07A4D" />
+      <circle cx="16" cy="26" r="1.4" fill="#E07A4D" />
+      <circle cx="6" cy="16" r="1.4" fill="#E07A4D" />
+      <circle cx="26" cy="16" r="1.4" fill="#E07A4D" />
+    </svg>
+  );
+}
+
+export function MilestoneFlagLogo(props: LogoProps) {
+  return (
+    <svg viewBox="0 0 32 32" fill="none" aria-hidden="true" {...props}>
+      <rect width="32" height="32" rx="8" fill="#FBEAE5" />
+      <path d="M9 7v18" stroke="#C84A1F" strokeWidth="1.8" strokeLinecap="round" />
+      <path d="M10 8h13l-3 4 3 4H10V8z" fill="#C84A1F" />
+    </svg>
+  );
+}
