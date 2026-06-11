@@ -512,67 +512,54 @@ function SourceTruthDashboardMock() {
     { label: "Driver review pending", source: "Slack + Calendar", width: "52%" }
   ];
 
-  const container = {
-    hidden: {},
-    visible: { transition: { staggerChildren: 0.07, delayChildren: 0.05 } }
-  };
-  const item = {
-    hidden: { opacity: 0, y: 6 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.32, ease: softEase } }
-  };
-
   return (
     <motion.div
       className="mock answer-mock truth-dashboard-mock"
-      variants={container}
-      initial="hidden"
-      whileInView="visible"
+      initial={{ opacity: 0 }}
+      whileInView={{ opacity: 1 }}
       viewport={{ once: true, amount: 0.3 }}
+      transition={{ duration: 0.4, ease: softEase }}
     >
-      <motion.div className="truth-dash-topbar" variants={item}>
+      <div className="truth-dash-topbar">
         <span className="truth-dash-mark"><Mark tone="light" /></span>
         <span>
           Company dashboard
           <b>Live source of truth</b>
         </span>
         <i aria-hidden="true" />
-      </motion.div>
+      </div>
 
       <div className="truth-dash-metrics">
         {metrics.map((metric) => (
-          <motion.div
-            key={metric.label}
-            className={`truth-dash-metric ${metric.tone}`}
-            variants={item}
-          >
+          <div key={metric.label} className={`truth-dash-metric ${metric.tone}`}>
             <span>{metric.label}</span>
             <b>{metric.value}</b>
-          </motion.div>
+          </div>
         ))}
       </div>
 
-      <motion.div className="truth-dash-panel" variants={item}>
+      <div className="truth-dash-panel">
         <div className="truth-dash-panel-head">
           <span>Unified activity</span>
           <b>Now</b>
         </div>
         {rows.map((row) => (
-          <motion.div key={row.label} className="truth-dash-row" variants={item}>
+          <div key={row.label} className="truth-dash-row">
             <span className="truth-dash-row-dot" />
             <div>
               <b>{row.label}</b>
               <span>{row.source}</span>
               <i style={{ width: row.width }} />
             </div>
-          </motion.div>
+          </div>
         ))}
-      </motion.div>
+      </div>
 
-      <motion.div className="truth-dash-sync" variants={item}>
+      <div className="truth-dash-sync">
         <span>Slack</span>
         <span>GitHub</span>
         <span>Docs</span>
-      </motion.div>
+      </div>
     </motion.div>
   );
 }
