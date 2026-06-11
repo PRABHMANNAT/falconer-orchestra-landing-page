@@ -213,7 +213,7 @@
   position: relative;
   z-index: 1;
   max-width: 1120px;
-  margin: clamp(48px, 7vw, 80px) auto 0;
+  margin: clamp(96px, 12vw, 160px) auto 0;
   text-align: center;
 }
 
