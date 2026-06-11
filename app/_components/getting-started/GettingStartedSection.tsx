@@ -529,7 +529,7 @@ export default function GettingStartedSection() {
         viewport={{ once: true, amount: 0.6 }}
         transition={{ duration: 0.5, ease: EASE }}
       >
-        <a href="#integrations" className="gs-link">
+        <a href="/waitlist" className="gs-link">
           See all integrations
           <span aria-hidden="true">→</span>
         </a>

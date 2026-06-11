@@ -168,7 +168,7 @@ export default function AIPmSection() {
           viewport={{ once: true }}
           transition={{ duration: 0.5, delay: 0.3, ease: EASE }}
         >
-          <a href="#" className="aipm-cta">
+          <a href="/waitlist" className="aipm-cta">
             Open the project signal board <span aria-hidden="true">-&gt;</span>
           </a>
           <p className="aipm-note">
