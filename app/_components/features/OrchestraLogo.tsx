@@ -75,6 +75,8 @@ export default function OrchestraLogo({
         <motion.circle
           cx={CX}
           cy={CY}
+          r={24 + glowIntensity * 10}
+          fillOpacity={0.2 + glowIntensity * 0.2}
           animate={{
             r: 24 + glowIntensity * 10,
             fillOpacity: 0.2 + glowIntensity * 0.2,
@@ -136,6 +138,7 @@ export default function OrchestraLogo({
         cx={CX}
         cy={CY}
         r={12}
+        fillOpacity={0.18 + glowIntensity * 0.82}
         animate={{
           fill: glowIntensity > 0 ? "#d97757" : "#A8A29A",
           fillOpacity: 0.18 + glowIntensity * 0.82,

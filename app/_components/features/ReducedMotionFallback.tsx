@@ -218,7 +218,7 @@ export default function ReducedMotionFallback() {
                     letterSpacing: "0.06em",
                   }}
                 >
-                  {zeroPad(i)}
+                  {zeroPad(i + 1)}
                 </span>
 
                 {/* Title */}

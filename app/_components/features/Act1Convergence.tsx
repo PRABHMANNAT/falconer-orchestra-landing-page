@@ -165,7 +165,14 @@ function SourceContent({
               boxShadow: "0 3px 10px rgba(14,29,11,0.06)",
             }}
           >
-            <span style={{ fontSize: 15, flexShrink: 0 }}>{s.icon}</span>
+            <span style={{
+              width: 34,
+              flexShrink: 0,
+              fontSize: 10,
+              letterSpacing: "0.08em",
+              color: "var(--color-accent)",
+              fontWeight: 700,
+            }}>{s.icon}</span>
             <span style={{
               overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap",
             }}>
@@ -293,7 +300,7 @@ function IntroSection() {
 
         <motion.h1
           variants={introContainer}
-          aria-label="Watch it come together."
+          aria-label="Connect every source."
           style={{
             fontFamily: "var(--font-display)",
             fontSize: "clamp(52px, 7vw, 96px)",

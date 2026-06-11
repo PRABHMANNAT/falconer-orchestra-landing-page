@@ -348,35 +348,38 @@ export default function Act2Growth({ onSectionChange }: Act2Props) {
   const trackRef   = useRef<HTMLDivElement>(null);
   const reduceMotion = useReducedMotion();
 
-  // 4 panels + 1 CTA = 5 panels - 100vw = 500vw total track
-  // But logo takes ~30vw on the left, so content panels are 100vw each
-  // Total track width = 30vw (logo) + 4 - 100vw (panels) + 100vw (CTA) = 530vw
-
   useGSAP(() => {
     if (reduceMotion || !sectionRef.current || !trackRef.current) return;
 
     const track = trackRef.current;
-    // total horizontal travel = track.scrollWidth - window.innerWidth
-    const totalX = -(track.scrollWidth - window.innerWidth);
+    const getTotalX = () => -(track.scrollWidth - window.innerWidth);
 
     const tween = gsap.to(track, {
-      x: totalX,
+      x: getTotalX,
       ease: "none",
     });
 
-    ScrollTrigger.create({
+    const trigger = ScrollTrigger.create({
       trigger: sectionRef.current,
       start: "top top",
-      end: `+=${Math.abs(totalX)}`,
+      end: () => `+=${Math.abs(getTotalX())}`,
       pin: true,
       scrub: 1.5,
       animation: tween,
+      invalidateOnRefresh: true,
       onUpdate: (st) => {
         const panelCount = 5; // 4 panels + cta
         const panelIdx = Math.min(Math.floor(st.progress * panelCount), panelCount - 1);
-        onSectionChange?.(8 + panelIdx);
+        onSectionChange?.(9 + panelIdx);
       },
     });
+
+    ScrollTrigger.refresh();
+
+    return () => {
+      trigger.kill();
+      tween.kill();
+    };
   }, { scope: sectionRef });
 
   return (
@@ -391,6 +394,7 @@ export default function Act2Growth({ onSectionChange }: Act2Props) {
       {/* Horizontal track */}
       <div
         ref={trackRef}
+        data-feature-track
         style={{
           display: "flex",
           flexWrap: "nowrap",

@@ -8,9 +8,9 @@ import { SOURCES } from "./types";
 
 const SOURCE_LABELS = SOURCES.map((s) => s.label.toUpperCase());
 
-const CAPABILITY_LABELS = ["SOCRATES", "SUGGESTIONS", "TIMELINE", "GROWTH"];
+const CAPABILITY_LABELS = ["SOCRATES", "SUGGESTIONS", "TIMELINE", "GROWTH", "START"];
 
-const ALL_LABELS = [...SOURCE_LABELS, ...CAPABILITY_LABELS]; // 12 entries
+const ALL_LABELS = ["OVERVIEW", ...SOURCE_LABELS, "CONNECTED", ...CAPABILITY_LABELS];
 
 // --- Pulse keyframe -------------------------------------------------------------
 
@@ -34,7 +34,7 @@ function injectPulseKeyframe() {
 // --- Types ----------------------------------------------------------------------
 
 interface ProgressIndicatorProps {
-  currentIndex: number; // 0–11
+  currentIndex: number;
   visible: boolean;
 }
 
@@ -79,9 +79,8 @@ export default function ProgressIndicator({
           left: 2,
           top: 3,
           width: 2,
-          // Each row is 6px dot + 6px gap + 6px dot … height covers all 12 rows.
-          // Row height = 6px dot + 8px gap = 14px; last row has no gap.
-          height: 12 * 14 - 8,
+          // Row height = 6px dot + 8px gap. The last row has no gap.
+          height: ALL_LABELS.length * 14 - 8,
           background:
             "linear-gradient(to bottom, var(--color-accent) 0%, transparent 100%)",
           borderRadius: 1,

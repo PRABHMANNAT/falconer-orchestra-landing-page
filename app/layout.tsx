@@ -57,7 +57,11 @@ export default function RootLayout({
   children: ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${bebas.variable} ${syne.variable} ${dmMono.variable} ${spaceGrotesk.variable}`}>
+    <html
+      lang="en"
+      data-scroll-behavior="smooth"
+      className={`${bebas.variable} ${syne.variable} ${dmMono.variable} ${spaceGrotesk.variable}`}
+    >
       <body>{children}</body>
     </html>
   );

@@ -32,8 +32,14 @@ export default function FeaturesPage() {
 
   // Act1: section -1=intro, 0-7=sources, 8=outro
   // Act2: section 8-12=panels
-  const inCinematic = currentSection >= -1 && currentSection <= 12;
+  const inCinematic = currentSection >= -1 && currentSection <= 13;
   const showCinematic = mounted && !reduceMotion && !isMobile;
+  const activeMenuIndex =
+    currentSection >= 0 && currentSection <= 7
+      ? currentSection
+      : currentSection >= 9 && currentSection <= 12
+      ? currentSection - 1
+      : undefined;
 
   const handleSectionChange = (idx: number) => {
     setCurrentSection(idx);
@@ -50,7 +56,13 @@ export default function FeaturesPage() {
     } else {
       const target = document.getElementById("act2-wrapper");
       if (!target) return;
-      window.scrollTo({ top: target.offsetTop, behavior: "smooth" });
+      const track = target.querySelector<HTMLElement>("[data-feature-track]");
+      const horizontalDistance = track
+        ? Math.max(track.scrollWidth - window.innerWidth, window.innerHeight)
+        : window.innerHeight * 4;
+      const panelIndex = idx - 8;
+      const targetTop = target.offsetTop + (horizontalDistance * panelIndex) / 5;
+      window.scrollTo({ top: targetTop, behavior: "smooth" });
     }
   };
 
@@ -62,10 +74,12 @@ export default function FeaturesPage() {
       {showCinematic && (
         <>
           <ProgressIndicator
-            currentIndex={currentSection + 1} // shift so -1=intro maps to 0
+            currentIndex={currentSection + 1}
             visible={inCinematic}
           />
           <SkipControls
+            activeIndex={activeMenuIndex}
+            visible={inCinematic}
             onJump={handleJump}
             onSkip={() => window.open("/#pricing", "_self")}
           />

@@ -15,10 +15,10 @@ const SOURCES = [
 ];
 
 const CAPABILITIES = [
-  { key: "cap-0", label: "Unified Search" },
-  { key: "cap-1", label: "Smart Summaries" },
-  { key: "cap-2", label: "Auto Actions" },
-  { key: "cap-3", label: "Team Insights" },
+  { key: "cap-0", label: "Socrates" },
+  { key: "cap-1", label: "Suggestions" },
+  { key: "cap-2", label: "Timeline" },
+  { key: "cap-3", label: "Growth" },
 ];
 
 interface SkipControlsProps {
@@ -72,8 +72,6 @@ export default function SkipControls({
   }, [menuOpen]);
 
   if (!visible) return null;
-
-  const allSections = [...SOURCES, ...CAPABILITIES];
 
   return (
     <>
