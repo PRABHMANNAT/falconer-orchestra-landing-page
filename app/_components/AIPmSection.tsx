@@ -96,14 +96,15 @@ export default function AIPmSection() {
         >
           <motion.span className="aipm-live" variants={headItem}>
             <span className="aipm-live-dot" />
-            Orchestra - scanning live signals
+            Orchestra - one source of truth
           </motion.span>
           <motion.h2 className="aipm-title" variants={headItem}>
-            Project risks, connected to the source
+            One source of truth
           </motion.h2>
           <motion.p className="aipm-sub" variants={headItem}>
-            Orchestra reads commits, docs, Slack threads, decisions, and calendars, then turns weak
-            signals into cited actions before scope, reviews, or launch plans drift.
+            Orchestra unifies commits, docs, Slack threads, decisions, and calendars into a single
+            connected workspace, so every status, risk, and next step traces back to the same cited
+            evidence your team already trusts.
           </motion.p>
         </motion.div>
 
