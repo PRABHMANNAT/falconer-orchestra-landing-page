@@ -15,12 +15,16 @@ import { useEffect, useRef } from "react";
  */
 export default function HalftoneGlobe({
   ink = [26, 46, 26], // dark forest green (default — light backgrounds)
-  accent = [232, 130, 90] // coral
+  accent = [232, 130, 90], // coral
+  speed = 1
 }: {
   ink?: [number, number, number];
   accent?: [number, number, number];
+  speed?: number;
 } = {}) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [inkR, inkG, inkB] = ink;
+  const [accentR, accentG, accentB] = accent;
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -32,8 +36,9 @@ export default function HalftoneGlobe({
       typeof window !== "undefined" &&
       window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-    const INK: [number, number, number] = ink;
-    const ACCENT: [number, number, number] = accent;
+    const INK: [number, number, number] = [inkR, inkG, inkB];
+    const ACCENT: [number, number, number] = [accentR, accentG, accentB];
+    const SPIN_SPEED = Math.max(0, speed);
 
     let W = 0;
     let H = 0;
@@ -52,9 +57,9 @@ export default function HalftoneGlobe({
     // Continent mask = sum of sines along fixed random 3D directions, thresholded.
     const dirs: number[][] = [];
     for (let i = 0; i < 14; i++) {
-      let x = rand() * 2 - 1;
-      let y = rand() * 2 - 1;
-      let z = rand() * 2 - 1;
+      const x = rand() * 2 - 1;
+      const y = rand() * 2 - 1;
+      const z = rand() * 2 - 1;
       const l = Math.hypot(x, y, z) || 1;
       dirs.push([x / l, y / l, z / l, 1.4 + rand() * 2.2, rand() * Math.PI * 2]);
     }
@@ -132,7 +137,7 @@ export default function HalftoneGlobe({
       const a = ASSEMBLE === 0 ? 1 : Math.min(1, elapsed / ASSEMBLE);
       const ease = 1 - Math.pow(1 - a, 3);
       // Rotation speed + reduce angle ported from 4c3e799 — slower, calmer spin.
-      const rot = reduce ? 0.5 : elapsed * 0.000115;
+      const rot = reduce ? 0.5 : 0.5 + elapsed * 0.000115 * SPIN_SPEED;
       const cosR = Math.cos(rot);
       const sinR = Math.sin(rot);
       const sizeScale = Math.min(W, H) / 560;
@@ -192,7 +197,7 @@ export default function HalftoneGlobe({
       cancelAnimationFrame(raf);
       ro.disconnect();
     };
-  }, []);
+  }, [accentB, accentG, accentR, inkB, inkG, inkR, speed]);
 
   return <canvas ref={canvasRef} className="globe-canvas" aria-hidden="true" />;
 }

@@ -415,7 +415,7 @@ export default function WaitlistPage() {
             <div className="wl-globe">
               <span className="wl-globe-halo" aria-hidden="true" />
               <span className="wl-static-globe" aria-hidden="true" />
-              <HalftoneGlobe ink={[9, 13, 16]} accent={[217, 119, 87]} />
+              <HalftoneGlobe ink={[236, 242, 232]} accent={[217, 119, 87]} speed={3.2} />
               <FloatingChips />
             </div>
           </div>

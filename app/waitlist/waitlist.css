@@ -183,17 +183,13 @@
 .wl-static-globe::before {
   content: "";
   position: absolute;
-  inset: 8%;
+  inset: 9%;
   border-radius: 50%;
-  opacity: 0.82;
-  background-image: radial-gradient(circle, rgba(240, 244, 238, 0.72) 0 0.9px, transparent 1.15px);
-  background-size: 5px 5px;
-  mask-image:
-    radial-gradient(ellipse at 36% 36%, #000 0 18%, transparent 24%),
-    radial-gradient(ellipse at 48% 52%, #000 0 22%, transparent 28%),
-    radial-gradient(ellipse at 64% 33%, #000 0 14%, transparent 20%),
-    radial-gradient(ellipse at 66% 64%, #000 0 19%, transparent 25%),
-    radial-gradient(circle at 50% 50%, #000 0 62%, transparent 64%);
+  opacity: 0.18;
+  background:
+    repeating-radial-gradient(ellipse at center, transparent 0 19px, rgba(240, 244, 238, 0.3) 20px 21px),
+    linear-gradient(90deg, transparent 0 45%, rgba(240, 244, 238, 0.16) 48% 52%, transparent 55% 100%);
+  mask-image: radial-gradient(circle at 50% 50%, #000 0 61%, transparent 63%);
 }
 
 .wl-static-globe::after {

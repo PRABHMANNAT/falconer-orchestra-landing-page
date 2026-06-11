@@ -7,6 +7,8 @@ import Mark from "../Mark";
 import "./styles.css";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
+const SOCRATES_PREVIEW_URL =
+  process.env.NEXT_PUBLIC_SOCRATES_PREVIEW_URL?.trim() || "/socrates-preview/";
 
 type StepId = "connect" | "structure" | "ask";
 
@@ -515,10 +517,11 @@ export default function GettingStartedSection() {
         transition={{ duration: 0.55, ease: EASE }}
       >
         <iframe
-          src="http://localhost:5174"
+          src={SOCRATES_PREVIEW_URL}
           title="Socrates live preview"
           loading="lazy"
           allow="clipboard-read; clipboard-write"
+          sandbox="allow-scripts allow-same-origin"
         />
       </motion.div>
 
