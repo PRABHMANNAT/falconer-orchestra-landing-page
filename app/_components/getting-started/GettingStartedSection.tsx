@@ -7,8 +7,7 @@ import Mark from "../Mark";
 import "./styles.css";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
-const SOCRATES_PREVIEW_URL =
-  "https://beta-kqffdnymn-chatgptkedalal-gmailcoms-projects.vercel.app/memory";
+const SOCRATES_PREVIEW_URL = "/adi-preview/index.html";
 
 type StepId = "connect" | "structure" | "ask";
 
