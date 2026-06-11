@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
 import Link from "next/link";
 import { Check, ChevronLeft, Mail } from "lucide-react";
-import HalftoneGlobe from "../HalftoneGlobe";
+import { GlobeDemo } from "../../components/GlobeDemo";
 import Mark from "../_components/Mark";
 import "./waitlist.css";
 
@@ -413,9 +413,7 @@ export default function WaitlistPage() {
 
           <div className="wl-globe-area">
             <div className="wl-globe">
-              <span className="wl-globe-halo" aria-hidden="true" />
-              <span className="wl-static-globe" aria-hidden="true" />
-              <HalftoneGlobe ink={[236, 242, 232]} accent={[217, 119, 87]} speed={3.2} />
+              <GlobeDemo />
             </div>
           </div>
 
