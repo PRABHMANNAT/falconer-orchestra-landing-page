@@ -5,52 +5,50 @@ import { useRef } from "react";
 import { Check } from "lucide-react";
 
 type Plan = {
-  id: "beta" | "pro" | "enterprise";
+  id: "team" | "scale";
   name: string;
   price: string;
   unit?: string;
+  blurb: string;
   features: string[];
   cta: string;
+  ctaHref: string;
   featured?: boolean;
   dark?: boolean;
 };
 
 const PLANS: Plan[] = [
   {
-    id: "beta",
-    name: "Beta",
-    price: "$0",
-    unit: "/mo during beta",
-    features: ["Up to 5 teammates", "Unlimited docs", "All integrations", "Socrates queries"],
-    cta: "Join waitlist",
-  },
-  {
-    id: "pro",
-    name: "Pro",
-    price: "$24",
+    id: "team",
+    name: "Team",
+    price: "$40",
     unit: "/user / month",
+    blurb: "For teams ready to make company knowledge searchable, cited, and operational.",
     features: [
-      "Everything in Beta",
-      "Suggestions",
-      "Custom integrations",
-      "Priority support",
-      "5-year audit log",
+      "Unlimited connected sources",
+      "Socrates answers with citations",
+      "Decision timeline and audit trail",
+      "AI suggestions for drift and stalled work",
+      "Slack, GitHub, Notion, Linear, email, and calls",
     ],
-    cta: "Start free trial",
+    cta: "Start with Team",
+    ctaHref: "/waitlist",
     featured: true,
   },
   {
-    id: "enterprise",
-    name: "Enterprise",
-    price: "Custom",
+    id: "scale",
+    name: "Scale",
+    price: "Book a call",
+    blurb: "For companies that need security reviews, custom rollout, and executive-grade visibility.",
     features: [
-      "SSO + SAML",
-      "SOC 2 Type II",
-      "Dedicated success",
-      "Self-host option",
-      "On-prem Socrates",
+      "Everything in Team",
+      "Custom integrations and data mapping",
+      "SSO, SAML, and permission design",
+      "Dedicated onboarding and success",
+      "Security, procurement, and investor-ready reporting",
     ],
     cta: "Book a call",
+    ctaHref: "https://calendly.com/adidogra07/orchestra-demo",
     dark: true,
   },
 ];
@@ -109,10 +107,10 @@ export default function PricingSection() {
           Pricing
         </motion.p>
         <motion.h2 className="pricing-title" variants={headItem}>
-          Start free. Scale when you feel it.
+          Simple pricing for serious teams.
         </motion.h2>
         <motion.p className="pricing-sub" variants={headItem}>
-          No credit card. No seat tax during beta.
+          Start with a company brain your team can use today. Talk to us when you need scale, security, or a custom rollout.
         </motion.p>
       </motion.div>
 
@@ -145,6 +143,16 @@ export default function PricingSection() {
               <span className="pricing-price">{plan.price}</span>
               {plan.unit && <span className="pricing-unit">{plan.unit}</span>}
             </div>
+            <p
+              style={{
+                margin: "12px 0 4px",
+                fontSize: 14,
+                lineHeight: 1.55,
+                color: plan.dark ? "rgba(255,255,255,0.66)" : "var(--color-muted)",
+              }}
+            >
+              {plan.blurb}
+            </p>
 
             <motion.ul
               className="pricing-features"
@@ -160,8 +168,10 @@ export default function PricingSection() {
               ))}
             </motion.ul>
 
-            <button
-              type="button"
+            <a
+              href={plan.ctaHref}
+              target={plan.ctaHref.startsWith("http") ? "_blank" : undefined}
+              rel={plan.ctaHref.startsWith("http") ? "noopener noreferrer" : undefined}
               className={[
                 "pricing-btn",
                 plan.featured ? "pricing-btn--primary" : "",
@@ -171,7 +181,7 @@ export default function PricingSection() {
                 .join(" ")}
             >
               {plan.cta}
-            </button>
+            </a>
           </motion.div>
         ))}
       </motion.div>
@@ -182,7 +192,7 @@ export default function PricingSection() {
         animate={inView ? { opacity: 1 } : { opacity: 0 }}
         transition={{ duration: 0.5, delay: 0.6 }}
       >
-        <a href="#">Full pricing →</a>
+        <a href="/pricing">Compare plans</a>
       </motion.div>
     </section>
   );

@@ -14,61 +14,59 @@ import "./pricing.css";
 
 const EASE = [0.22, 1, 0.36, 1] as [number, number, number, number];
 
-/* ──────────────── Plans (annual prices precomputed @ 2-month free) ──────────────── */
+/* Pricing plans */
 type Plan = {
-  id: "beta" | "pro" | "enterprise";
+  id: "team" | "scale";
   name: string;
-  monthly: number | null; // null = custom
-  annual: number | null;
+  price: string;
   unit?: string;
   blurb: string;
   features: string[];
   cta: string;
+  ctaHref: string;
   featured?: boolean;
   dark?: boolean;
 };
 
 const PLANS: Plan[] = [
   {
-    id: "beta",
-    name: "Beta",
-    monthly: 0,
-    annual: 0,
-    unit: "during beta",
-    blurb: "For founders prototyping with their first 5 people.",
-    features: ["Up to 5 teammates", "Unlimited docs", "All integrations", "Socrates queries"],
-    cta: "Join waitlist",
-  },
-  {
-    id: "pro",
-    name: "Pro",
-    monthly: 24,
-    annual: 20,
+    id: "team",
+    name: "Team",
+    price: "$40",
     unit: "user / month",
-    blurb: "Everything your team needs to ship in sync.",
+    blurb: "For operating teams that need one reliable place to search, cite, and track company context.",
     features: [
-      "Everything in Beta",
-      "Suggestions",
-      "Custom integrations",
-      "Priority support",
-      "5-year audit log",
+      "Unlimited connected sources",
+      "Socrates answers with source citations",
+      "Decision timeline and audit trail",
+      "AI suggestions for drift and stalled work",
+      "Core integrations for docs, chat, code, tickets, email, and calls",
+      "Priority product support",
     ],
-    cta: "Start free trial",
+    cta: "Start with Team",
+    ctaHref: "/waitlist",
     featured: true,
   },
   {
-    id: "enterprise",
-    name: "Enterprise",
-    monthly: null,
-    annual: null,
-    blurb: "When you need controls, residency, and a name to call.",
-    features: ["SSO + SAML", "SOC 2 Type II", "Dedicated success", "Self-host option", "On-prem Socrates"],
+    id: "scale",
+    name: "Scale",
+    price: "Book a call",
+    blurb: "For companies evaluating security, procurement, investor diligence, or a multi-team rollout.",
+    features: [
+      "Everything in Team",
+      "Custom integrations and data mapping",
+      "SSO, SAML, and workspace permissions",
+      "Dedicated onboarding and success",
+      "Security and procurement support",
+      "Executive and investor-ready reporting",
+    ],
     cta: "Book a call",
+    ctaHref: "https://calendly.com/adidogra07/orchestra-demo",
     dark: true,
   },
 ];
 
-/* ──────────────── Variants ──────────────── */
+/* Variants */
 const headVariants: Variants = {
   hidden: {},
   visible: { transition: { staggerChildren: 0.08, delayChildren: 0.04 } },
@@ -94,19 +92,19 @@ const itemVariants: Variants = {
   visible: { opacity: 1, x: 0, transition: { duration: 0.35, ease: EASE } },
 };
 
-/* ──────────────── Comparison rows ──────────────── */
-type Row = { feature: string; values: [string | boolean, string | boolean, string | boolean] };
+/* Comparison rows */
+type Row = { feature: string; values: [string | boolean, string | boolean] };
 const COMPARE: Row[] = [
-  { feature: "Teammates",            values: ["Up to 5", "Unlimited", "Unlimited"] },
-  { feature: "Integrations",         values: [true,       true,         true] },
-  { feature: "Socrates queries",     values: ["Daily cap","Unlimited",  "Unlimited"] },
-  { feature: "Suggestions",          values: [false,      true,         true] },
-  { feature: "Custom integrations",  values: [false,      true,         true] },
-  { feature: "Audit log retention",  values: ["30 days",  "5 years",    "Unlimited"] },
-  { feature: "SSO + SAML",           values: [false,      false,        true] },
-  { feature: "SOC 2 Type II",        values: [false,      false,        true] },
-  { feature: "Self-host / On-prem",  values: [false,      false,        true] },
-  { feature: "Dedicated success",    values: [false,      "Priority",   "Named CSM"] },
+  { feature: "Best for",             values: ["Teams building shared context", "Companies rolling out across departments"] },
+  { feature: "Teammates",            values: ["Unlimited", "Unlimited"] },
+  { feature: "Connected sources",    values: ["Core integrations", "Custom integrations"] },
+  { feature: "Socrates answers",     values: ["Cited answers", "Cited answers plus rollout tuning"] },
+  { feature: "Decision timeline",    values: [true, true] },
+  { feature: "AI suggestions",       values: [true, true] },
+  { feature: "Security review",      values: ["Standard", "Supported"] },
+  { feature: "SSO + SAML",           values: [false, true] },
+  { feature: "Success support",      values: ["Priority support", "Dedicated onboarding"] },
+  { feature: "Investor reporting",   values: ["Workspace exports", "Executive-ready reporting"] },
 ];
 
 function Cell({ v }: { v: string | boolean }) {
@@ -125,27 +123,27 @@ function Cell({ v }: { v: string | boolean }) {
   return <span className="cell-text">{v}</span>;
 }
 
-/* ──────────────── FAQ ──────────────── */
+/* FAQ */
 const FAQ: { q: string; a: string }[] = [
   {
-    q: "Is there a free trial on Pro?",
-    a: "Yes — every Pro subscription includes a 14-day trial with full access. You can cancel at any time inside settings.",
+    q: "What is included in the $40 plan?",
+    a: "Team includes the core company brain: connected sources, cited Socrates answers, decision history, AI suggestions, and priority product support.",
   },
   {
     q: "What counts as a teammate?",
-    a: "Anyone with edit or ask access in your workspace. Read-only viewers (e.g. customers you share a snapshot with) are free.",
+    a: "Anyone with edit or ask access in your workspace. Viewer-only access for shared snapshots can be handled separately.",
   },
   {
-    q: "Do you charge for integrations?",
-    a: "No. Every plan can connect every integration. Enterprise unlocks self-hosted runners and on-prem Socrates for sensitive data.",
+    q: "When should we book a call?",
+    a: "Book a call if you need security review, SSO, custom integrations, procurement support, or a rollout plan across multiple teams.",
   },
   {
-    q: "Can we pay annually?",
-    a: "Yes — toggle Annual above for 2 months free per seat. Enterprise contracts are negotiated separately.",
+    q: "Can Orchestra support investor or board diligence?",
+    a: "Yes. Scale is designed for leadership visibility, decision history, source-backed reporting, and a cleaner operational story for diligence.",
   },
   {
-    q: "How does Beta pricing work?",
-    a: "Beta is free for up to 5 teammates while we are in private launch. You'll get 30 days' notice before any plan change.",
+    q: "Can we start small and move to Scale later?",
+    a: "Yes. Start with Team, prove the workflow, then move to Scale when security, integrations, or rollout complexity requires it.",
   },
 ];
 
@@ -187,16 +185,9 @@ function FaqItem({ q, a, idx }: { q: string; a: string; idx: number }) {
   );
 }
 
-/* ──────────────── Page ──────────────── */
+/* Page */
 export default function PricingPage() {
   const reduce = useReducedMotion();
-  const [billing, setBilling] = useState<"monthly" | "annual">("annual");
-
-  const priceFor = (plan: Plan) => {
-    if (plan.monthly === null) return "Custom";
-    const n = billing === "annual" ? plan.annual : plan.monthly;
-    return n === 0 ? "$0" : `$${n}`;
-  };
 
   return (
     <>
@@ -231,38 +222,17 @@ export default function PricingPage() {
               Pricing
             </motion.span>
             <motion.h1 className="pricing-page-h1" variants={headItem}>
-              Start free.{" "}
-              <span className="accent">Scale when you feel it.</span>
+              Pricing that matches{" "}
+              <span className="accent">how teams buy.</span>
             </motion.h1>
             <motion.p className="pricing-page-sub" variants={headItem}>
-              No credit card. No seat tax during beta. Switch any time — and bring everyone with you.
+              One clear team plan for adoption. One guided path for companies that need security, procurement, and scale.
             </motion.p>
 
-            {/* Billing toggle */}
-            <motion.div
-              className="billing-toggle"
-              role="tablist"
-              aria-label="Billing period"
-              variants={headItem}
-            >
-              {(["monthly", "annual"] as const).map((opt) => (
-                <button
-                  key={opt}
-                  type="button"
-                  role="tab"
-                  aria-selected={billing === opt}
-                  className={`billing-opt${billing === opt ? " is-active" : ""}`}
-                  onClick={() => setBilling(opt)}
-                >
-                  {opt === "monthly" ? "Monthly" : "Annual"}
-                  {opt === "annual" && <span className="billing-save">−2mo</span>}
-                </button>
-              ))}
-            </motion.div>
           </motion.div>
         </header>
 
-        {/* PRICING CARDS — same UI language as landing page */}
+        {/* Pricing cards match the landing page UI language. */}
         <section
           className="pricing-section"
           aria-label="Plans"
@@ -293,23 +263,17 @@ export default function PricingPage() {
 
                 <p className="pricing-plan-name">{plan.name}</p>
 
-                <div className="pricing-price-row" data-billing={billing}>
+                <div className="pricing-price-row">
                   <motion.span
-                    key={`${plan.id}-${billing}`}
+                    key={plan.id}
                     className="pricing-price"
                     initial={{ opacity: 0, y: 8 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.32, ease: EASE }}
                   >
-                    {priceFor(plan)}
+                    {plan.price}
                   </motion.span>
-                  {plan.unit && (
-                    <span className="pricing-unit">
-                      {plan.id === "beta"
-                        ? `/mo ${plan.unit}`
-                        : `/${plan.unit}${billing === "annual" ? " · billed yearly" : ""}`}
-                    </span>
-                  )}
+                  {plan.unit && <span className="pricing-unit">/{plan.unit}</span>}
                 </div>
 
                 <p
@@ -337,8 +301,10 @@ export default function PricingPage() {
                   ))}
                 </motion.ul>
 
-                <button
-                  type="button"
+                <a
+                  href={plan.ctaHref}
+                  target={plan.ctaHref.startsWith("http") ? "_blank" : undefined}
+                  rel={plan.ctaHref.startsWith("http") ? "noopener noreferrer" : undefined}
                   className={[
                     "pricing-btn",
                     plan.featured ? "pricing-btn--primary" : "",
@@ -348,7 +314,7 @@ export default function PricingPage() {
                     .join(" ")}
                 >
                   {plan.cta}
-                </button>
+                </a>
               </motion.div>
             ))}
           </motion.div>
@@ -367,7 +333,7 @@ export default function PricingPage() {
               Compare plans
             </motion.h2>
             <motion.p variants={headItem}>
-              Everything Pro and up — Beta is for getting your team in fast.
+              Team gives buyers a clear starting point. Scale gives larger companies the support needed to adopt safely.
             </motion.p>
           </motion.div>
 
@@ -376,9 +342,8 @@ export default function PricingPage() {
               <thead>
                 <tr>
                   <th scope="col">Feature</th>
-                  <th scope="col">Beta</th>
-                  <th scope="col" className="pricing-table-popular">Pro</th>
-                  <th scope="col">Enterprise</th>
+                  <th scope="col" className="pricing-table-popular">Team</th>
+                  <th scope="col">Scale</th>
                 </tr>
               </thead>
               <tbody>
@@ -433,11 +398,11 @@ export default function PricingPage() {
                 reduce ? undefined : { duration: 5, repeat: Infinity, ease: "easeInOut" }
               }
             />
-            <h2 id="pricing-cta-title">Ready to put it all in one brain?</h2>
-            <p>Join the waitlist and we&apos;ll reach out the moment your spot opens.</p>
+            <h2 id="pricing-cta-title">Ready to make company knowledge investable?</h2>
+            <p>Start with Team at $40 per user, or book a call for security, procurement, and rollout planning.</p>
             <div className="pricing-page-cta-actions">
               <a href="/waitlist" className="pricing-page-btn pricing-page-btn--primary">
-                Join Waitlist
+                Start with Team
               </a>
               <a
                 href="https://calendly.com/adidogra07/orchestra-demo"
