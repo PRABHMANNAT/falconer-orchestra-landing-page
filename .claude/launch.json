@@ -23,6 +23,14 @@
       "cwd": "orchestrav2-adifrontend/apps/beta-web",
       "port": 5174,
       "autoPort": false
+    },
+    {
+      "name": "orchestrav2-backend",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev"],
+      "cwd": "orchestrav2-adifrontend",
+      "port": 3001,
+      "autoPort": false
     }
   ]
 }

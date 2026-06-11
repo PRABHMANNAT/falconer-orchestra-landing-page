@@ -500,7 +500,7 @@ export default function GettingStartedSection() {
         transition={{ duration: 0.55, ease: EASE }}
       >
         <iframe
-          src="https://beta-web-sigma.vercel.app/memory"
+          src="http://localhost:5174"
           title="Orchestra Memory preview"
           loading="lazy"
           allow="clipboard-read; clipboard-write"
