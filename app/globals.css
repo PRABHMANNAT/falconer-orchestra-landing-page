@@ -1217,6 +1217,218 @@ svg {
 
 /* ---------- Mock 2 — Truth ---------- */
 
+.truth-dashboard-mock {
+  display: grid;
+  grid-template-rows: auto auto 1fr auto;
+  gap: 10px;
+  padding: 12px;
+  background:
+    linear-gradient(135deg, rgba(255, 252, 248, 0.96), rgba(246, 239, 231, 0.88)),
+    radial-gradient(circle at 90% 10%, rgba(217, 119, 87, 0.18), transparent 42%);
+}
+
+.truth-dashboard-mock::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(110deg, transparent 12%, rgba(255, 255, 255, 0.42) 44%, transparent 68%);
+  transform: translateX(-120%);
+  animation: truth-dashboard-scan 4.6s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.truth-dash-topbar {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  padding: 10px 11px;
+  border: 1px solid rgba(14, 29, 11, 0.1);
+  border-radius: 13px;
+  background: rgba(255, 255, 255, 0.82);
+  box-shadow: 0 12px 26px rgba(20, 20, 19, 0.08);
+}
+
+.truth-dash-mark {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  flex: none;
+  border-radius: 9px;
+  background: var(--color-accent);
+}
+
+.truth-dash-mark .falcon-mark {
+  width: 16px;
+  height: 16px;
+  color: #fff;
+}
+
+.truth-dash-topbar span:not(.truth-dash-mark) {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+  color: var(--color-muted);
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+
+.truth-dash-topbar b {
+  overflow: hidden;
+  color: var(--color-near-black);
+  font-family: var(--font-body);
+  font-size: 13px;
+  letter-spacing: 0;
+  text-transform: none;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.truth-dash-topbar i {
+  width: 9px;
+  height: 9px;
+  margin-left: auto;
+  border-radius: 50%;
+  background: #26a269;
+  box-shadow: 0 0 0 5px rgba(38, 162, 105, 0.13);
+}
+
+.truth-dash-metrics {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 7px;
+}
+
+.truth-dash-metric {
+  min-width: 0;
+  padding: 9px 10px;
+  border: 1px solid var(--color-line);
+  border-radius: 11px;
+  background: rgba(255, 255, 255, 0.76);
+}
+
+.truth-dash-metric span,
+.truth-dash-panel-head span,
+.truth-dash-row span,
+.truth-dash-sync span {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+
+.truth-dash-metric b {
+  display: block;
+  margin-top: 4px;
+  color: var(--color-near-black);
+  font-size: 20px;
+  line-height: 1;
+}
+
+.truth-dash-metric.dark {
+  background: var(--color-near-black);
+}
+
+.truth-dash-metric.dark span { color: rgba(251, 238, 232, 0.68); }
+.truth-dash-metric.dark b { color: var(--color-accent-tint); }
+.truth-dash-metric.warn { border-color: rgba(224, 160, 32, 0.42); }
+.truth-dash-metric.accent { border-color: rgba(217, 119, 87, 0.38); }
+
+.truth-dash-panel {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: 9px;
+  min-height: 0;
+  padding: 11px;
+  border: 1px solid rgba(14, 29, 11, 0.1);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.8);
+  box-shadow: 0 18px 42px rgba(20, 20, 19, 0.1);
+}
+
+.truth-dash-panel-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.truth-dash-panel-head b {
+  color: var(--color-accent-darker);
+  font-family: var(--font-mono);
+  font-size: 10px;
+}
+
+.truth-dash-row {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 9px;
+  align-items: start;
+  min-width: 0;
+}
+
+.truth-dash-row-dot {
+  width: 7px;
+  height: 7px;
+  margin-top: 5px;
+  border-radius: 50%;
+  background: var(--color-accent);
+  box-shadow: 0 0 0 4px rgba(217, 119, 87, 0.14);
+}
+
+.truth-dash-row div {
+  display: grid;
+  gap: 3px;
+  min-width: 0;
+}
+
+.truth-dash-row b {
+  overflow: hidden;
+  color: var(--color-near-black);
+  font-size: 12px;
+  line-height: 1.15;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.truth-dash-row i {
+  display: block;
+  height: 4px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--color-accent), rgba(14, 29, 11, 0.16));
+}
+
+.truth-dash-sync {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.truth-dash-sync span {
+  padding: 5px 8px;
+  border: 1px solid var(--color-line);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.74);
+  color: var(--color-near-black);
+  font-size: 8.5px;
+}
+
+@keyframes truth-dashboard-scan {
+  0%, 42% { transform: translateX(-120%); opacity: 0; }
+  52% { opacity: 1; }
+  88%, 100% { transform: translateX(120%); opacity: 0; }
+}
+
 .truth-svg {
   position: absolute;
   inset: 0;
@@ -1382,7 +1594,14 @@ svg {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .orbit, .orbit-node, .ctx-ring, .kicker-dot, .msg-dots span { animation: none; }
+  .orbit,
+  .orbit-node,
+  .ctx-ring,
+  .kicker-dot,
+  .msg-dots span,
+  .truth-dashboard-mock::before {
+    animation: none;
+  }
 }
 
 /* ---------- System of record ---------- */
@@ -2166,7 +2385,7 @@ svg {
   text-overflow: ellipsis;
 }
 
-/* ---------- AI PM (Suggestions) ---------- */
+/* ---------- Signal layer (Suggestions) ---------- */
 .aipm-section {
   padding: clamp(80px, 10vw, 130px) var(--pad);
   background:

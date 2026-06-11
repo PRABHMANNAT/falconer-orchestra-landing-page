@@ -49,9 +49,9 @@ const heroItem = {
 const featureCards = [
   {
     number: "01",
-    eyebrow: "Socrates",
-    title: "Answers grounded in your company",
-    body: "Ask anything and get context pulled from real threads, docs, and decisions — never generic AI slop, always cited.",
+    eyebrow: "Source of Truth",
+    title: "One source of truth dashboard",
+    body: "See decisions, docs, commits, threads, and risk flags in one live operating view of your company.",
     kind: "answer"
   },
   {
@@ -410,66 +410,6 @@ function TimelinePanel() {
   );
 }
 
-function AnswerMock() {
-  const chips = [
-    { label: "May 14 · call", tone: "thread" },
-    { label: "NW-218 · ticket", tone: "ticket" },
-    { label: "Scoping memo", tone: "doc" }
-  ];
-
-  return (
-    <div className="mock answer-mock">
-      <motion.div
-        className="msg msg-user"
-        initial={{ opacity: 0, y: 6 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.45, ease: softEase }}
-      >
-        <span className="msg-tag">You</span>
-        <p>What did we promise Northwind about retries?</p>
-      </motion.div>
-
-      <motion.div
-        className="msg msg-answer"
-        initial={{ opacity: 0, y: 10 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.55, ease: softEase, delay: 0.2 }}
-      >
-        <div className="msg-head">
-          <span className="msg-avatar"><Mark tone="light" /></span>
-          <span className="msg-tag accent">Socrates</span>
-          <span className="msg-dots" aria-hidden="true">
-            <span /><span /><span />
-          </span>
-        </div>
-        <p>A 24-hour replay window with idempotency keys — committed on the May 14 call.</p>
-        <motion.div
-          className="msg-chips"
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-          transition={{ staggerChildren: 0.1, delayChildren: 0.6 }}
-        >
-          {chips.map((c) => (
-            <motion.span
-              key={c.label}
-              className={`chip ${c.tone}`}
-              variants={{
-                hidden: { opacity: 0, y: 4 },
-                visible: { opacity: 1, y: 0, transition: { duration: 0.3, ease: softEase } }
-              }}
-            >
-              {c.label}
-            </motion.span>
-          ))}
-        </motion.div>
-      </motion.div>
-    </div>
-  );
-}
-
 function TruthMock() {
   const nodes = [
     { id: "email", label: "Email", sub: "Can you support replays?", x: 60, y: 50 },
@@ -562,6 +502,97 @@ function TruthMock() {
   );
 }
 
+function SourceTruthDashboardMock() {
+  const metrics = [
+    { label: "Sources", value: "12", tone: "accent" },
+    { label: "Decisions", value: "34", tone: "dark" },
+    { label: "Risks", value: "03", tone: "warn" }
+  ];
+  const rows = [
+    { label: "OAuth scope reconciled", source: "PRD + GitHub", width: "78%" },
+    { label: "Driver review pending", source: "Slack + Calendar", width: "52%" },
+    { label: "Auth map saved to Memory", source: "Docs + commits", width: "88%" }
+  ];
+
+  return (
+    <div className="mock answer-mock truth-dashboard-mock">
+      <motion.div
+        className="truth-dash-topbar"
+        initial={{ opacity: 0, y: -8 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.45, ease: softEase }}
+      >
+        <span className="truth-dash-mark"><Mark tone="light" /></span>
+        <span>
+          Company dashboard
+          <b>Live source of truth</b>
+        </span>
+        <i aria-hidden="true" />
+      </motion.div>
+
+      <div className="truth-dash-metrics">
+        {metrics.map((metric, i) => (
+          <motion.div
+            key={metric.label}
+            className={`truth-dash-metric ${metric.tone}`}
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.4, ease: softEase, delay: 0.15 + i * 0.1 }}
+          >
+            <span>{metric.label}</span>
+            <b>{metric.value}</b>
+          </motion.div>
+        ))}
+      </div>
+
+      <motion.div
+        className="truth-dash-panel"
+        initial={{ opacity: 0, scale: 0.96 }}
+        whileInView={{ opacity: 1, scale: 1 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.5, ease: softEase, delay: 0.2 }}
+      >
+        <div className="truth-dash-panel-head">
+          <span>Unified activity</span>
+          <b>Now</b>
+        </div>
+        {rows.map((row, i) => (
+          <motion.div
+            key={row.label}
+            className="truth-dash-row"
+            initial={{ opacity: 0, x: -10 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.42, ease: softEase, delay: 0.42 + i * 0.12 }}
+          >
+            <span className="truth-dash-row-dot" />
+            <div>
+              <b>{row.label}</b>
+              <span>{row.source}</span>
+              <i style={{ width: row.width }} />
+            </div>
+          </motion.div>
+        ))}
+      </motion.div>
+
+      <motion.div
+        className="truth-dash-sync"
+        initial={{ opacity: 0, y: 8 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.45, ease: softEase, delay: 0.9 }}
+      >
+        <span>Slack</span>
+        <span>GitHub</span>
+        <span>Docs</span>
+        <span>Calendar</span>
+      </motion.div>
+    </div>
+  );
+}
+
 function ContextMock() {
   const sources: { label: string; Logo: ComponentType<SVGProps<SVGSVGElement>> }[] = [
     { label: "Gmail",  Logo: GmailLogo },
@@ -602,7 +633,7 @@ function ContextMock() {
 }
 
 function FeatureMock({ kind }: { kind: string }) {
-  if (kind === "answer") return <AnswerMock />;
+  if (kind === "answer") return <SourceTruthDashboardMock />;
   if (kind === "truth") return <TruthMock />;
   return <ContextMock />;
 }
@@ -924,9 +955,6 @@ export default function Home() {
                 >
                   Book Demo
                 </a>
-                <a className="hero-ghost" href="#">
-                  Sign up free →
-                </a>
               </motion.div>
 
             </motion.div>
@@ -1038,7 +1066,7 @@ export default function Home() {
           </motion.div>
         </section>
 
-        {/* ── SECTION 7: AI PM (Suggestions) — NEW ── */}
+        {/* ── SECTION 7: Signal layer (Suggestions) — NEW ── */}
         <AIPmSection />
 
         {/* ── SECTION 8: TIMELINE — NEW ── */}

@@ -19,37 +19,37 @@ const CARDS: Card[] = [
     key: "merge",
     Icon: GitMerge,
     accent: "#d97757",
-    category: "Merge conflicts",
+    category: "Conflict watch",
     severity: "High",
-    title: "Two PRs are rewriting auth.ts at once",
-    body: "Maya and Devraj are deep in the same file. Whoever merges second eats a painful rebase — untangle it before they collide.",
+    title: "PR #47 and PR #52 are both changing auth core",
+    body: "Orchestra compares GitHub file history, ownership, and Slack context before the second branch turns into a rebase.",
   },
   {
     key: "drift",
     Icon: FileWarning,
     accent: "#7c5cff",
-    category: "Spec drift",
-    severity: null,
-    title: "Your code shipped OAuth — the PRD still says magic-link only",
-    body: "Spec and reality stopped agreeing days ago. Reconcile now, not in the launch post-mortem.",
+    category: "Decision conflict",
+    severity: "Review",
+    title: "OAuth is shipping, but the PRD says magic-link only",
+    body: "Socrates links PR #47 to BloomFast PRD v2 and the #engineering thread so scope gets reconciled before merge.",
   },
   {
     key: "stalled",
     Icon: Clock,
     accent: "#e0a020",
-    category: "Stalled work",
+    category: "Review latency",
     severity: null,
-    title: "PR #43 has been waiting on review for 7 days",
-    body: "Blocked on Sarah, untouched since last week — and quietly holding up the release.",
+    title: "Driver Assignment has no reviewer activity",
+    body: "GitHub, Calendar, and Slack signals show no owner or checkpoint. Assign Sarah or Devraj before the sprint slips.",
   },
   {
     key: "coverage",
     Icon: FileSearch,
     accent: "#10a5a0",
-    category: "Coverage gap",
+    category: "Memory gap",
     severity: null,
-    title: "The Driver Assignment spec has zero engineering activity",
-    body: "Scoped for sprint 4. It's sprint 5 now and nobody has started — this is how features quietly slip.",
+    title: "Auth changed faster than the docs",
+    body: "Recent commits touch auth, sessions, and middleware. Generate an architecture map so Memory matches reality.",
   },
 ];
 
@@ -87,7 +87,6 @@ export default function AIPmSection() {
   return (
     <section className="aipm-section">
       <div className="aipm-inner">
-        {/* Header */}
         <motion.div
           className="aipm-head"
           variants={headVariants}
@@ -97,18 +96,17 @@ export default function AIPmSection() {
         >
           <motion.span className="aipm-live" variants={headItem}>
             <span className="aipm-live-dot" />
-            Socrates · watching live
+            Orchestra - scanning live signals
           </motion.span>
           <motion.h2 className="aipm-title" variants={headItem}>
-            The AI PM you never hired
+            Project risks, connected to the source
           </motion.h2>
           <motion.p className="aipm-sub" variants={headItem}>
-            It reads every commit, doc, and thread your team produces — then surfaces the
-            one thing about to derail your sprint, before it does. No prompting required.
+            Orchestra reads commits, docs, Slack threads, decisions, and calendars, then turns weak
+            signals into cited actions before scope, reviews, or launch plans drift.
           </motion.p>
         </motion.div>
 
-        {/* 2×2 grid — striped-frame panels (dark + light themed) */}
         <motion.div
           ref={gridRef}
           variants={gridVariants}
@@ -125,13 +123,11 @@ export default function AIPmSection() {
                 variants={cardVariants}
                 className="group relative z-0 rounded-[22px] hover:z-20 [--pattern-fg:color-mix(in_oklab,#0a0a0a_5%,transparent)] dark:[--pattern-fg:color-mix(in_oklab,#fff_5%,transparent)]"
               >
-                {/* decorative diagonal-stripe frame */}
                 <span
                   aria-hidden="true"
                   className="absolute inset-0 h-full w-full rounded-[inherit] bg-[image:repeating-linear-gradient(315deg,var(--pattern-fg)_0,var(--pattern-fg)_1px,transparent_0,transparent_50%)] bg-[size:5px_5px] bg-fixed shadow-sm ring-1 ring-black/5 shadow-black/5 transition duration-300 group-hover:ring-black/15 dark:ring-white/5 dark:shadow-white/5 dark:group-hover:ring-white/20"
                 />
 
-                {/* content panel — pops out on hover, revealing the stripes */}
                 <div className="relative origin-center rounded-[22px] bg-white p-4 ring-1 shadow-sm ring-black/10 shadow-black/5 transition-[transform,box-shadow] duration-300 ease-out will-change-transform group-hover:-translate-y-1 group-hover:-rotate-2 group-hover:scale-[1.05] group-hover:shadow-2xl group-hover:shadow-black/25 md:p-8 dark:bg-neutral-900 dark:ring-white/10 dark:shadow-white/5 dark:group-hover:shadow-black/60">
                   <div className="mb-4 flex items-center justify-between gap-3">
                     <span className="inline-flex items-center gap-2 font-mono text-[11px] font-medium tracking-[0.14em] uppercase" style={{ color: "var(--accent)" }}>
@@ -164,7 +160,6 @@ export default function AIPmSection() {
           })}
         </motion.div>
 
-        {/* Footer CTA */}
         <motion.div
           className="aipm-footer"
           initial={{ opacity: 0, y: 10 }}
@@ -173,11 +168,11 @@ export default function AIPmSection() {
           transition={{ duration: 0.5, delay: 0.3, ease: EASE }}
         >
           <a href="#" className="aipm-cta">
-            See everything Socrates caught <span aria-hidden="true">→</span>
+            Open the project signal board <span aria-hidden="true">-&gt;</span>
           </a>
           <p className="aipm-note">
-            Socrates tracks 8 kinds of risk across your stack — and only ever shows you
-            what needs you right now.
+            Tracks conflict risk, decision drift, stalled reviews, documentation gaps, and next-best
+            actions across every connected source.
           </p>
         </motion.div>
       </div>

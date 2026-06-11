@@ -276,10 +276,10 @@ export function Panel2Suggestions() {
   return (
     <div style={panelBase}>
       <div style={innerContent} ref={ref}>
-        <p style={eyebrowStyle("#d97757")}>The AI PM</p>
+        <p style={eyebrowStyle("#d97757")}>Signal layer</p>
         <h2 style={titleStyle}>{"Catch issues\nbefore they grow."}</h2>
         <p style={subtitleStyle}>
-          Spot merge conflicts, spec drift, and stalled work while there is still time to fix them.
+          Spot conflict risk, decision drift, and stalled reviews while there is still time to fix them.
         </p>
 
         <div style={{ display: "flex", flexDirection: "column", gap: 0, maxWidth: 480, marginTop: 32 }}>

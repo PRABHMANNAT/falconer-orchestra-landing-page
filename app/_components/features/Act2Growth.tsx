@@ -427,10 +427,10 @@ export default function Act2Growth({ onSectionChange }: Act2Props) {
 
         {/* Panel 2 - Suggestions */}
         <Panel
-          eyebrow="The AI PM"
+          eyebrow="Signal layer"
           eyebrowColor="var(--color-accent)"
           title={"Catch issues\nbefore they grow."}
-          subtitle="Spot merge conflicts, spec drift, and stalled work while there is still time to fix them."
+          subtitle="Spot conflict risk, decision drift, and stalled reviews while there is still time to fix them."
         >
           <SuggestionsMock />
         </Panel>

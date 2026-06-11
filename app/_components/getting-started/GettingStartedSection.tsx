@@ -493,6 +493,21 @@ export default function GettingStartedSection() {
       </motion.div>
 
       <motion.div
+        className="gs-memory-preview"
+        initial={{ opacity: 0, y: 14 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, amount: 0.28 }}
+        transition={{ duration: 0.55, ease: EASE }}
+      >
+        <iframe
+          src="https://beta-web-sigma.vercel.app/memory"
+          title="Orchestra Memory preview"
+          loading="lazy"
+          allow="clipboard-read; clipboard-write"
+        />
+      </motion.div>
+
+      <motion.div
         className="gs-foot"
         initial={{ opacity: 0, y: 8 }}
         whileInView={{ opacity: 1, y: 0 }}

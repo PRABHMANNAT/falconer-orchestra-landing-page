@@ -26,10 +26,10 @@ const FOOTER_COLUMNS: Array<{
   {
     heading: "Resources",
     links: [
-      { label: "Docs", href: "#" },
-      { label: "Integrations", href: "#" },
-      { label: "Changelog", href: "#" },
-      { label: "Notes", href: "#" }
+      { label: "Docs", href: "/docs" },
+      { label: "Integrations", href: "/integrations" },
+      { label: "Changelog", href: "/changelog" },
+      { label: "Notes", href: "/notes" }
     ]
   },
   {
