@@ -6,7 +6,7 @@ import dynamic from "next/dynamic";
 import Mark from "../_components/Mark";
 import SiteHeader from "../_components/SiteHeader";
 
-// Dynamic imports — all GSAP code runs client-side only
+// Dynamic imports - all GSAP code runs client-side only
 const Act1Convergence      = dynamic(() => import("../_components/features/Act1Convergence"),      { ssr: false });
 const Act2Growth           = dynamic(() => import("../_components/features/Act2Growth"),           { ssr: false });
 const ProgressIndicator    = dynamic(() => import("../_components/features/ProgressIndicator"),    { ssr: false });

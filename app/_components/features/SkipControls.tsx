@@ -77,7 +77,7 @@ export default function SkipControls({
 
   return (
     <>
-      {/* Skip to Pricing button — bottom-right */}
+      {/* Skip to Pricing button - bottom-right */}
       <button
         onClick={handleSkip}
         style={{
@@ -115,7 +115,7 @@ export default function SkipControls({
         SKIP TO PRICING &rarr;
       </button>
 
-      {/* Section Jump Menu button — top-right */}
+      {/* Section Jump Menu button - top-right */}
       <button
         ref={menuButtonRef}
         onClick={() => setMenuOpen((prev) => !prev)}

@@ -11,14 +11,14 @@ import { ALL_RAYS } from "./types";
 
 gsap.registerPlugin(ScrollTrigger);
 
-// ─────────────────────────────────────────────
+// ---------------------------------------------
 // Socrates Q&A mock card
-// ─────────────────────────────────────────────
+// ---------------------------------------------
 function SocratesMock() {
   const chips = [
-    { label: "Call note · May 14", color: "#6f9a8a" },
+    { label: "Call note | May 14", color: "#6f9a8a" },
     { label: "Linear NW-218", color: "#5E6AD2" },
-    { label: "Plan · Retries", color: "#d97757" },
+    { label: "Plan | Retries", color: "#d97757" },
   ];
   const followUps = [
     "What did we promise on the SSO rollout?",
@@ -43,7 +43,7 @@ function SocratesMock() {
       transition={{ duration: 0.6, ease: [0.22,1,0.36,1] }}
     >
       <p style={{ fontFamily: "var(--font-mono)", fontSize: 10, letterSpacing: "0.16em", textTransform: "uppercase", color: "var(--color-muted)", margin: "0 0 12px" }}>
-        Northwind · Account brain · Socrates
+        Northwind | Account brain | Socrates
       </p>
       {/* Query */}
       <div style={{ padding: "12px 14px", background: "var(--color-cream)", borderRadius: 10, border: "1px solid var(--color-line)", marginBottom: 16 }}>
@@ -61,7 +61,7 @@ function SocratesMock() {
             Socrates
           </p>
           <p style={{ margin: "0 0 12px", fontSize: 14, color: "var(--color-ink)", lineHeight: 1.55 }}>
-            A 24-hour replay window with idempotency keys — committed on the May 14 call.
+            Use a 24-hour replay window with idempotency keys. Source: May 14 call.
           </p>
           <div style={{ display: "flex", flexWrap: "wrap", gap: 6, paddingTop: 10, borderTop: "1px dashed var(--color-line)" }}>
             <span style={{ fontFamily: "var(--font-mono)", fontSize: 10, letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--color-muted)" }}>Grounded in</span>
@@ -109,9 +109,9 @@ function SocratesMock() {
   );
 }
 
-// ─────────────────────────────────────────────
+// ---------------------------------------------
 // Suggestion cards mock
-// ─────────────────────────────────────────────
+// ---------------------------------------------
 function SuggestionsMock() {
   const cards = [
     { accent: "#d97757", cat: "MERGE CONFLICTS", title: "Maya and Devraj both editing auth.ts" },
@@ -149,14 +149,14 @@ function SuggestionsMock() {
   );
 }
 
-// ─────────────────────────────────────────────
+// ---------------------------------------------
 // Mini timeline mock
-// ─────────────────────────────────────────────
+// ---------------------------------------------
 function TimelineMock() {
   const events = [
     { src: "SLACK", color: "#4A154B", bg: "#ede9fe", title: "Scoping call recap posted", attr: "Maya R." },
     { src: "GITHUB", color: "#c2410c", bg: "#fff7ed", title: "PR #47 merged by Devraj", attr: "Devraj K." },
-    { src: "MANUAL", color: "#0f766e", bg: "#f0fdfa", title: "PRD updated — auth confirmed", attr: "Sana A." },
+    { src: "MANUAL", color: "#0f766e", bg: "#f0fdfa", title: "PRD updated: auth confirmed", attr: "Sana A." },
   ];
   return (
     <div style={{ position: "relative", paddingLeft: 28, marginTop: 32, maxWidth: 440 }}>
@@ -205,16 +205,16 @@ function TimelineMock() {
   );
 }
 
-// ─────────────────────────────────────────────
+// ---------------------------------------------
 // Growth outcomes
-// ─────────────────────────────────────────────
+// ---------------------------------------------
 function GrowthMock() {
   const outcomes = [
     "Faster onboarding",
-    "Fewer dropped balls",
-    "Decisions made once",
-    "Audit-ready always",
-    "AI that knows your context",
+    "Less repeated work",
+    "Clear decision history",
+    "Faster reviews",
+    "Context-aware AI",
   ];
   return (
     <div style={{ display: "flex", flexWrap: "wrap", gap: 10, marginTop: 32, maxWidth: 440 }}>
@@ -240,9 +240,9 @@ function GrowthMock() {
   );
 }
 
-// ─────────────────────────────────────────────
+// ---------------------------------------------
 // Panel wrapper
-// ─────────────────────────────────────────────
+// ---------------------------------------------
 function Panel({
   eyebrow, eyebrowColor, title, subtitle, children,
 }: {
@@ -280,9 +280,9 @@ function Panel({
   );
 }
 
-// ─────────────────────────────────────────────
+// ---------------------------------------------
 // Final CTA frame
-// ─────────────────────────────────────────────
+// ---------------------------------------------
 function CtaFrame() {
   return (
     <div style={{
@@ -329,16 +329,16 @@ function CtaFrame() {
           letterSpacing: "0.18em", textTransform: "uppercase",
           color: "rgba(250,247,241,0.35)",
         }}>
-          Free during beta · No credit card
+          No card needed
         </p>
       </div>
     </div>
   );
 }
 
-// ─────────────────────────────────────────────
-// Act 2 — Horizontal scroll container
-// ─────────────────────────────────────────────
+// ---------------------------------------------
+// Act 2 - Horizontal scroll container
+// ---------------------------------------------
 interface Act2Props {
   onSectionChange?: (index: number) => void; // 8-11 for panels, 12 for CTA
 }
@@ -348,9 +348,9 @@ export default function Act2Growth({ onSectionChange }: Act2Props) {
   const trackRef   = useRef<HTMLDivElement>(null);
   const reduceMotion = useReducedMotion();
 
-  // 4 panels + 1 CTA = 5 panels × 100vw = 500vw total track
+  // 4 panels + 1 CTA = 5 panels - 100vw = 500vw total track
   // But logo takes ~30vw on the left, so content panels are 100vw each
-  // Total track width = 30vw (logo) + 4 × 100vw (panels) + 100vw (CTA) = 530vw
+  // Total track width = 30vw (logo) + 4 - 100vw (panels) + 100vw (CTA) = 530vw
 
   useGSAP(() => {
     if (reduceMotion || !sectionRef.current || !trackRef.current) return;
@@ -411,42 +411,42 @@ export default function Act2Growth({ onSectionChange }: Act2Props) {
           <OrchestraLogo size={360} activeRays={ALL_RAYS} glowIntensity={1} />
         </div>
 
-        {/* Panel 1 — Socrates */}
+        {/* Panel 1 - Socrates */}
         <Panel
           eyebrow="From your brain"
           eyebrowColor="#0D9488"
           title={"Ask anything.\nGet answers\nyou can trust."}
-          subtitle="Socrates queries every source you connected. Every answer cites where it came from."
+          subtitle="Socrates searches your connected tools and shows the sources behind every answer."
         >
           <SocratesMock />
         </Panel>
 
-        {/* Panel 2 — Suggestions */}
+        {/* Panel 2 - Suggestions */}
         <Panel
           eyebrow="The AI PM"
           eyebrowColor="var(--color-accent)"
-          title={"Notice what\nyou'd miss."}
-          subtitle="Socrates watches your company in motion. It flags merge conflicts, spec drift, stalled work — before they cost you a sprint."
+          title={"Catch issues\nbefore they grow."}
+          subtitle="Spot merge conflicts, spec drift, and stalled work while there is still time to fix them."
         >
           <SuggestionsMock />
         </Panel>
 
-        {/* Panel 3 — Timeline */}
+        {/* Panel 3 - Timeline */}
         <Panel
           eyebrow="One thread of truth"
           eyebrowColor="#7c3aed"
-          title={"Every decision,\nforever."}
-          subtitle="An immutable timeline of every change. Traceable to source, sliceable by Socrates, audit-ready by default."
+          title={"Every decision\nwith context."}
+          subtitle="See what changed, who decided it, and which source proves it."
         >
           <TimelineMock />
         </Panel>
 
-        {/* Panel 4 — Growth */}
+        {/* Panel 4 - Growth */}
         <Panel
           eyebrow="What it becomes"
           eyebrowColor="#D97706"
-          title={"Now grow\nyour business."}
-          subtitle="When everything is one source of truth, you stop losing context — and start moving faster than competitors who can't."
+          title={"Move faster\nwith less drift."}
+          subtitle="Give every team the same context so decisions stay aligned as work moves forward."
         >
           <GrowthMock />
         </Panel>

@@ -1,15 +1,15 @@
 "use client";
 
-// Act 1 — Convergence
+// Act 1 - Convergence
 // Architecture: sticky logo + normally-scrolling content sections side-by-side.
 // NO GSAP pinning. framer-motion useScroll tracks progress and lights up rays.
 //
 // Layout inside wrapper (660vh total):
 //   [sticky logo, z-index 1] always centered on screen
 //   [content overlay, z-index 2, margin-top -100vh] scrolls normally over logo
-//     · IntroSection   100vh  (centered, logo dim)
-//     · 8 SourceSecs    60vh each  (alternating left/right)
-//     · OutroSection    80vh  (centered, logo fully lit)
+//     | IntroSection   100vh  (centered, logo dim)
+//     | 8 SourceSecs    60vh each  (alternating left/right)
+//     | OutroSection    80vh  (centered, logo fully lit)
 
 import { useRef, useState } from "react";
 import {
@@ -22,9 +22,9 @@ import {
 import OrchestraLogo, { type SourceKey } from "./OrchestraLogo";
 import { SOURCES } from "./types";
 
-// ─── Scroll height constants ──────────────────────────────────────────────────
+// --- Scroll height constants --------------------------------------------------
 const INTRO_VH  = 100;
-const SOURCE_VH = 60;   // each source section — fast, keeps total under 15s scroll
+const SOURCE_VH = 60;   // each source section - fast, keeps total under 15s scroll
 const OUTRO_VH  = 80;
 const TOTAL_VH  = INTRO_VH + SOURCES.length * SOURCE_VH + OUTRO_VH; // 660
 
@@ -35,56 +35,56 @@ const SRC_F    = SOURCE_VH / TOTAL_VH; // 0.091
 // Activation threshold for each ray: midpoint of its section
 const RAY_MID = SOURCES.map((_, i) => INTRO_F + (i + 0.5) * SRC_F);
 
-// ─── Ease ────────────────────────────────────────────────────────────────────
+// --- Ease --------------------------------------------------------------------
 const E = [0.22, 1, 0.36, 1] as const;
 
-// ─── Data samples per source ─────────────────────────────────────────────────
+// --- Data samples per source -------------------------------------------------
 const SAMPLES: { icon: string; text: string }[][] = [
   // 0 docs
   [
-    { icon: "📄", text: "BloomFast PRD v2 · 47 pages · ingested 2s ago" },
-    { icon: "📋", text: "Northwind SRS · 12 sections · last edited 3h ago" },
+    { icon: "DOC", text: "BloomFast PRD v2 | 47 pages | synced now" },
+    { icon: "SPEC", text: "Northwind SRS | 12 sections | edited 3h ago" },
   ],
   // 1 slack
   [
-    { icon: "💬", text: `#retries — "agreed on 24hr replay" · Maya, May 14` },
-    { icon: "💬", text: `#auth — "SAML first, OIDC fallback" · Dev, Apr 22` },
-    { icon: "💬", text: `#northwind — "renewal Jun 3" · Sana` },
+    { icon: "MSG", text: `#retries | "24hr replay approved" | Maya, May 14` },
+    { icon: "MSG", text: `#auth | "SAML first, OIDC fallback" | Dev, Apr 22` },
+    { icon: "MSG", text: `#northwind | "renewal Jun 3" | Sana` },
   ],
   // 2 gmail
   [
-    { icon: "📧", text: "Re: Webhook SLA · Northwind · May 8" },
-    { icon: "📧", text: "Follow-up: SSO timeline · cto@northwind.co" },
+    { icon: "MAIL", text: "Re: Webhook SLA | Northwind | May 8" },
+    { icon: "MAIL", text: "Follow-up: SSO timeline | cto@northwind.co" },
   ],
   // 3 github
   [
-    { icon: "🔀", text: "PR #47 · auth.ts refactor · merged 2d ago" },
-    { icon: "📝", text: "feat: retry backoff (#51) · +234 −18 · open" },
-    { icon: "✅", text: "8a3f91c · fix: idempotency key on replays" },
+    { icon: "PR", text: "PR #47 | auth.ts refactor | merged 2d ago" },
+    { icon: "CODE", text: "feat: retry backoff (#51) | +234 -18 | open" },
+    { icon: "SHA", text: "8a3f91c | fix: idempotency key on replays" },
   ],
   // 4 calendar
   [
-    { icon: "📅", text: "Northwind Sprint Planning · May 20 · 9 AM" },
-    { icon: "📅", text: "Customer QBR · Northwind · Jun 3 · 2 PM" },
+    { icon: "CAL", text: "Northwind Sprint Planning | May 20 | 9 AM" },
+    { icon: "CAL", text: "Customer QBR | Northwind | Jun 3 | 2 PM" },
   ],
   // 5 transcripts
   [
-    { icon: "🎙️", text: `Northwind · May 14 · "replay window" cited 3×` },
-    { icon: "🎙️", text: "Sprint planning · May 20 · action items extracted" },
+    { icon: "CALL", text: `Northwind | May 14 | "replay window" cited 3x` },
+    { icon: "CALL", text: "Sprint planning | May 20 | action items extracted" },
   ],
   // 6 linear
   [
-    { icon: "📌", text: "NW-218 · Dead-letter queue · In Progress · Devraj" },
-    { icon: "📌", text: "NW-141 · SCIM provisioning · Backlog" },
+    { icon: "TASK", text: "NW-218 | Dead-letter queue | In Progress | Devraj" },
+    { icon: "TASK", text: "NW-141 | SCIM provisioning | Backlog" },
   ],
   // 7 notion
   [
-    { icon: "📓", text: "Northwind runbook · 8 pages · synced 1h ago" },
-    { icon: "📓", text: "Engineering wiki · Auth patterns · read 12×" },
+    { icon: "NOTE", text: "Northwind runbook | 8 pages | synced 1h ago" },
+    { icon: "NOTE", text: "Engineering wiki | Auth patterns | read 12x" },
   ],
 ];
 
-// ─── Source content overlay ───────────────────────────────────────────────────
+// --- Source content overlay ---------------------------------------------------
 function SourceContent({
   source,
   index,
@@ -175,7 +175,7 @@ function SourceContent({
         ))}
       </motion.div>
 
-      {/* "Connected" pill — shows once section is mostly scrolled */}
+      {/* "Connected" pill - shows once section is mostly scrolled */}
       <AnimatePresence>
         {visible && (
           <motion.div
@@ -209,8 +209,8 @@ function SourceContent({
   );
 }
 
-// ─── Intro section content ────────────────────────────────────────────────────
-const INTRO_HEADING = ["Watch", "it", "come", "together."];
+// --- Intro section content ----------------------------------------------------
+const INTRO_HEADING = ["Connect", "every", "source."];
 
 function IntroSection() {
   const reduce = useReducedMotion();
@@ -329,7 +329,7 @@ function IntroSection() {
             lineHeight: 1.6, maxWidth: 460, margin: "0 auto 40px",
           }}
         >
-          Eight sources of truth, one company brain. Scroll to see how Orchestra assembles itself.
+          Orchestra connects the tools your team already uses and turns scattered context into one reliable company brain.
         </motion.p>
 
         <motion.div
@@ -372,7 +372,7 @@ function IntroSection() {
   );
 }
 
-// ─── Outro / transition section ───────────────────────────────────────────────
+// --- Outro / transition section -----------------------------------------------
 function OutroSection() {
   return (
     <div style={{
@@ -407,21 +407,21 @@ function OutroSection() {
           fontSize: 17, color: "var(--color-muted)",
           lineHeight: 1.6, maxWidth: 440, margin: "0 auto 36px",
         }}>
-          Every signal, in one source of truth. But that&apos;s just the beginning.
+          Your docs, conversations, tickets, meetings, and code now work from the same company context.
         </p>
         <p style={{
           fontFamily: "var(--font-mono)", fontSize: 11,
           letterSpacing: "0.18em", textTransform: "uppercase",
           color: "var(--color-muted)", margin: 0,
         }}>
-          Continue ↓
+          Continue
         </p>
       </motion.div>
     </div>
   );
 }
 
-// ─── Main component ───────────────────────────────────────────────────────────
+// --- Main component -----------------------------------------------------------
 interface Act1Props {
   onSectionChange?: (index: number) => void; // -1=intro, 0-7=sources, 8=outro
 }
@@ -459,7 +459,7 @@ export default function Act1Convergence({ onSectionChange }: Act1Props) {
 
   const glowInt = litRays.length / 8;
 
-  // ── Reduced-motion / mobile: skip the sticky layout ──────────────────────
+  // -- Reduced-motion / mobile: skip the sticky layout ----------------------
   if (reduceMotion) {
     return (
       <div style={{ maxWidth: 1100, margin: "0 auto", padding: "60px var(--pad)" }}>
@@ -479,7 +479,7 @@ export default function Act1Convergence({ onSectionChange }: Act1Props) {
       ref={wrapperRef}
       style={{ position: "relative", height: `${TOTAL_VH}vh` }}
     >
-      {/* ── Layer 1: Sticky logo (always centered, behind content) ── */}
+      {/* -- Layer 1: Sticky logo (always centered, behind content) -- */}
       <div
         style={{
           position: "sticky",
@@ -500,13 +500,13 @@ export default function Act1Convergence({ onSectionChange }: Act1Props) {
         />
       </div>
 
-      {/* ── Layer 2: Content overlay — pulled back to start at top ── */}
+      {/* -- Layer 2: Content overlay - pulled back to start at top -- */}
       <div style={{ position: "relative", zIndex: 2, marginTop: "-100vh" }}>
 
-        {/* INTRO — 100vh, centered, transparent bg so logo shows */}
+        {/* INTRO - 100vh, centered, transparent bg so logo shows */}
         <IntroSection />
 
-        {/* 8 SOURCE SECTIONS — 60vh each, alternating sides */}
+        {/* 8 SOURCE SECTIONS - 60vh each, alternating sides */}
         {SOURCES.map((source, i) => {
           const isEven = i % 2 === 0;
           const connectedNow = currentSection === i && litRays.includes(source.key as SourceKey);
@@ -534,7 +534,7 @@ export default function Act1Convergence({ onSectionChange }: Act1Props) {
           );
         })}
 
-        {/* OUTRO — 80vh, centered */}
+        {/* OUTRO - 80vh, centered */}
         <OutroSection />
       </div>
     </div>

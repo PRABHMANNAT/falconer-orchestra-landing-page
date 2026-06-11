@@ -4,7 +4,7 @@ import { useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { SOURCES } from "./types";
 
-// ─── Label arrays ──────────────────────────────────────────────────────────────
+// --- Label arrays --------------------------------------------------------------
 
 const SOURCE_LABELS = SOURCES.map((s) => s.label.toUpperCase());
 
@@ -12,7 +12,7 @@ const CAPABILITY_LABELS = ["SOCRATES", "SUGGESTIONS", "TIMELINE", "GROWTH"];
 
 const ALL_LABELS = [...SOURCE_LABELS, ...CAPABILITY_LABELS]; // 12 entries
 
-// ─── Pulse keyframe ─────────────────────────────────────────────────────────────
+// --- Pulse keyframe -------------------------------------------------------------
 
 const PULSE_STYLE_ID = "progress-indicator-pulse";
 
@@ -31,14 +31,14 @@ function injectPulseKeyframe() {
   document.head.appendChild(style);
 }
 
-// ─── Types ──────────────────────────────────────────────────────────────────────
+// --- Types ----------------------------------------------------------------------
 
 interface ProgressIndicatorProps {
   currentIndex: number; // 0–11
   visible: boolean;
 }
 
-// ─── Component ──────────────────────────────────────────────────────────────────
+// --- Component ------------------------------------------------------------------
 
 export default function ProgressIndicator({
   currentIndex,
@@ -72,7 +72,7 @@ export default function ProgressIndicator({
         pointerEvents: "none",
       }}
     >
-      {/* Connector line — sits behind the dots */}
+      {/* Connector line - sits behind the dots */}
       <div
         style={{
           position: "absolute",
@@ -125,7 +125,7 @@ export default function ProgressIndicator({
               }}
             />
 
-            {/* Label — only the active label is visible */}
+            {/* Label - only the active label is visible */}
             <AnimatePresence initial={false}>
               {isActive && (
                 <motion.span

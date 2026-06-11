@@ -50,14 +50,14 @@ const subtitleStyle: React.CSSProperties = {
 };
 
 // ---------------------------------------------------------------------------
-// Panel 1 — Socrates
+// Panel 1 - Socrates
 // ---------------------------------------------------------------------------
 
 export function Panel1Socrates() {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: "-15%" });
 
-  const chips = ["Call note · May 14", "Linear NW-218", "Plan · Retries"];
+  const chips = ["Call note | May 14", "Linear NW-218", "Plan | Retries"];
   const followUps = [
     "What did we promise on the SSO rollout?",
     "Who owns the Northwind renewal?",
@@ -173,8 +173,7 @@ export function Panel1Socrates() {
                 margin: "0 0 12px",
               }}
             >
-              A 24-hour replay window with idempotency keys — committed on the
-              May 14 call.
+              Use a 24-hour replay window with idempotency keys. Source: May 14 call.
             </p>
 
             <div
@@ -249,7 +248,7 @@ export function Panel1Socrates() {
 }
 
 // ---------------------------------------------------------------------------
-// Panel 2 — Suggestions
+// Panel 2 - Suggestions
 // ---------------------------------------------------------------------------
 
 const suggestionCards = [
@@ -278,10 +277,9 @@ export function Panel2Suggestions() {
     <div style={panelBase}>
       <div style={innerContent} ref={ref}>
         <p style={eyebrowStyle("#d97757")}>The AI PM</p>
-        <h2 style={titleStyle}>{"Notice what\nyou'd miss."}</h2>
+        <h2 style={titleStyle}>{"Catch issues\nbefore they grow."}</h2>
         <p style={subtitleStyle}>
-          Socrates watches your company in motion. It flags merge conflicts, spec
-          drift, stalled work.
+          Spot merge conflicts, spec drift, and stalled work while there is still time to fix them.
         </p>
 
         <div style={{ display: "flex", flexDirection: "column", gap: 0, maxWidth: 480, marginTop: 32 }}>
@@ -354,7 +352,7 @@ export function Panel2Suggestions() {
 }
 
 // ---------------------------------------------------------------------------
-// Panel 3 — Timeline
+// Panel 3 - Timeline
 // ---------------------------------------------------------------------------
 
 const timelineEvents = [
@@ -373,7 +371,7 @@ const timelineEvents = [
   {
     source: "Manual",
     badgeBg: "#0D9488",
-    title: "PRD updated — auth scope confirmed",
+    title: "PRD updated: auth scope confirmed",
     author: "Sana A.",
   },
 ];
@@ -386,10 +384,9 @@ export function Panel3Timeline() {
     <div style={panelBase}>
       <div style={innerContent} ref={ref}>
         <p style={eyebrowStyle("#7c3aed")}>One thread of truth</p>
-        <h2 style={titleStyle}>{"Every decision,\nforever."}</h2>
+        <h2 style={titleStyle}>{"Every decision\nwith context."}</h2>
         <p style={subtitleStyle}>
-          An immutable timeline of every change. Traceable to source, sliceable
-          by Socrates.
+          See what changed, who decided it, and which source proves it.
         </p>
 
         {/* Mini timeline */}
@@ -515,15 +512,15 @@ export function Panel3Timeline() {
 }
 
 // ---------------------------------------------------------------------------
-// Panel 4 — Growth
+// Panel 4 - Growth
 // ---------------------------------------------------------------------------
 
 const outcomePills = [
   "Faster onboarding",
-  "Fewer dropped balls",
-  "Decisions made once",
-  "Audit-ready always",
-  "AI that knows your context",
+  "Less repeated work",
+  "Clear decision history",
+  "Faster reviews",
+  "Context-aware AI",
 ];
 
 export function Panel4Growth() {
@@ -534,10 +531,9 @@ export function Panel4Growth() {
     <div style={panelBase}>
       <div style={innerContent} ref={ref}>
         <p style={eyebrowStyle("#D97706")}>What it becomes</p>
-        <h2 style={titleStyle}>{"Now grow\nyour business."}</h2>
+        <h2 style={titleStyle}>{"Move faster\nwith less drift."}</h2>
         <p style={subtitleStyle}>
-          When everything is one source of truth, you stop losing context — and
-          start moving faster.
+          Give every team the same context so decisions stay aligned as work moves forward.
         </p>
 
         <div
@@ -583,7 +579,7 @@ export function Panel4Growth() {
 }
 
 // ---------------------------------------------------------------------------
-// Default export — ordered array for Act2Growth to map over
+// Default export - ordered array for Act2Growth to map over
 // ---------------------------------------------------------------------------
 
 const CapabilityPanels = [

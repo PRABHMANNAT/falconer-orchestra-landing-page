@@ -13,7 +13,7 @@ function zeroPad(n: number) {
   return n < 10 ? `0${n}` : String(n);
 }
 
-/* Animate-in wrapper — skips animation when reduced-motion is set */
+/* Animate-in wrapper - skips animation when reduced-motion is set */
 function FadeUp({
   children,
   delay = 0,
@@ -52,28 +52,28 @@ const CAPABILITIES = [
   {
     eyebrow: "SOCRATES",
     title: "Ask anything. Get answers you can trust.",
-    body: "Query your entire company knowledge base in plain English. Socrates surfaces the source, the date, and the person behind every answer.",
+    body: "Search your connected tools in plain English and see the sources behind every answer.",
     bg: "#f2f0ec",
     accent: "var(--color-accent)",
   },
   {
     eyebrow: "SUGGESTIONS",
-    title: "Notice what you'd miss.",
-    body: "Orchestra detects when a decision in Slack contradicts a spec in Docs, when a deadline slipped past a calendar invite, or when a promise made on a call hasn't been followed up on.",
+    title: "Catch issues before they grow.",
+    body: "Spot merge conflicts, spec drift, missed deadlines, and unowned follow-ups while they are still easy to fix.",
     bg: "#f8f5eb",
     accent: "#1E88E5",
   },
   {
     eyebrow: "TIMELINE",
-    title: "Every decision, forever.",
-    body: "A permanent, searchable log of every decision your team has ever made — with the full context of why it was made. Onboard new hires in days, not months.",
+    title: "Every decision with context.",
+    body: "See what changed, who decided it, and which source proves it.",
     bg: "#ffffff",
     accent: "#5E6AD2",
   },
   {
     eyebrow: "GROWTH",
-    title: "Now grow your business.",
-    body: "Orchestra synthesises customer signals across email, calls, and tickets to surface the patterns that drive revenue — so you can double down on what's working.",
+    title: "Move faster with less drift.",
+    body: "Give every team the same context so decisions stay aligned as work moves forward.",
     bg: "var(--color-cream)",
     accent: "var(--color-accent)",
   },
@@ -129,7 +129,7 @@ export default function ReducedMotionFallback() {
               margin: 0,
             }}
           >
-            Eight Sources.
+            Connected Sources.
             <br />
             One Brain.
           </h1>
@@ -146,7 +146,7 @@ export default function ReducedMotionFallback() {
               margin: 0,
             }}
           >
-            Everything your team touches, flowing into one source of truth.
+            Orchestra connects the tools your team already uses and turns scattered context into one reliable company brain.
           </p>
         </FadeUp>
 
@@ -206,7 +206,7 @@ export default function ReducedMotionFallback() {
                   }}
                 />
 
-                {/* Source number — top-right */}
+                {/* Source number - top-right */}
                 <span
                   style={{
                     position: "absolute",
