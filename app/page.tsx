@@ -5,7 +5,6 @@ import Link from "next/link";
 import { AnimatePresence, motion, useMotionValueEvent, useReducedMotion, useScroll } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { InteractiveGridPattern } from "@/registry/magicui/interactive-grid-pattern";
-import { StripedPattern } from "@/registry/magicui/striped-pattern";
 import Footer from "./_components/Footer";
 import GettingStarted from "./_components/GettingStarted";
 import Mark from "./_components/Mark";
@@ -1016,26 +1015,6 @@ export default function Home() {
 
         {/* ── SECTION 5: GETTING STARTED (integrations) ── */}
         <GettingStarted />
-
-        {/* ── SECTION 6: SOCRATES ── */}
-        <section className="record" id="record">
-          <div className="record-pattern-bg">
-            <StripedPattern className="[mask-image:radial-gradient(300px_circle_at_center,white,transparent)]" />
-          </div>
-          <SocratesPanel />
-          <motion.div
-            className="record-copy"
-            initial={false}
-            whileInView="visible"
-            viewport={{ once: true }}
-            variants={fadeUp}
-            transition={{ duration: 0.6, ease: softEase }}
-          >
-            <p className="kicker blue">Socrates</p>
-            <h2>The context layer that talks back</h2>
-            <p>Socrates rides along on every surface. It sees what you&apos;re looking at, surfaces what you forgot, and pushes back when an assumption doesn&apos;t hold.</p>
-          </motion.div>
-        </section>
 
         {/* ── SECTION 7: Signal layer (Suggestions) — NEW ── */}
         <AIPmSection />

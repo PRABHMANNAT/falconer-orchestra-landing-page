@@ -493,6 +493,21 @@ export default function GettingStartedSection() {
       </motion.div>
 
       <motion.div
+        className="gs-memory-head"
+        initial={{ opacity: 0, y: 10 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, amount: 0.4 }}
+        transition={{ duration: 0.45, ease: EASE }}
+      >
+        <h2>Socrates</h2>
+        <p className="gs-memory-sub">The context layer that talks back</p>
+        <p className="gs-memory-desc">
+          Socrates rides along on every surface, surfacing what you forgot and pushing back when an
+          assumption doesn&apos;t hold. Try it out in the live embedded preview below.
+        </p>
+      </motion.div>
+
+      <motion.div
         className="gs-memory-preview"
         initial={{ opacity: 0, y: 14 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -501,7 +516,7 @@ export default function GettingStartedSection() {
       >
         <iframe
           src="http://localhost:5174"
-          title="Orchestra Memory preview"
+          title="Socrates live preview"
           loading="lazy"
           allow="clipboard-read; clipboard-write"
         />
