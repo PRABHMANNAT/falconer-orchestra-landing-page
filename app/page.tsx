@@ -512,15 +512,24 @@ function SourceTruthDashboardMock() {
     { label: "Driver review pending", source: "Slack + Calendar", width: "52%" }
   ];
 
+  const container = {
+    hidden: {},
+    visible: { transition: { staggerChildren: 0.07, delayChildren: 0.05 } }
+  };
+  const item = {
+    hidden: { opacity: 0, y: 6 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.32, ease: softEase } }
+  };
+
   return (
-    <div className="mock answer-mock truth-dashboard-mock">
-      <motion.div
-        className="truth-dash-topbar"
-        initial={{ opacity: 0, y: -8 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.45, ease: softEase }}
-      >
+    <motion.div
+      className="mock answer-mock truth-dashboard-mock"
+      variants={container}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, amount: 0.3 }}
+    >
+      <motion.div className="truth-dash-topbar" variants={item}>
         <span className="truth-dash-mark"><Mark tone="light" /></span>
         <span>
           Company dashboard
@@ -530,14 +539,11 @@ function SourceTruthDashboardMock() {
       </motion.div>
 
       <div className="truth-dash-metrics">
-        {metrics.map((metric, i) => (
+        {metrics.map((metric) => (
           <motion.div
             key={metric.label}
             className={`truth-dash-metric ${metric.tone}`}
-            initial={{ opacity: 0, y: 10 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.4, ease: softEase, delay: 0.15 + i * 0.1 }}
+            variants={item}
           >
             <span>{metric.label}</span>
             <b>{metric.value}</b>
@@ -545,26 +551,13 @@ function SourceTruthDashboardMock() {
         ))}
       </div>
 
-      <motion.div
-        className="truth-dash-panel"
-        initial={{ opacity: 0, scale: 0.96 }}
-        whileInView={{ opacity: 1, scale: 1 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.5, ease: softEase, delay: 0.2 }}
-      >
+      <motion.div className="truth-dash-panel" variants={item}>
         <div className="truth-dash-panel-head">
           <span>Unified activity</span>
           <b>Now</b>
         </div>
-        {rows.map((row, i) => (
-          <motion.div
-            key={row.label}
-            className="truth-dash-row"
-            initial={{ opacity: 0, x: -10 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.42, ease: softEase, delay: 0.42 + i * 0.12 }}
-          >
+        {rows.map((row) => (
+          <motion.div key={row.label} className="truth-dash-row" variants={item}>
             <span className="truth-dash-row-dot" />
             <div>
               <b>{row.label}</b>
@@ -575,18 +568,12 @@ function SourceTruthDashboardMock() {
         ))}
       </motion.div>
 
-      <motion.div
-        className="truth-dash-sync"
-        initial={{ opacity: 0, y: 8 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.45, ease: softEase, delay: 0.9 }}
-      >
+      <motion.div className="truth-dash-sync" variants={item}>
         <span>Slack</span>
         <span>GitHub</span>
         <span>Docs</span>
       </motion.div>
-    </div>
+    </motion.div>
   );
 }
 
