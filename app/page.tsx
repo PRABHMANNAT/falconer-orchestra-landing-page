@@ -505,13 +505,11 @@ function TruthMock() {
 function SourceTruthDashboardMock() {
   const metrics = [
     { label: "Sources", value: "12", tone: "accent" },
-    { label: "Decisions", value: "34", tone: "dark" },
-    { label: "Risks", value: "03", tone: "warn" }
+    { label: "Open risks", value: "03", tone: "dark" }
   ];
   const rows = [
-    { label: "OAuth scope reconciled", source: "PRD + GitHub", width: "78%" },
-    { label: "Driver review pending", source: "Slack + Calendar", width: "52%" },
-    { label: "Auth map saved to Memory", source: "Docs + commits", width: "88%" }
+    { label: "OAuth scope reconciled", source: "PRD + GitHub", width: "76%" },
+    { label: "Driver review pending", source: "Slack + Calendar", width: "52%" }
   ];
 
   return (
@@ -587,7 +585,6 @@ function SourceTruthDashboardMock() {
         <span>Slack</span>
         <span>GitHub</span>
         <span>Docs</span>
-        <span>Calendar</span>
       </motion.div>
     </div>
   );
