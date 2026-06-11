@@ -408,7 +408,7 @@ export default function WaitlistPage() {
         <section className="wl-panel wl-story">
           <div className="wl-story-copy">
             <h1>Welcome to Orchestra</h1>
-            <p>Proof-first company memory for teams. Every answer mapped back to the work.</p>
+            <p>One source of truth across every tool your team uses. Decisions, docs, and discussions unified so the answer is always one search away.</p>
           </div>
 
           <div className="wl-globe-area">
@@ -416,7 +416,6 @@ export default function WaitlistPage() {
               <span className="wl-globe-halo" aria-hidden="true" />
               <span className="wl-static-globe" aria-hidden="true" />
               <HalftoneGlobe ink={[236, 242, 232]} accent={[217, 119, 87]} speed={3.2} />
-              <FloatingChips />
             </div>
           </div>
 
